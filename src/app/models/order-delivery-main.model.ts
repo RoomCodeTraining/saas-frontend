@@ -1,0 +1,26 @@
+export class OrderDeliveryMain {
+    id?:number;
+    userpeople_id!:number;
+    ordermakingmain_id!:number;
+    insurerfirm_id!:number;
+    productonsell_id!:number;
+    reference!:string;
+    opcs_do!:number;
+    opcs_on!:Date;
+    opdb_do!:number;
+    opdb_on!:Date;
+    opft_do!:number;
+    opft_on!:Date;
+    opftxtrasc_do!:number;
+    opftxtrasc_on!:Date;
+    opftxtrcpn_do!:number;
+    opftxtrcpn_on!:Date;
+    opftxtrbkr_do!:number;
+    opftxtrbkr_on!:Date;
+    status_value!:number;
+    active_value!:number;
+    entry_by!:number;
+    entry_on!:Date;
+    canceled_by!:number;
+    canceled_on!:Date;
+}

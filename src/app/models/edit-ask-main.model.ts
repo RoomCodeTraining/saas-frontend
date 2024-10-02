@@ -1,0 +1,51 @@
+export class EditAskMain {
+    id?:number;
+    editaskchannel_id!:number;
+    onbehalfofbrokerbyentityfirm_id!:number;
+    onbehalfofuserpeople_id!:number;
+    reference!:string;
+    filetoprocess!:string;
+    status_value!:number;
+    active_value!:number;
+    entry_by!:number;
+    entry_on!:Date;
+    canceled_by!:number;
+    canceled_on!:Date;
+    processed_by!:number;
+    processed_on!:Date;
+    processed_value!:number;
+    processed_detail!:Date;
+    opft_do!:number;
+    opft_by!:number;
+    opft_starton!:Date;
+    opft_finishon!:Date;
+    opft_urldownloadfile!:string;
+    opftxtrasc_do!:number;
+    opftxtrasc_by!:number;
+    opftxtrasc_starton!:Date;
+    opftxtrasc_finishon!:Date;
+    opftxtrasc_urldownloadfile!:string;
+    opftxtrcpn_do!:number;
+    opftxtrcpn_by!:number;
+    opftxtrcpn_starton!:Date;
+    opftxtrcpn_finishon!:Date;
+    opftxtrcpn_urldownloadfile!:string;
+    opftxtrbkr_do!:number;
+    opftxtrbkr_by!:number;
+    opftxtrbkr_starton!:Date;
+    opftxtrbkr_finishon!:Date;
+    opftxtrbkr_urldownloadfile!:string;  
+
+    brokerlink_code!:string;    
+    certificatetype_id!:number;    
+    certificate_type!:string;    
+    user_token!:any;    
+    input_json!:any;    
+    output_json!:any;    
+    certificates!:any;    
+
+    organization_code!:string;    
+    office_code!:string;    
+    productions!:any;    
+
+}

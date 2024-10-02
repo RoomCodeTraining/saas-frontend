@@ -1,0 +1,24 @@
+export class EditAskDetail {
+    id?:number;
+    editaskmain_id!:number;
+    brokerlink_code!:string;
+    certificate_type!:string;
+    vehicle_licenseplate!:string;
+    vehicle_chassisnumber!:string;
+    vehicle_type!:string;
+    vehicle_brand!:string;
+    vehicle_model!:string;
+    vehicle_category!:string;
+    vehicle_energy!:string;
+    vehicle_seat!:string;
+    vehicle_power!:string;
+    vehicle_usage!:string;
+    insured_name!:string;
+    insured_email!:string;
+    insured_mobile!:string;
+    company_rc!:string;
+    company_policy!:string;
+    company_dateeffective!:string;
+    company_datedue!:string;
+    company_dateedition!:string;
+}

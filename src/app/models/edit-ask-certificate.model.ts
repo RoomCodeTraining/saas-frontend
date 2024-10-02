@@ -1,0 +1,32 @@
+export class EditAskCertificate {
+    id?:number;
+    editaskmain_id!:number;
+    orderdeliverydetail_id!:number;
+    brokerbyentityfirm_id!:number;
+    certificatetype_id!:number;
+    vehicle_licenseplate!:string;
+    vehicle_chassisnumber!:string;
+    vehicle_type!:string;
+    vehicle_brand!:string;
+    vehicle_model!:string;
+    vehicle_category!:string;
+    vehicle_energy!:string;
+    vehicle_seat!:string;
+    vehicle_power!:string;
+    vehicle_usage!:string;
+    insured_name!:string;
+    insured_email!:string;
+    insured_mobile!:string;
+    company_rc!:string;
+    company_policy!:string;
+    company_dateeffective!:string;
+    company_datedue!:string;
+    company_dateedition!:string;
+    company_dateprinting!:string;
+    status_value!:number;
+    active_value!:number;
+    entry_by!:number;
+    entry_on!:Date;
+    canceled_by!:number;
+    canceled_on!:Date;
+}

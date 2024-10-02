@@ -1,0 +1,64 @@
+export class EntityFirm {
+    id?:number;
+    userpeople_id!:any;
+    officefirm_id!:string;
+    partfirm_id!:string;
+    entitytype_id!:string;
+    value!:number;
+    entity_code!:string;
+    label!:Date;
+    name!:string;
+    email!:string;
+    description!:string;
+    logo!:string;
+    phone!:string;
+    address!:string;
+    contact_address!:string;
+    contact_telephone!:string;
+    contact_email!:string;
+    ftp_host!:string;
+    ftp_username!:string;
+    ftp_password!:string;
+    ftp_directory!:string;
+    ftp_notificationemail!:string;
+    ftp_urldownloadlink!:string;
+    ftp_entryby!:string;
+    ftp_entryon!:string;
+    status_value!:number;
+    active_value!:number;
+    entry_by!:number;
+    entry_on!:Date;
+
+    entitybroker_id!:number;
+    entitybroker_code!:string;
+    entitybroker_name!:string;
+    entityinsurer_id!:number;
+    entityinsurer_code!:string;
+    entityinsurer_name!:string;
+    shopproductonsell_id!:number;
+    shopproductonsell_label!:string;
+    shopproductonsell_name!:string;
+    cima_orderdeliverybroker_count!:number;
+    cima_orderdeliverybroker_count_available!:number;
+    cima_orderdeliverybroker_count_edited!:number;
+    pool_orderdeliverybroker_count!:number;
+    pool_orderdeliverybroker_count_available!:number;
+    pool_orderdeliverybroker_count_edited!:number;
+
+    entityfirm_id!:number;
+    entityfirm_code!:string;
+    entityfirm_name!:string;
+    cima_orderdeliverymain_count!:number;
+    cima_orderdeliverymain_count_available!:number;
+    cima_orderdeliverymain_count_edited!:number;
+    pool_orderdeliverymain_count!:number;
+    pool_orderdeliverymain_count_available!:number;
+    pool_orderdeliverymain_count_edited!:number;
+
+    organization_type_id!:string;
+    office_type_id!:string;
+    code!:string;
+    telephone!:string;
+    logo_path!:any;
+
+}
