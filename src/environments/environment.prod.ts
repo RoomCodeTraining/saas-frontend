@@ -4,4 +4,4 @@ export const environment = {
   // PREPRODUCTION
   api_url: 'https://saas.roomcodetraining.com/api',
 
-};
+}; 
