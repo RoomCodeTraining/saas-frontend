@@ -39,9 +39,12 @@ import { ProfileComponent } from './components/app-content/user/profile/profile.
 import { SetPasswordComponent } from './auth/set-password/set-password.component';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 import {CookieService} from 'ngx-cookie-service';
-import { ListSellerComponent } from './components/app-content/entity/saller/list-seller/list-seller.component';
-import { AddSellerComponent } from './components/app-content/entity/saller/add-seller/add-seller.component';
-import { EditSellerComponent } from './components/app-content/entity/saller/edit-seller/edit-seller.component';
+import { ListSellerComponent } from './components/app-content/entity/seller/list-seller/list-seller.component';
+import { AddSellerComponent } from './components/app-content/entity/seller/add-seller/add-seller.component';
+import { EditSellerComponent } from './components/app-content/entity/seller/edit-seller/edit-seller.component';
+import { EditClientComponent } from './components/app-content/entity/client/edit-client/edit-client.component';
+import { ListClientComponent } from './components/app-content/entity/client/list-client/list-client.component';
+import { AddClientComponent } from './components/app-content/entity/client/add-client/add-client.component';
 
 function resourceProviderFactory(JarwisService: JarwisService) {
   return () => {
@@ -79,6 +82,9 @@ function resourceProviderFactory(JarwisService: JarwisService) {
     ListSellerComponent,
     AddSellerComponent,
     EditSellerComponent,
+    EditClientComponent,
+    ListClientComponent,
+    AddClientComponent,
   ],
   imports: [
     BrowserModule,

@@ -30,8 +30,12 @@ export class AppService {
     }));
               }
 
-  getEntityType(page:number): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/certificate-types?page=${page}`,{headers: this.headers}).pipe(catchError(err => { return throwError(err); }));
+  getEntityType(): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/types`,{headers: this.headers}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getAllEntity(page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities?page=${page}`,{headers: this.headers}).pipe(catchError(err => { return throwError(err); }));
   }
 
   getEntity(page:number): Observable<any> {
@@ -49,6 +53,23 @@ export class AppService {
   getEntityPaginateSearch(page:number,information:any): Observable<any> {
     return this.http.get<any[]>(`${this.baseUrl}/entities?page=${page}` +`&search=` + information,{headers: this.headers}).pipe(catchError(err => { return throwError(err); }));
   }
+
+  addEntity(data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/users`, data,{headers: this.headers}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  updateEntity(data:any,user_id:string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/users/`+ user_id, data,{headers: this.headers}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  enableEntity(user_id:string,data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/users/`+ user_id +`/enable`, data,{headers: this.headers}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  disableEntity(user_id:string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/users/`+ user_id +`/disable`,{headers: this.headers}).pipe(catchError(err => { return throwError(err); }));
+  }
+
 
   getRole(): Observable<any> {
     return this.http.get<any[]>(`${this.baseUrl}/roles`,{headers: this.headers}).pipe(catchError(err => { return throwError(err); }));
