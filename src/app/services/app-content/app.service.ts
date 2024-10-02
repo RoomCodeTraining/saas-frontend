@@ -18,6 +18,7 @@ export class AppService {
     'Authorization': `Bearer ${localStorage.getItem('token')}`,
     'Content-Type': 'application/json',
     'Accept': 'application/json',
+    'Access-Control-Allow-Credentials': `true`,
   });
   
   constructor(private http: HttpClient,
