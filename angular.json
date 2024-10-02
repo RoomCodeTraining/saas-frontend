@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "eatci-front": {
+    "coop-front": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -64,10 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "eatci-front:build:production"
+              "browserTarget": "coop-front:build:production"
             },
             "development": {
-              "browserTarget": "eatci-front:build:development"
+              "browserTarget": "coop-front:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -75,7 +75,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "eatci-front:build"
+            "browserTarget": "coop-front:build"
           }
         },
         "test": {
