@@ -32,6 +32,7 @@ export class ListSellerComponent implements OnInit {
   listItem: any;
   listEntityType: any;
   listRole: any;
+  listProduct: any;
   listEntityFirm: any;
 
   itemSelected: any;
@@ -62,7 +63,8 @@ export class ListSellerComponent implements OnInit {
   submitted2 = false;
   submitted3 = false;
 
-  entity_type_id!: string;
+  entity_type_id: number = 1;
+  type: string = "vendeur";
   name: string = "";
   profil_id!:number;
   password: string = "";
@@ -81,6 +83,11 @@ export class ListSellerComponent implements OnInit {
   code: string = "";
   mobile: string = "";
   avatar: any;
+
+  entity_product_id!: number;
+  weight: number = 0;
+  price: number= 0;
+
 
   user_logged!: any;
   npage!: number;
@@ -143,35 +150,33 @@ export class ListSellerComponent implements OnInit {
     /** spinner starts on init */
     this.SpinnerService.show();
     
+    this.getProduct();
     this.getRoles();
-    this.getEntities();
+    this.getEntityType();
     this.getItems();
     this.makePassword(12);
     this.getUserLogged();
 
     this.formGroupAdd = new FormGroup({
-      entity_type_id: new FormControl('', [Validators.required]),
+      // entity_type_id: new FormControl(''),
       name: new FormControl('', [Validators.required]),
-      address: new FormControl('', [Validators.required]),
-      contact: new FormControl('', [Validators.required,Validators.pattern("^[0-9]{10}$")]),
-      email: new FormControl('', [Validators.required,Validators.email]),
-      // logo: new FormControl('', [Validators.required]),
+      address: new FormControl('', []),
+      contact: new FormControl('', [Validators.pattern("^[0-9]{10}$")]),
+      email: new FormControl('', [Validators.email]),
+      logo: new FormControl('', []),
     });
 
     this.formGroupEdit = new FormGroup({
       name: new FormControl('', [Validators.required]),
-      address: new FormControl('', [Validators.required]),
-      contact: new FormControl('', [Validators.required,Validators.pattern("^[0-9]{10}$")]),
-      email: new FormControl('', [Validators.required,Validators.email]),
+      address: new FormControl('', []),
+      contact: new FormControl('', [Validators.pattern("^[0-9]{10}$")]),
+      email: new FormControl('', [Validators.email]),
     });
 
     this.formGroup2 = new FormGroup({
-      //role: new FormControl('', [Validators.required]),
-      //entityfirm_id: new FormControl('', [Validators.required]),
-      firstname: new FormControl('', [Validators.required]),
-      lastname: new FormControl('', [Validators.required]),
-      mobile: new FormControl('', [Validators.required,Validators.pattern("^[0-9]{10}$")]),
-      email: new FormControl('', [Validators.required,Validators.email]),
+      entity_product_id: new FormControl('', [Validators.required]),
+      weight: new FormControl('', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]),
+      price: new FormControl('', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]),
     });
 
   }
@@ -293,144 +298,68 @@ export class ListSellerComponent implements OnInit {
     });
   }
 
-  getEntities(){
+  getProduct(){
+    this.appService.getAllProduct().subscribe((data: any) => {
+      this.listProduct = data.data;
+    });
+  }
+
+  getEntityType(){
     this.appService.getEntityType().subscribe((data: any) => {
       this.listEntityType = data.data;
     });
   }
 
+  getPaginate(data:any){
+    this.current_page = data?.meta?.current_page;
+    this.first_page_url = data?.meta?.first_page_url;
+    this.from = data?.meta?.from;
+    this.last_page = data?.meta?.last_page;
+    this.last_page_url = data?.meta?.last_page_url;
+    this.links = data?.meta?.links;
+    this.next_page_url = data?.meta?.next_page_url;
+    this.per_page = data?.meta?.per_page;
+    this.prev_page_url = data?.meta?.prev_page_url;
+    this.to = data?.meta?.to;
+    this.total = data?.meta?.total;
+  }
+
   getItems(){
-    if(this.entity_type_id){
-      this.appService.getEntity(this.current_page).subscribe((data: any) => {
-        this.listItem = data.data;
-  
-        this.current_page = data.meta.current_page;
-        this.first_page_url = data.meta.first_page_url;
-        this.from = data.meta.from;
-        this.last_page = data.meta.last_page;
-        this.last_page_url = data.meta.last_page_url;
-        this.links = data.meta.links;
-        this.next_page_url = data.meta.next_page_url;
-        this.per_page = data.meta.per_page;
-        this.prev_page_url = data.meta.prev_page_url;
-        this.to = data.meta.to;
-        this.total = data.meta.total;
-  
-        this.SpinnerService.hide();
-  
-      });
-    } else {
-      this.appService.getAllEntity(this.current_page).subscribe((data: any) => {
-        this.listItem = data.data;
-  
-        this.current_page = data.meta.current_page;
-        this.first_page_url = data.meta.first_page_url;
-        this.from = data.meta.from;
-        this.last_page = data.meta.last_page;
-        this.last_page_url = data.meta.last_page_url;
-        this.links = data.meta.links;
-        this.next_page_url = data.meta.next_page_url;
-        this.per_page = data.meta.per_page;
-        this.prev_page_url = data.meta.prev_page_url;
-        this.to = data.meta.to;
-        this.total = data.meta.total;
-  
-        this.SpinnerService.hide();
-  
-      });
-    }
-    
+    this.appService.getSeller(this.current_page,this.type).subscribe((data: any) => {
+      this.listItem = data.data;
+
+      this.getPaginate(data);
+
+      this.SpinnerService.hide();
+
+    });
   }
 
   search(){
-    if(this.entity_type_id){
-      this.SpinnerService.show();
-      this.appService.getEntitySearch(this.current_page,this.information).subscribe((data: any) => {
-        this.listItem = data.data;
-        
-        this.current_page = data.meta.current_page;
-        this.first_page_url = data.meta.first_page_url;
-        this.from = data.meta.from;
-        this.last_page = data.meta.last_page;
-        this.last_page_url = data.meta.last_page_url;
-        this.links = data.meta.links;
-        this.next_page_url = data.meta.next_page_url;
-        this.per_page = data.meta.per_page;
-        this.prev_page_url = data.meta.prev_page_url;
-        this.to = data.meta.to;
-        this.total = data.meta.total;
+    this.SpinnerService.show();
+    this.appService.getSellerSearch(this.current_page,this.type,this.information).subscribe((data: any) => {
+      this.listItem = data.data;
+      
+      this.getPaginate(data);
 
-        this.SpinnerService.hide();
+      this.SpinnerService.hide();
 
-      })
-    } else {
-      this.SpinnerService.show();
-      this.appService.getEntitySearch(this.current_page,this.information).subscribe((data: any) => {
-        this.listItem = data.data;
-        
-        this.current_page = data.meta.current_page;
-        this.first_page_url = data.meta.first_page_url;
-        this.from = data.meta.from;
-        this.last_page = data.meta.last_page;
-        this.last_page_url = data.meta.last_page_url;
-        this.links = data.meta.links;
-        this.next_page_url = data.meta.next_page_url;
-        this.per_page = data.meta.per_page;
-        this.prev_page_url = data.meta.prev_page_url;
-        this.to = data.meta.to;
-        this.total = data.meta.total;
-
-        this.SpinnerService.hide();
-
-      })
-    }
+    })
   }
 
   paginate(){
     if(this.information){
       this.search()
     } else {
-      if(this.entity_type_id){
-        this.SpinnerService.show();
-        this.appService.getEntityPaginate(this.current_page).subscribe((data: any) => {
-          this.listItem = data.data;
-          
-          this.current_page = data.meta.current_page;
-          this.first_page_url = data.meta.first_page_url;
-          this.from = data.meta.from;
-          this.last_page = data.meta.last_page;
-          this.last_page_url = data.meta.last_page_url;
-          this.links = data.meta.links;
-          this.next_page_url = data.meta.next_page_url;
-          this.per_page = data.meta.per_page;
-          this.prev_page_url = data.meta.prev_page_url;
-          this.to = data.meta.to;
-          this.total = data.meta.total;
+      this.SpinnerService.show();
+      this.appService.getSellerPaginate(this.current_page,this.type).subscribe((data: any) => {
+        this.listItem = data.data;
+        
+        this.getPaginate(data);
 
-          this.SpinnerService.hide();
+        this.SpinnerService.hide();
 
-        })
-      } else {
-        this.SpinnerService.show();
-        this.appService.getEntityPaginate(this.current_page).subscribe((data: any) => {
-          this.listItem = data.data;
-          
-          this.current_page = data.meta.current_page;
-          this.first_page_url = data.meta.first_page_url;
-          this.from = data.meta.from;
-          this.last_page = data.meta.last_page;
-          this.last_page_url = data.meta.last_page_url;
-          this.links = data.meta.links;
-          this.next_page_url = data.meta.next_page_url;
-          this.per_page = data.meta.per_page;
-          this.prev_page_url = data.meta.prev_page_url;
-          this.to = data.meta.to;
-          this.total = data.meta.total;
-
-          this.SpinnerService.hide();
-
-        })
-      }
+      })
     }
   }
 
@@ -494,7 +423,7 @@ export class ListSellerComponent implements OnInit {
     this.disableItem = false;
     this.addAdminItem = false;
     this.itemSelected = item;
-    // this.entity_type_id = this.itemSelected.entity_type_id.id;
+    this.entity_type_id = this.itemSelected.entitytype.id;
     this.name = this.itemSelected.name;
     this.contact = this.itemSelected.contact;
     this.email = this.itemSelected.email;
@@ -522,7 +451,7 @@ export class ListSellerComponent implements OnInit {
     this.disableItem = false;
     this.addAdminItem = false;
     this.itemSelected = item;
-    // this.entity_type_id = this.itemSelected.entity_type_id.id;
+    this.entity_type_id = this.itemSelected.entitytype.id;
     this.name = this.itemSelected.name;
     this.contact = this.itemSelected.contact;
     this.email = this.itemSelected.email;
@@ -539,7 +468,7 @@ export class ListSellerComponent implements OnInit {
     this.disableItem = false;
     this.addAdminItem = false;
     this.itemSelected = item;
-    // this.entity_type_id = this.itemSelected.entity_type_id.id;
+    this.entity_type_id = this.itemSelected.entitytype.id;
     this.name = this.itemSelected.name;
     this.contact = this.itemSelected.contact;
     this.email = this.itemSelected.email;
@@ -556,7 +485,7 @@ export class ListSellerComponent implements OnInit {
     this.disableItem = true;
     this.addAdminItem = false;
     this.itemSelected = item;
-    // this.entity_type_id = this.itemSelected.entity_type_id.id;
+    this.entity_type_id = this.itemSelected.entitytype.id;
     this.name = this.itemSelected.name;
     this.contact = this.itemSelected.contact;
     this.email = this.itemSelected.email;
@@ -619,7 +548,15 @@ export class ListSellerComponent implements OnInit {
       //   pushItem.logo_path = null;
       // } 
 
-      this.appService.addEntity(formData).subscribe(res => {
+      let requestData = {
+        entity_type_id: this.entity_type_id,
+        name: this.name,
+        address: this.address,
+        contact: this.contact,
+        email: this.email,
+      }
+
+      this.appService.addEntity(requestData).subscribe(res => {
         this.message = res;
         if(this.message.success == false){
           this.submit = false;
@@ -699,7 +636,15 @@ export class ListSellerComponent implements OnInit {
         formData.append("logo_path",null);
       }
 
-      this.appService.updateEntity(formData,this.itemSelected.id).subscribe(res => {
+      let requestData = {
+        entity_type_id: this.entity_type_id,
+        name: this.name,
+        address: this.address,
+        contact: this.contact,
+        email: this.email,
+      }
+
+      this.appService.updateEntity(requestData,this.itemSelected.id).subscribe(res => {
         this.message = res;
         if(this.message.success == false){
           this.submit = false;
@@ -886,24 +831,16 @@ export class ListSellerComponent implements OnInit {
     } else {
       this.exist_phone_error = false;
       this.submit = true;
-      const formData:any = new FormData();
-      formData.append("email",this.email);
-      formData.append("contact",this.mobile);
-      formData.append("first_name",this.firstname);
-      formData.append("last_name",this.lastname);
-      if(this.itemSelected.entity_type_id == "supplier" || this.itemSelected.entity_type_id == "insurer" || this.itemSelected.entity_type_id == "broker" || this.itemSelected.entity_type_id == "bancassurance"){
-        formData.append("role","main_office_admin");
-      } else {
-        formData.append("role","admin");
-      }
-      formData.append("office_id",this.itemSelected.main_office.id);
-      if(this.avatarfiles){
-        formData.append("avatar",this.avatarfiles,this.avatarfiles.name);
-      } else {
-        formData.append("avatar",null);
+
+      let requestData = {
+        entity_product_id: this.entity_product_id,
+        weight: this.weight,
+        price: this.price,
+        last_name: this.lastname,
+        children_id: this.itemSelected.id,
       }
 
-      this.appService.addUser(formData).subscribe(res => {
+      this.appService.addUser(requestData).subscribe(res => {
         this.message = res;
         if(this.message.success == false){
           this.submit = false;

@@ -23,6 +23,7 @@ export class JarwisService {
   headers = new HttpHeaders({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
+    'Access-Control-Allow-Credentials': `true`,
   });
 
   bnicb_headers = new HttpHeaders({

@@ -279,6 +279,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getUserLogged(){
+      console.log("userprofile_id");
     this.appService.getUserProfile().subscribe((data: any) => {
       this.user_logged = data.data;
       this.userprofile_id = this.user_logged.role.id;  
@@ -287,7 +288,7 @@ export class DashboardComponent implements OnInit {
     },
     (err: HttpErrorResponse) => {
         //console.log("API indisponible");
-        this.logout();
+        // this.logout();
     });
   }
 

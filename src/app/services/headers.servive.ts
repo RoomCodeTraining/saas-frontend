@@ -16,12 +16,20 @@ export class HeadersService {
 
   headers = new HttpHeaders({
     'Authorization': `Bearer ${localStorage.getItem('token')}`,
-    // 'Content-Type': 'application/json',
-    // 'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
   });
 
   
   constructor(private http: HttpClient) { }
+
+  header(){
+    return new HttpHeaders({
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      });
+  }
 
   bnicb_header(){
     return new HttpHeaders({

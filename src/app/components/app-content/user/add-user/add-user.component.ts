@@ -220,7 +220,7 @@ export class AddUserComponent implements OnInit {
   }
 
   onChange(event:any) {
-    this.SpinnerService.show();
+    // this.SpinnerService.show();
   }
 
   onSelectAvatar(event:any) {
@@ -235,6 +235,8 @@ export class AddUserComponent implements OnInit {
   getRoles(){
     this.appService.getRole().subscribe((data: any) => {
       this.listRole = data.data;
+
+      this.SpinnerService.hide();
     });
   }
 
@@ -264,14 +266,22 @@ export class AddUserComponent implements OnInit {
       formData.append("first_name",this.firstname);
       formData.append("last_name",this.lastname);
       formData.append("role",this.role);
-      formData.append("office_id",this.office_id);
+      // formData.append("office_id",this.office_id);
       // if(this.avatarfiles){
       //   formData.append("avatar",this.avatarfiles,this.avatarfiles.name);
       // } else {
       //   formData.append("avatar",null);
       // }
 
-      this.appService.addUser(formData).subscribe(res => {
+      let requestData = {
+        email: this.email,
+        contact: this.mobile,
+        first_name: this.firstname,
+        last_name: this.lastname,
+        role: this.role,
+      }
+
+      this.appService.addUser(requestData).subscribe(res => {
         this.message = res;
         if(this.message.success == false){
           this.submit = false;

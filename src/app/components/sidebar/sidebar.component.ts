@@ -67,9 +67,9 @@ export class SidebarComponent implements OnInit {
     this._menu = this._menu.substring(0,this._menu.length - 1);
     //console.log("this._menu",this._menu);
 
-    // this.ifUserLogged();
+    this.ifUserLogged();
 
-	  // this.getUserLogged();
+	  this.getUserLogged();
 
   }
 

@@ -1,0 +1,96 @@
+<app-sidebar></app-sidebar>
+<div class="main-content">
+    <app-header></app-header>    
+    <div class="p-5">
+        <div class="p-6 animate__animated" :class="[$store.app.animation]">
+            <div x-data="sales">
+                <ul class="flex space-x-2 rtl:space-x-reverse">
+                    <li class="before:content-['/'] ltr:before:mr-1 rtl:before:ml-1">
+                        <span>Ajout de produits</span>
+                    </li>
+                </ul>
+                <div class="pt-5">
+                    <div class="row mb-5">
+                        <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
+                            <div class="flex items-start justify-center min-h-screen px-4">
+                                <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
+                                    <h5 class="font-bold text-lg p-5">Ajout de produits</h5>
+                                    <div class="p-5">
+                                        <form class="space-y-5" style="padding-bottom: 100px;" (submit)="save()">
+                                            <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
+                                                <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
+                                            </div>
+                                            <div class="grid grid-cols-1 grid-cols-1 gap-1">
+                                                <div class="mb-3" [formGroup]="formGroup">
+                                                    <label for="gridPassword">Produit <span style="color:red">*</span></label>
+                                                    <ng-select id="entity_product" name="entity_product" formControlName="entity_product" (change)="onChangeProduct($event)" [(ngModel)]="entity_product" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submitted && f['entity_product'].errors }">
+                                                        <ng-option *ngFor="let item of listProduct" [value]="item">{{item.name}}</ng-option>
+                                                    </ng-select>
+                                                    <div *ngIf="submitted && f['entity_product'].errors" class="mt-1">
+                                                        <div *ngIf="submitted && f['entity_product'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="productListSeleted.length > 0">
+                                                    <div class="table-responsive">
+                                                        <table class="table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>N°</th>
+                                                                    <th>Nom</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody *ngIf="productListSeleted.length > 0">
+                                                                <tr *ngFor="let item of productListSeleted | filter:information; let i = index;">
+                                                                    <td>{{i+1}}</td>
+                                                                    <td>{{item?.name}}</td>
+                                                                    <td class="text-center">
+                                                                        <ul class="flex gap-2">
+                                                                            <li *ngIf="!item?.is_disabled">
+                                                                                <a href="javascript:;" x-tooltip="Supprimer" (click)="deleteProduct(item)">
+                                                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 m-auto text-danger">
+                                                                                        <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
+                                                                                        <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                                                                    </svg>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <h1 *ngIf="productListSeleted.length <= 0" class="text-center items-center p-2">Aucune donnée à afficher</h1>
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                            <div class="flex justify-end items-center mt-8">
+                                                <button type="button" (click)="resetAll(); addItem = !addItem" class="btn btn-outline-danger">Annuler</button>
+                                                <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="!submit">Enregistrer</button>
+                                                <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="submit">
+                                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
+                                                        <line x1="12" y1="2" x2="12" y2="6"></line>
+                                                        <line x1="12" y1="18" x2="12" y2="22"></line>
+                                                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                                                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                                                        <line x1="2" y1="12" x2="6" y2="12"></line>
+                                                        <line x1="18" y1="12" x2="22" y2="12"></line>
+                                                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                                                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                                                    </svg>
+                                                    Patientez ...
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <app-preloader></app-preloader>
+            </div>    
+        </div>
+    </div>
+</div>
+

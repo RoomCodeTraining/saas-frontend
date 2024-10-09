@@ -90,7 +90,7 @@
         <div class="relative bg-white flex w-full items-center px-5 py-2.5 dark:bg-[#0e1726]" style="background-color: rgb(255, 255, 255);">
             <div class="horizontal-logo flex lg:hidden justify-between items-center ltr:mr-2 rtl:ml-2">
                 <a routerLink="/" class="main-logo flex items-center shrink-0">
-                    <img class="w-8 ltr:-ml-1 rtl:-mr-1 inline" src="assets/images/logo-icon.png" alt="image" />
+                    <img class="w-8 ltr:-ml-1 rtl:-mr-1 inline" src="assets/images/logo-type.png" alt="image" />
                     <span
                         class="text-2xl ltr:ml-1.5 rtl:mr-1.5  font-semibold  align-middle hidden md:inline dark:text-white-light transition-all duration-300">COOP</span>
                 </a>
@@ -115,14 +115,14 @@
             <div
                 class="sm:flex-1 ltr:sm:ml-0 ltr:ml-auto sm:rtl:mr-0 rtl:mr-auto flex items-center space-x-1.5 lg:space-x-2 rtl:space-x-reverse dark:text-[#d0d2d6]" *ngIf="user_logged">
                 <div class="sm:ltr:mr-auto sm:rtl:ml-auto" style="padding-left: 10%; width: 100%;" x-data="{ search: false }">
-                    <h2>{{user_logged.current_office.name}} | {{user_logged.name}} | {{user_logged.role.label}}</h2>
+                    <h2>{{user_logged.entity.name}} | {{user_logged.name}}</h2>
                 </div>
                 
                 <div class="dropdown flex-shrink-0" x-data="dropdown" (click)="open = !open">
                     <a href="javascript:;" class="relative group">
                         <span><img
                                 class="w-9 h-9 rounded-full object-cover saturate-50 group-hover:saturate-100"
-                                src="{{user_logged.photo_url}}" alt="image" /></span>
+                                src="{{user_logged?.photo_url}}" alt="image" /></span>
                     </a>
                     <ul [attr.x-show]="open" x-transition x-transition.duration.300ms
                         class="ltr:right-0 rtl:left-0 text-dark dark:text-white-dark top-11 !py-0 w-[230px] font-semibold dark:text-white-light/90">
@@ -130,13 +130,13 @@
                             <div class="flex items-center px-2 py-2">
                                 <div class="flex-none">
                                     <img class="rounded-md w-10 h-10 object-cover"
-                                        src="{{user_logged.photo_url}}" alt="image" />
+                                        src="{{user_logged?.photo_url}}" alt="image" />
                                 </div>
                                 <div class="ltr:pl-4 rtl:pr-4">
                                     <h6 style="font-size: 12px;">
-                                        {{user_logged.last_name}} 
+                                        {{user_logged?.last_name}} 
                                         <br>
-                                        {{user_logged.first_name}}
+                                        {{user_logged?.first_name}}
                                     </h6>
                                     <a class="text-black/60  hover:text-primary dark:text-dark-light/60 dark:hover:text-white"
                                         href="javascript:;" style="font-size: 10px;">

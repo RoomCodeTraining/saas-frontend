@@ -270,22 +270,26 @@ export class ListUserComponent implements OnInit {
     // });
   }
 
+  getPaginate(data:any){
+    this.current_page = data?.meta?.current_page;
+    this.first_page_url = data?.meta?.first_page_url;
+    this.from = data?.meta?.from;
+    this.last_page = data?.meta?.last_page;
+    this.last_page_url = data?.meta?.last_page_url;
+    this.links = data?.meta?.links;
+    this.next_page_url = data?.meta?.next_page_url;
+    this.per_page = data?.meta?.per_page;
+    this.prev_page_url = data?.meta?.prev_page_url;
+    this.to = data?.meta?.to;
+    this.total = data?.meta?.total;
+  }
+
   getItems(){
     if(this.role){
       this.appService.getUser(this.current_page,this.role).subscribe((data: any) => {
         this.listItem = data.data;
   
-        this.current_page = data.meta.current_page;
-        this.first_page_url = data.meta.first_page_url;
-        this.from = data.meta.from;
-        this.last_page = data.meta.last_page;
-        this.last_page_url = data.meta.last_page_url;
-        this.links = data.meta.links;
-        this.next_page_url = data.meta.next_page_url;
-        this.per_page = data.meta.per_page;
-        this.prev_page_url = data.meta.prev_page_url;
-        this.to = data.meta.to;
-        this.total = data.meta.total;
+        this.getPaginate(data);
   
         this.SpinnerService.hide();
   
@@ -294,17 +298,7 @@ export class ListUserComponent implements OnInit {
       this.appService.getAllUser(this.current_page).subscribe((data: any) => {
         this.listItem = data.data;
   
-        this.current_page = data.meta.current_page;
-        this.first_page_url = data.meta.first_page_url;
-        this.from = data.meta.from;
-        this.last_page = data.meta.last_page;
-        this.last_page_url = data.meta.last_page_url;
-        this.links = data.meta.links;
-        this.next_page_url = data.meta.next_page_url;
-        this.per_page = data.meta.per_page;
-        this.prev_page_url = data.meta.prev_page_url;
-        this.to = data.meta.to;
-        this.total = data.meta.total;
+        this.getPaginate(data);
   
         this.SpinnerService.hide();
   
@@ -319,17 +313,7 @@ export class ListUserComponent implements OnInit {
       this.appService.getUserSearch(this.current_page,this.role,this.information).subscribe((data: any) => {
         this.listItem = data.data;
         
-        this.current_page = data.meta.current_page;
-        this.first_page_url = data.meta.first_page_url;
-        this.from = data.meta.from;
-        this.last_page = data.meta.last_page;
-        this.last_page_url = data.meta.last_page_url;
-        this.links = data.meta.links;
-        this.next_page_url = data.meta.next_page_url;
-        this.per_page = data.meta.per_page;
-        this.prev_page_url = data.meta.prev_page_url;
-        this.to = data.meta.to;
-        this.total = data.meta.total;
+        this.getPaginate(data);
 
         this.SpinnerService.hide();
 
@@ -339,17 +323,7 @@ export class ListUserComponent implements OnInit {
       this.appService.getAllUserSearch(this.current_page,this.information).subscribe((data: any) => {
         this.listItem = data.data;
         
-        this.current_page = data.meta.current_page;
-        this.first_page_url = data.meta.first_page_url;
-        this.from = data.meta.from;
-        this.last_page = data.meta.last_page;
-        this.last_page_url = data.meta.last_page_url;
-        this.links = data.meta.links;
-        this.next_page_url = data.meta.next_page_url;
-        this.per_page = data.meta.per_page;
-        this.prev_page_url = data.meta.prev_page_url;
-        this.to = data.meta.to;
-        this.total = data.meta.total;
+        this.getPaginate(data);
 
         this.SpinnerService.hide();
 
@@ -366,17 +340,7 @@ export class ListUserComponent implements OnInit {
         this.appService.getUserPaginate(this.current_page,this.role).subscribe((data: any) => {
           this.listItem = data.data;
           
-          this.current_page = data.meta.current_page;
-          this.first_page_url = data.meta.first_page_url;
-          this.from = data.meta.from;
-          this.last_page = data.meta.last_page;
-          this.last_page_url = data.meta.last_page_url;
-          this.links = data.meta.links;
-          this.next_page_url = data.meta.next_page_url;
-          this.per_page = data.meta.per_page;
-          this.prev_page_url = data.meta.prev_page_url;
-          this.to = data.meta.to;
-          this.total = data.meta.total;
+          this.getPaginate(data);
 
           this.SpinnerService.hide();
 
@@ -386,17 +350,7 @@ export class ListUserComponent implements OnInit {
         this.appService.getAllUserPaginate(this.current_page).subscribe((data: any) => {
           this.listItem = data.data;
           
-          this.current_page = data.meta.current_page;
-          this.first_page_url = data.meta.first_page_url;
-          this.from = data.meta.from;
-          this.last_page = data.meta.last_page;
-          this.last_page_url = data.meta.last_page_url;
-          this.links = data.meta.links;
-          this.next_page_url = data.meta.next_page_url;
-          this.per_page = data.meta.per_page;
-          this.prev_page_url = data.meta.prev_page_url;
-          this.to = data.meta.to;
-          this.total = data.meta.total;
+          this.getPaginate(data);
 
           this.SpinnerService.hide();
 
@@ -844,7 +798,15 @@ export class ListUserComponent implements OnInit {
       formData.append("avatar",null);
     }
 
-    this.appService.updateUser(formData,this.itemSelected.id).subscribe(res => {
+    let requestData = {
+      email: this.email,
+      contact: this.mobile,
+      first_name: this.firstname,
+      last_name: this.lastname,
+      role: this.role,
+    }
+
+    this.appService.updateUser(requestData,this.itemSelected.id).subscribe(res => {
       this.message = res;
       if(this.message.success == false){
         this.submit = false;

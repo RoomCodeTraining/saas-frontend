@@ -11,7 +11,7 @@ export class TokenService {
     signup: 'http://localhost:8000/api/signup'
   };
 
-  authenticated!: any;
+  token!: any;
   decode_token!: any;
   user_logged_id!: any;
 
@@ -35,9 +35,9 @@ export class TokenService {
   }
 
   isValid() {
-    const authenticated = this.get();
-    if (authenticated) {
-      const payload = this.payload(authenticated);
+    const token = this.get();
+    if (token) {
+      const payload = this.payload(token);
       if (payload) {
         return true;
       }
@@ -45,8 +45,8 @@ export class TokenService {
     return false;
   }
 
-  payload(authenticated:any) {
-    return authenticated;
+  payload(token:any) {
+    return token;
   }
 
   loggedIn() {

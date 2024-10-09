@@ -45,6 +45,17 @@ import { EditSellerComponent } from './components/app-content/entity/seller/edit
 import { EditClientComponent } from './components/app-content/entity/client/edit-client/edit-client.component';
 import { ListClientComponent } from './components/app-content/entity/client/list-client/list-client.component';
 import { AddClientComponent } from './components/app-content/entity/client/add-client/add-client.component';
+import { ListTrackerComponent } from './components/app-content/tracker/list-tracker/list-tracker.component';
+import { ListOperationComponent } from './components/app-content/operation/list-operation/list-operation.component';
+import { ListPurchaseComponent } from './components/app-content/purchase/list-purchase/list-purchase.component';
+import { ListSaleComponent } from './components/app-content/sale/list-sale/list-sale.component';
+import { AddPurchaseComponent } from './components/app-content/purchase/add-purchase/add-purchase.component';
+import { AddSaleComponent } from './components/app-content/sale/add-sale/add-sale.component';
+import { AddOperationComponent } from './components/app-content/operation/add-operation/add-operation.component';
+import { AddProductComponent } from './components/app-content/product/add-product/add-product.component';
+import { ListProductComponent } from './components/app-content/product/list-product/list-product.component';
+import { ListPriceComponent } from './components/app-content/price/list-price/list-price.component';
+import { AddPriceComponent } from './components/app-content/price/add-price/add-price.component';
 
 function resourceProviderFactory(JarwisService: JarwisService) {
   return () => {
@@ -85,6 +96,17 @@ function resourceProviderFactory(JarwisService: JarwisService) {
     EditClientComponent,
     ListClientComponent,
     AddClientComponent,
+    ListTrackerComponent,
+    ListOperationComponent,
+    ListPurchaseComponent,
+    ListSaleComponent,
+    AddPurchaseComponent,
+    AddSaleComponent,
+    AddOperationComponent,
+    AddProductComponent,
+    ListProductComponent,
+    ListPriceComponent,
+    AddPriceComponent,
   ],
   imports: [
     BrowserModule,
