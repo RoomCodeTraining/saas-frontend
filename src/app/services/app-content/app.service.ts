@@ -341,6 +341,11 @@ export class AppService {
     return this.http.post<any>(`${this.baseUrl}/sales`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
+  cancelSale(sale_id:any,data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/sales/state/update/`+sale_id, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+
   getPurchase(page:number): Observable<any> {
     return this.http.get<any[]>(`${this.baseUrl}/purchases?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
@@ -361,24 +366,57 @@ export class AppService {
     return this.http.post<any>(`${this.baseUrl}/purchases`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getOperation(page:number): Observable<any> {
+  cancelPurchase(purchase_id:any,data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/purchases/state/update/`+purchase_id, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getAllOperation(page:number): Observable<any> {
     return this.http.get<any[]>(`${this.baseUrl}/operations?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getOperationPaginate(page:number): Observable<any> {
+  getAllOperationPaginate(page:number): Observable<any> {
     return this.http.get<any[]>(`${this.baseUrl}/operations?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getOperationSearch(page:number,information:any): Observable<any> {
+  getAllOperationSearch(page:number,information:any): Observable<any> {
     return this.http.get<any[]>(`${this.baseUrl}/operations?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getOperationPaginateSearch(page:number,information:any): Observable<any> {
+  getAllOperationPaginateSearch(page:number,information:any): Observable<any> {
     return this.http.get<any[]>(`${this.baseUrl}/operations?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  addOperation(data:any): Observable<any> {
+
+  getOperation(wallet_id:number,page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/operations?page=${page}`+`&walletRef=`+ wallet_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getOperationPaginate(wallet_id:number,page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/operations?page=${page}`+`&walletRef=`+ wallet_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getOperationSearch(wallet_id:number,page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/operations?page=${page}`+`&walletRef=`+ wallet_id +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getOperationPaginateSearch(wallet_id:number,page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/operations?page=${page}`+`&walletRef=`+ wallet_id +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  addOperation(wallet_id:number,data:any): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/operations`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  cancelOperation(operation_id:number,data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/operations/state/update/`+operation_id, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getStatistic(): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/statistics`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getStatisticWithDate(from:Date,to:Date): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/statistics/`+from+`/`+to,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
 

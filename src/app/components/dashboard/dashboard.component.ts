@@ -92,6 +92,8 @@ export class DashboardComponent implements OnInit {
 
   formGroup!: FormGroup;
   submitted = false;
+  submit = false;
+
 
   user_logged!: any;
   listUserService!: any;
@@ -237,6 +239,11 @@ export class DashboardComponent implements OnInit {
   totalOffices: number = 0;
   totalAgentMandataire: number = 0;
 
+  item: any;
+
+  date_from: any;
+  date_to: any;
+
 
   constructor(
     public appService: AppService,
@@ -268,6 +275,11 @@ export class DashboardComponent implements OnInit {
     this.ifUserLogged();
 
     this.getUserLogged();
+
+    this.formGroup = new FormGroup({
+      date_from: new FormControl('', [Validators.required]),
+      date_to: new FormControl('', [Validators.required]),
+    });
     
 
   }
@@ -279,7 +291,6 @@ export class DashboardComponent implements OnInit {
   }
 
   getUserLogged(){
-      console.log("userprofile_id");
     this.appService.getUserProfile().subscribe((data: any) => {
       this.user_logged = data.data;
       this.userprofile_id = this.user_logged.role.id;  
@@ -319,120 +330,73 @@ export class DashboardComponent implements OnInit {
 
   getItems(userprofile_id: number){
 
-    if(this.user_logged?.role?.name == 'admin'){
-    //   this.statisticService.getUserStatistic().subscribe((data: any) => {
-    //     this.totalUser = data.data.totalUsers.value;
-    //     this.totalAbleUser = data.data.activeUsers.value;
-    //     this.totalEnableUser = data.data.disabledUsers.value;
-    //     this.SpinnerService.hide();  
-    //   });
-
-    //   this.statisticService.getOrderStatistic().subscribe((data: any) => {
-    //     this.totalOrder = data.data.total.value;
-    //     this.totalOrderApproved = data.data.approved.value;
-    //     this.totalOrderPending = data.data.pending.value;
-    //     this.totalOrderAwaitingConfirmation = data.data.awaiting_confirmation.value;
-    //     this.SpinnerService.hide();  
-    //   });
-
-    //   this.statisticService.getCertificateStatistic().subscribe((data: any) => {
-    //     this.totalCedeao = data.data.cedeao.value;
-    //     this.SpinnerService.hide();  
-    //   });
-
-    //   this.statisticService.getOrganizationStatistic().subscribe((data: any) => {
-    //     this.totalInsurers = data.data.insurers.value;
-    //     this.totalBrokers = data.data.brokers.value;
-    //     this.totalBancassurance = data.data.bancassurances.value;  
-    //     this.SpinnerService.hide();  
-    //   });
-    // } else if(this.user_logged?.role?.name === 'operating_admin'){
-    //   this.statisticService.getOrderStatistic().subscribe((data: any) => {
-    //     this.totalOrder = data.data.total.value;
-    //     this.totalOrderPending = data.data.pending.value;
-    //     this.totalOrderAwaitingConfirmation = data.data.awaiting_confirmation.value;
-    //     this.SpinnerService.hide();  
-    //   });
-    // } else if(this.user_logged?.role?.name === 'main_office_admin' &&  this.user_logged.organization.organization_type.code == 'insurer'){
-    //   this.statisticService.getUserStatistic().subscribe((data: any) => {
-    //     this.totalUser = data.data.totalUsers.value;
-    //     this.totalAbleUser = data.data.activeUsers.value;
-    //     this.totalEnableUser = data.data.disabledUsers.value;
-    //     this.SpinnerService.hide();  
-    //   });
-
-    //   this.statisticService.getOfficeStatistic().subscribe((data: any) => {
-    //     this.totalOffices = data.data.offices.value;
-    //     this.totalAgent = data.data.agent.value;
-    //     this.totalAgentMandataire = data.data.agent_mandataire.value;  
-    //     this.SpinnerService.hide();  
-    //   });
-    // } else if(((this.user_logged?.role?.name === 'main_office_admin') && (this.user_logged.organization.organization_type.code != 'insurer' && this.user_logged.organization.organization_type.code != 'supplier')) || this.user_logged?.role?.name == 'office_admin'){
-    //   this.statisticService.getUserStatistic().subscribe((data: any) => {
-    //     this.totalUser = data.data.totalUsers.value;
-    //     this.totalAbleUser = data.data.activeUsers.value;
-    //     this.totalEnableUser = data.data.disabledUsers.value;
-    //     this.SpinnerService.hide();  
-    //   });
-
-    //   this.statisticService.getOfficeStatistic().subscribe((data: any) => {
-    //     this.totalOffices = data.data.offices.value;
-    //     this.totalAgent = data.data.agent.value;
-    //     this.totalAgentMandataire = data.data.agent_mandataire.value;  
-    //     this.SpinnerService.hide();  
-    //   });
-
-    //   this.statisticService.getTransactionStatistic().subscribe((data: any) => {
-    //     this.totalTransaction = data.data.total.value;
-    //     this.totalTransactionApproved = data.data.approved.value;
-    //     this.totalTransactionAwaitingConfirmation = data.data.pending.value;
-    //     this.SpinnerService.hide();  
-    //   });
-
-    //   this.statisticService.getCertificateStatistic().subscribe((data: any) => {
-    //     this.totalCedeao = data.data.cedeao.value;
-    //     this.SpinnerService.hide();  
-    //   });
-
-    // } else if(this.user_logged?.role?.name === 'stock_manager'){
-    //   this.statisticService.getOrderStatistic().subscribe((data: any) => {
-    //     this.totalOrder = data.data.total.value;
-    //     this.totalOrderApproved = data.data.approved.value;
-    //     this.totalOrderAwaitingConfirmation = data.data.awaiting_confirmation.value;
-    //     this.SpinnerService.hide();  
-    //   });
-
-    //   this.statisticService.getTransactionStatistic().subscribe((data: any) => {
-    //     this.totalTransaction = data.data.total.value;
-    //     this.totalTransactionApproved = data.data.approved.value;
-    //     this.totalTransactionAwaitingConfirmation = data.data.pending.value;
-    //     this.SpinnerService.hide();  
-    //   });
-    // } else if(this.user_logged?.role?.name === 'broker_manager' || this.user_logged?.role?.name === 'office_manager'){
-    //   this.statisticService.getTransactionStatistic().subscribe((data: any) => {
-    //     this.totalTransaction = data.data.total.value;
-    //     this.totalTransactionApproved = data.data.approved.value;
-    //     this.totalTransactionAwaitingConfirmation = data.data.pending.value;
-    //     this.SpinnerService.hide();  
-    //   });
-    // } else if(this.user_logged?.role?.name === 'office_master' || this.user_logged?.role?.name === 'standard_user'){
-    //   this.statisticService.getCertificateStatistic().subscribe((data: any) => {
-    //     this.totalCedeao = data.data.cedeao.value;
-    //     this.SpinnerService.hide();  
-    //   });
-    // } else if(this.user_logged?.role?.name === 'main_office_admin' &&  this.user_logged.organization.organization_type.code == 'supplier'){
-    //   this.statisticService.getOrderStatistic().subscribe((data: any) => {
-    //     this.totalOrder = data.data.total.value;
-    //     this.totalOrderApproved = data.data.approved.value;
-    //     this.totalOrderAwaitingConfirmation = data.data.awaiting_confirmation.value;
-    //     this.SpinnerService.hide();  
-    // });
-    } else {
-
-      this.SpinnerService.hide();
-
-    }
-
+    this.appService.getStatistic().subscribe((data: any) => {
+      this.item = data.data;
+      this.SpinnerService.hide();  
+    });
   }  
 
+  get f() { return this.formGroup.controls; }
+
+  save(){
+    this.submitted = true;
+    if(this.formGroup.invalid){
+      return;
+    } else {
+      this.submit = true;
+
+      this.appService.getStatisticWithDate(this.date_from,this.date_to).subscribe((data: any) => {
+        this.message = data;
+        if(this.message.success == false){
+          this.submit = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
+          this.toast = {
+            message: this.message.message,
+            title: 'Erreur',
+            type: 'error',
+            ic: {
+              timeOut: 5000,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.SpinnerService.hide();
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submit = false;
+          this.item = data.data;
+          this.SpinnerService.hide();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
+        this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submit = false;
+        this.toast = {
+          message: err.error.error,
+          title: 'Erreur',
+          type: 'error',
+          ic: {
+            timeOut: 5000,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submit = false;
+        this.SpinnerService.hide();
+        this.cs.showToast(this.toast);
+      })
+    }
+  }
 }

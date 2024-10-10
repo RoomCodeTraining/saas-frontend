@@ -32,6 +32,7 @@ import { AppService } from 'src/app/services/app-content/app.service';
 export class ListTrackerComponent implements OnInit {
 
   listItem: any;
+  listOperation: any;
   listUserType: any;
   listRole: any;
   listOrganization: any;
@@ -39,6 +40,7 @@ export class ListTrackerComponent implements OnInit {
 
   itemSelected: any;
   walletSelected: any;
+  operationHistorySelected: any;
 
   selectedImage: any;
   logofiles: any;
@@ -96,11 +98,15 @@ export class ListTrackerComponent implements OnInit {
   user_logged_id!: any;
 
   information!: string;
+  informationOperation!: string;
   start: number = 0;
 
   type: string = "pisteur";
-
+  
   submit: boolean = false;
+  submitOperation: boolean = false;
+  submitWallet: boolean = false;
+  submitDeposit: boolean = false;
 
   addItem: boolean = false;  
   editItem: boolean = false;  
@@ -110,6 +116,7 @@ export class ListTrackerComponent implements OnInit {
   disableItem: boolean = false;
   walletItem: boolean = false;
   depositItem: boolean = false;
+  operationHistoryItem: boolean = false;
 
   activeDropdown!: any;  
   open: boolean = false;  
@@ -127,6 +134,18 @@ export class ListTrackerComponent implements OnInit {
   prev_page_url!: string;
   to!: number;
   total!: number;
+
+  operation_current_page: number=1;
+  operation_first_page_url!: string;
+  operation_from!: number;
+  operation_last_page!: number;
+  operation_last_page_url!: string;
+  operation_links!: any;
+  operation_next_page_url!: string;
+  operation_per_page!: number;
+  operation_prev_page_url!: string;
+  operation_to!: number;
+  operation_total!: number;
 
   permissions!: any;
   permitted: boolean = false;
@@ -274,6 +293,9 @@ export class ListTrackerComponent implements OnInit {
     this.lastname = "";
     this.mobile = "";
     this.email = "";
+
+    this.weight = 0;
+    this.amount = 0;
   }
 
   getProduct(){
@@ -407,6 +429,104 @@ export class ListTrackerComponent implements OnInit {
     this.paginate();
   }
 
+
+
+  getPaginateOperation(data:any){
+    this.operation_current_page = data?.meta?.current_page;
+    this.operation_first_page_url = data?.meta?.first_page_url;
+    this.operation_from = data?.meta?.from;
+    this.operation_last_page = data?.meta?.last_page;
+    this.operation_last_page_url = data?.meta?.last_page_url;
+    this.operation_links = data?.meta?.links;
+    this.operation_next_page_url = data?.meta?.next_page_url;
+    this.operation_per_page = data?.meta?.per_page;
+    this.operation_prev_page_url = data?.meta?.prev_page_url;
+    this.operation_to = data?.meta?.to;
+    this.operation_total = data?.meta?.total;
+  }
+
+  getOperation(){
+    this.SpinnerService.show();
+    this.appService.getOperation(this.walletSelected.reference,this.operation_current_page).subscribe((data: any) => {
+      this.listOperation = data?.data;
+
+      this.getPaginateOperation(data);
+
+      this.SpinnerService.hide();
+
+    });
+  }
+
+  searchOperation(){
+    this.SpinnerService.show();
+    this.appService.getOperationSearch(this.walletSelected.id,this.operation_current_page,this.informationOperation).subscribe((data: any) => {
+      this.listOperation = data?.data;
+      
+      this.getPaginateOperation(data);
+
+      this.SpinnerService.hide();
+
+    })
+  }
+
+  paginateOperation(){
+    if(this.informationOperation){
+      this.searchOperation()
+    } else {
+      this.SpinnerService.show();
+        this.appService.getOperationPaginate(this.walletSelected.id,this.operation_current_page).subscribe((data: any) => {
+          this.listOperation = data?.data;
+          
+          this.getPaginateOperation(data);
+
+          this.SpinnerService.hide();
+
+        })
+    }
+  }
+
+  nextPageOperation() {
+    this.SpinnerService.show();
+    this.operation_current_page = this.current_page + 1;
+    this.paginateOperation();
+  }
+
+  previousPageOperation() {
+    this.SpinnerService.show();
+    this.operation_current_page = this.current_page - 1;
+    this.paginateOperation();
+  }
+
+  otherPageLeft1Operation() {
+    this.operation_current_page = this.current_page - 1;
+    this.paginateOperation();
+  }
+
+  otherPageLeft2Operation() {
+    this.operation_current_page = this.current_page - 2;
+    this.paginateOperation();
+  }
+
+  otherPageRigth1Operation() {
+    this.operation_current_page = this.current_page + 1;
+    this.paginateOperation();
+  }
+
+  otherPageRigth2Operation() {
+    this.operation_current_page = this.current_page + 2;
+    this.paginateOperation();
+  }
+
+  firstPageOperation() {
+    this.operation_current_page = 1;
+    this.paginateOperation();
+  }
+
+  lastPageOperation() {
+    this.operation_current_page = this.last_page;
+    this.paginateOperation();
+  }
+
   itemAdd() {
     this.addItem = true;
     this.itemDetail = false;
@@ -467,8 +587,6 @@ export class ListTrackerComponent implements OnInit {
     this.firstname = this.itemSelected.firstname;
     this.lastname = this.itemSelected.lastname;
     this.password = this.itemSelected.password;
-    // this.userprofile_id = this.itemSelected.userprofile_id;
-    // this.entityfirm_id = this.itemSelected.entityfirm_id;
     this.avatar = this.itemSelected.avatar;
     this.status_id = this.itemSelected.status_id;
   }
@@ -481,13 +599,11 @@ export class ListTrackerComponent implements OnInit {
     this.disableItem = true;
     this.walletItem = false;
     this.itemSelected = item;
-    this.email = this.itemSelected.id.email;
-    this.mobile = this.itemSelected.id.contact;
-    this.firstname = this.itemSelected.id.firstname;
-    this.lastname = this.itemSelected.id.lastname;
-    this.password = this.itemSelected.id.password;
-    this.userprofile_id = this.itemSelected.userprofile_id.id;
-    this.entityfirm_id = this.itemSelected.entityfirm_id.id;
+    this.email = this.itemSelected.email;
+    this.mobile = this.itemSelected.contact;
+    this.firstname = this.itemSelected.firstname;
+    this.lastname = this.itemSelected.lastname;
+    this.password = this.itemSelected.password;
     this.avatar = this.itemSelected.avatar;
     this.status_id = this.itemSelected.status_id;
   }
@@ -532,7 +648,24 @@ export class ListTrackerComponent implements OnInit {
 
   itemDeposit(item:any) {
     this.depositItem = true;
+    this.operationHistoryItem = false;
     this.walletSelected = item;
+  }
+
+  itemOperationHistory(item:any) {
+    this.depositItem = false;
+    this.operationHistoryItem = true;
+    this.walletSelected = item;
+    this.getOperation();
+  }
+
+  itemCancel(item:any) {
+    this.editItem = false;
+    this.itemDetail = false;
+    this.operationItem = false;
+    this.ableItem = false;
+    this.walletItem = false;
+    this.operationHistorySelected = item;
   }
  
   hide_message() {
@@ -635,66 +768,6 @@ export class ListTrackerComponent implements OnInit {
   }
 
   get f3() { return this.formGroupEdit.controls; }
-
-  sendWelcome(){
-    this.submit = true;
-
-    const formData:any = new FormData();
-    formData.append("email",this.itemSelected.email);
-
-    this.appService.sendWelcome(formData).subscribe(res => {
-      this.message = res;
-      if(this.message.success == false){
-        this.error_message = this.message.message;
-        this.submit = !this.submit;
-        this.exist_error = true;
-        this.toast = {
-          message: this.message.message,
-          title: 'Erreur',
-          type: 'error',
-          ic: {
-            timeOut: 5000,
-            closeButton: true,
-            progressBar: true,
-          } as GlobalConfig,
-        };
-        this.SpinnerService.hide();
-      } else {
-        this.toast = {
-          message: this.message.message,
-          title: 'Succès',
-          type: 'success',
-          ic: {
-            timeOut: 2500,
-            closeButton: true,
-            progressBar: true,
-          } as GlobalConfig,
-        };
-        this.submit = !this.submit;
-        this.itemSelected = !this.itemSelected;
-        this.ngOnInit();
-      }
-      this.cs.showToast(this.toast);
-    },
-    (err: HttpErrorResponse) => {
-      this.exist_error = true;
-      this.error_message = err.error.errors;
-      this.submit = false;
-      this.toast = {
-        message: err.error.message,
-        title: 'Erreur',
-        type: 'error',
-        ic: {
-          timeOut: 5000,
-          closeButton: true,
-          progressBar: true,
-        } as GlobalConfig,
-      };
-      this.submit = false;
-      this.SpinnerService.hide();
-      this.cs.showToast(this.toast);
-    })
-  }
 
   enable(){
     this.submit = true;
@@ -817,28 +890,14 @@ export class ListTrackerComponent implements OnInit {
 
   get f2() { return this.formGroup2.controls; }
 
-  update(){
+  cancel(){
     this.submit = true;
-    const formData:any = new FormData();
-    formData.append("email",this.email);
-    formData.append("contact",this.mobile);
-    formData.append("first_name",this.firstname);
-    formData.append("last_name",this.lastname);
-    if(this.avatarfiles){
-      formData.append("avatar",this.avatarfiles,this.avatarfiles.name);
-    } else {
-      formData.append("avatar",null);
-    }
-
+    
     let requestData = {
-      email: this.email,
-      contact: this.mobile,
-      first_name: this.firstname,
-      last_name: this.lastname,
-      role: this.role,
+      operation_id: this.operationHistorySelected.id,
     }
 
-    this.appService.updateUser(requestData,this.itemSelected.id).subscribe(res => {
+    this.appService.cancelOperation(this.operationHistorySelected.id,requestData).subscribe(res => {
       this.message = res;
       if(this.message.success == false){
         this.submit = false;
@@ -869,6 +928,7 @@ export class ListTrackerComponent implements OnInit {
         this.submit = false;
         this.editItem = !this.editItem;
         this.itemSelected = !this.itemSelected;
+        this.resetAll();
         this.ngOnInit();
       }
       this.cs.showToast(this.toast);
@@ -900,7 +960,7 @@ export class ListTrackerComponent implements OnInit {
     if(this.formGroupOperation.invalid){
       return;
     } else {
-      this.submittedOperation = true;
+      this.submitOperation = true;
       
       let requestData = {
         entity_product_id: this.entity_product_id,
@@ -913,7 +973,7 @@ export class ListTrackerComponent implements OnInit {
       this.appService.addPurchase(requestData).subscribe(res => {
         this.message = res;
         if(this.message.success == false){
-          this.submittedOperation = false;
+          this.submitOperation = false;
           this.error_message = this.message.message;
           this.exist_error = false;
           this.toast = {
@@ -938,9 +998,10 @@ export class ListTrackerComponent implements OnInit {
               progressBar: true,
             } as GlobalConfig,
           };
-          this.submittedOperation = false;
-          this.addItem = !this.addItem;
+          this.submitOperation = false;
+          this.operationItem = !this.operationItem;
           this.itemSelected = !this.itemSelected;
+          this.resetAll();
           this.ngOnInit();
         }
         this.cs.showToast(this.toast);
@@ -948,7 +1009,7 @@ export class ListTrackerComponent implements OnInit {
       (err: HttpErrorResponse) => {
         this.exist_error = true;
         this.error_message = err.error.errors;
-        this.submittedOperation = false;
+        this.submitOperation = false;
         this.toast = {
           message: err.error.error,
           title: 'Erreur',
@@ -959,7 +1020,7 @@ export class ListTrackerComponent implements OnInit {
             progressBar: true,
           } as GlobalConfig,
         };
-        this.submittedOperation = false;
+        this.submitOperation = false;
         this.SpinnerService.hide();
         this.cs.showToast(this.toast);
       })
@@ -973,7 +1034,7 @@ export class ListTrackerComponent implements OnInit {
     if(this.formGroupWallet.invalid){
       return;
     } else {
-      this.submittedWallet = true;
+      this.submitWallet = true;
       
       let requestData = {
         product_id: this.entity_product_id,
@@ -984,7 +1045,7 @@ export class ListTrackerComponent implements OnInit {
       this.appService.addWallet(requestData).subscribe(res => {
         this.message = res;
         if(this.message.success == false){
-          this.submittedWallet = false;
+          this.submitWallet = false;
           this.error_message = this.message.message;
           this.exist_error = false;
           this.toast = {
@@ -1009,9 +1070,10 @@ export class ListTrackerComponent implements OnInit {
               progressBar: true,
             } as GlobalConfig,
           };
-          this.submittedWallet = false;
-          this.addItem = !this.addItem;
+          this.submitWallet = false;
+          this.walletItem = !this.walletItem;
           this.itemSelected = !this.itemSelected;
+          this.resetAll();
           this.ngOnInit();
         }
         this.cs.showToast(this.toast);
@@ -1019,7 +1081,7 @@ export class ListTrackerComponent implements OnInit {
       (err: HttpErrorResponse) => {
         this.exist_error = true;
         this.error_message = err.error.errors;
-        this.submittedWallet = false;
+        this.submitWallet = false;
         this.toast = {
           message: err.error.error,
           title: 'Erreur',
@@ -1030,7 +1092,7 @@ export class ListTrackerComponent implements OnInit {
             progressBar: true,
           } as GlobalConfig,
         };
-        this.submittedWallet = false;
+        this.submitWallet = false;
         this.SpinnerService.hide();
         this.cs.showToast(this.toast);
       })
@@ -1044,7 +1106,7 @@ export class ListTrackerComponent implements OnInit {
     if(this.formGroupDeposit.invalid){
       return;
     } else {
-      this.submittedDeposit = true;
+      this.submitDeposit = true;
       
       let requestData = {
         amount: this.amount,
@@ -1054,7 +1116,7 @@ export class ListTrackerComponent implements OnInit {
       this.appService.addDeposit(requestData).subscribe(res => {
         this.message = res;
         if(this.message.success == false){
-          this.submittedDeposit = false;
+          this.submitDeposit = false;
           this.error_message = this.message.message;
           this.exist_error = false;
           this.toast = {
@@ -1079,9 +1141,10 @@ export class ListTrackerComponent implements OnInit {
               progressBar: true,
             } as GlobalConfig,
           };
-          this.submittedDeposit = false;
-          this.addItem = !this.addItem;
+          this.submitDeposit = false;
+          this.depositItem = !this.depositItem;
           this.itemSelected = !this.itemSelected;
+          this.resetAll();
           this.ngOnInit();
         }
         this.cs.showToast(this.toast);
@@ -1089,7 +1152,7 @@ export class ListTrackerComponent implements OnInit {
       (err: HttpErrorResponse) => {
         this.exist_error = true;
         this.error_message = err.error.errors;
-        this.submittedDeposit = false;
+        this.submitDeposit = false;
         this.toast = {
           message: err.error.error,
           title: 'Erreur',
@@ -1100,7 +1163,7 @@ export class ListTrackerComponent implements OnInit {
             progressBar: true,
           } as GlobalConfig,
         };
-        this.submittedDeposit = false;
+        this.submitDeposit = false;
         this.SpinnerService.hide();
         this.cs.showToast(this.toast);
       })

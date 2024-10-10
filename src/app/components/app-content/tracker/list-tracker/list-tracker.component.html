@@ -42,22 +42,13 @@
                             </div>
                         </div>
                     </div>
-                    <form class="space-y-5" style="padding-bottom: 10px; padding-left: 0%; padding-right: 0%;">
-                        <div class="grid grid-cols-1 grid-cols-3 gap-3">
-                            <div>
-                                <ng-select id="role" name="role" [(ngModel)]="role" (change)="onChange($event)" placeholder="Profil">
-                                    <ng-option *ngFor="let item of listRole" [value]="item?.name">{{item.label}}</ng-option>
-                                </ng-select>
-                            </div>
-                        </div>                                        
-                    </form>
                     <div class="table-responsive">
                         <table class="table-hover">
                             <thead>
                                 <tr>
                                     <th>N°</th>
                                     <th>Action</th>
-                                    <th>Photo</th>
+                                    <!-- <th>Photo</th> -->
                                     <th>Rôle</th>
                                     <th>Nom et prénom</th>
                                     <th>Email</th>
@@ -113,13 +104,13 @@
                                             </li>
                                         </ul>
                                     </td>
-                                    <td>
+                                    <!-- <td>
                                         <div class="flex items-center w-max">
                                             <div class="w-max">
                                                 <img src="{{item?.photo_url}}" class="h-8 w-8 rounded-full object-cover ltr:mr-2 rtl:ml-2" alt="avatar" />
                                             </div>
                                         </div>
-                                    </td>
+                                    </td> -->
                                     <td>{{item?.role}}</td>
                                     <td>{{item?.last_name}} {{item?.first_name}}</td>
                                     <td>{{item?.email}}</td>
@@ -284,90 +275,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="pt-5" *ngIf="itemSelected && editItem">
-                    <div class="row mb-5">
-                        <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
-                            <div class="flex items-start justify-center min-h-screen px-4">
-                                <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
-                                    <h5 class="font-bold text-lg p-5">Modification de {{itemSelected.name}}</h5>
-                                    <div class="p-5">
-                                        <form class="space-y-5" style="padding-bottom: 100px;" (submit)="update()">
-                                            <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
-                                                <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
-                                            </div>
-                                            <div class="grid grid-cols-1 grid-cols-2 gap-2">
-                                                <div class="mb-3" [formGroup]="formGroup2">
-                                                    <label>Nom <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" formControlName="lastname" [ngClass]="{ 'is-invalid': submitted2 && f2['lastname'].errors }"
-                                                        name="lastname" [(ngModel)]="lastname" />
-                                                    <div *ngIf="submitted2 && f2['lastname'].errors" class="mt-1">
-                                                        <div *ngIf="submitted2 && f2['lastname'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroup2">
-                                                    <label>Prénom(s) <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" formControlName="firstname" [ngClass]="{ 'is-invalid': submitted2 && f2['firstname'].errors }"
-                                                        name="firstname" [(ngModel)]="firstname" />
-                                                    <div *ngIf="submitted2 && f2['firstname'].errors" class="mt-1">
-                                                        <div *ngIf="submitted2 && f2['firstname'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroup2">
-                                                    <label>Téléphone <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" formControlName="mobile" [ngClass]="{ 'is-invalid': submitted2 && f2['mobile'].errors }"
-                                                        name="mobile" [(ngModel)]="mobile" />
-                                                    <div *ngIf="submitted2 && f2['mobile'].errors" class="mt-1">
-                                                        <div *ngIf="submitted2 && f2['mobile'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                    <div *ngIf="submitted2 && exist_error" class="mt-1">
-                                                        <div class="text-danger">{{phone_error}}</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroup2">
-                                                    <label>Email <span style="color:red">*</span></label>
-                                                    <input type="email" class="form-input" formControlName="email" [ngClass]="{ 'is-invalid': submitted2 && f2['email'].errors }"
-                                                        name="email" [(ngModel)]="email" />
-                                                    <div *ngIf="submitted2 && f2['email'].errors" class="mt-1">
-                                                        <div *ngIf="submitted2 && f2['email'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                        <div *ngIf="submitted2 && f2['email'].errors?.['pattern']" class="text-danger">Ce champ doit être une adresse email !</div>
-                                                    </div>
-                                                </div>
-                                                <!-- <div class="mb-3">
-                                                    <label>Photo de profil</label>
-                                                    <div class="user-pro-img" *ngIf="!avatarSrc">
-                                                        <img src="{{itemSelected.photo_url}}" class="w-24 h-24 rounded-full object-cover" alt="photo" />
-                                                    </div>
-                                                    <div class="user-pro-img" *ngIf="avatarSrc">
-                                                        <img id="blah" [src]="avatarSrc || 'assets/images/avatar.png'" class="w-24 h-24 rounded-full object-cover" alt="photo" />
-                                                    </div>
-                                                    <input type="file" [(ngModel)]="avatar" class="multi file-upload-input with-preview" name="avatar" (change)="onSelectAvatar($event)" id="customFileLang" lang="fr">
-                                                </div> -->
-                                            </div>
-                
-                                            <div class="flex justify-end items-center mt-8">
-                                                <button type="button" (click)="resetAll(); itemSelected = !itemSelected" class="btn btn-outline-danger">Annuler</button>
-                                                <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="!submit">Enregistrer</button>
-                                                <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="submit">
-                                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
-                                                        <line x1="12" y1="2" x2="12" y2="6"></line>
-                                                        <line x1="12" y1="18" x2="12" y2="22"></line>
-                                                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
-                                                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
-                                                        <line x1="2" y1="12" x2="6" y2="12"></line>
-                                                        <line x1="18" y1="12" x2="22" y2="12"></line>
-                                                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
-                                                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
-                                                    </svg>
-                                                    Patientez ...
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="pt-5" *ngIf="itemSelected && itemDetail">
                     <div class="row mb-5">
                         <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
@@ -412,7 +319,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="table-responsive">
+                                            <div class="table-responsive mb-5">
                                                 <table class="table-hover">
                                                     <thead>
                                                         <tr>
@@ -432,16 +339,30 @@
                                                                 <ul class="flex gap-2">
                                                                     <li>
                                                                         <a href="javascript:;" x-tooltip="Recharger" (click)="itemDeposit(item)">
-                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                                                                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                                            <svg width="24px" height="24px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                                                <path fill="#444" d="M15 4v8h-14v-8h14zM16 3h-16v10h16v-10z"></path>
+                                                                                <path fill="#444" d="M8 5c1.7 0 3 1.3 3 3s-1.3 3-3 3h5v-1h1v-4h-1v-1h-5z"></path>
+                                                                                <path fill="#444" d="M5 8c0-1.7 1.3-3 3-3h-5v1h-1v4h1v1h5c-1.7 0-3-1.3-3-3z"></path>
                                                                             </svg>
-
-                                                                            <!-- <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 text-success">
-                                                                                <path d="M11 10.5H12.5V9M11 4.5H12.5V6M4 4.5H2.5V6M2.5 9V10.5H4M7.5 9.5C6.39543 9.5 5.5 8.60457 5.5 7.5C5.5 6.39543 6.39543 5.5 7.5 5.5C8.60457 5.5 9.5 6.39543 9.5 7.5C9.5 8.60457 8.60457 9.5 7.5 9.5ZM1.5 2.5H13.5C14.0523 2.5 14.5 2.94772 14.5 3.5V11.5C14.5 12.0523 14.0523 12.5 13.5 12.5H1.5C0.947716 12.5 0.5 12.0523 0.5 11.5V3.5C0.5 2.94772 0.947715 2.5 1.5 2.5Z" 
-                                                                                stroke="#000000"
-                                                                                stroke-width="1.5"/>
-                                                                            </svg> -->
+                                                                        </a>
+                                                                    </li> 
+                                                                    <li>
+                                                                        <a href="javascript:;" x-tooltip="Historique des opérations" (click)="itemOperationHistory(item)">
+                                                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
+                                                                                fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 text-primary">
+                                                                                <path opacity="0.5"
+                                                                                    d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
+                                                                                    fill="currentColor" />
+                                                                                <path
+                                                                                    d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
+                                                                                    fill="currentColor" />
+                                                                                <path
+                                                                                    d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
+                                                                                    fill="currentColor" />
+                                                                                <path
+                                                                                    d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
+                                                                                    fill="currentColor" />
+                                                                            </svg>
                                                                         </a>
                                                                     </li> 
                                                                 </ul>
@@ -456,8 +377,153 @@
                                                 </table>
                                                 <h1 *ngIf="itemSelected?.wallets.length <= 0" class="text-center items-center p-2">Aucune donnée à afficher</h1>
                                             </div>
+
+                                            <hr>
+
+                                            <div *ngIf="operationHistoryItem">
+                                                <div class="flex items-center justify-between flex-wrap gap-4 mt-5 mb-5">
+                                                    <h2 class="text-xl">Historique des operations du portefeuille de {{walletSelected?.product_concerned?.name}}</h2>
+                                                    <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
+                                                        <div class="flex gap-3">
+                                                            <div class="relative ">
+                                                                <form (submit)="searchOperation()">
+                                                                    <input type="text" placeholder="Recherche" name="informationOperation" [(ngModel)]="informationOperation" class="form-input py-2 ltr:pr-11 rtl:pl-11 peer"/>
+                                                                    <div class="absolute ltr:right-[11px] rtl:left-[11px] top-1/2 -translate-y-1/2 peer-focus:text-primary">
+                                                    
+                                                                        <svg class="mx-auto" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                            <circle cx="11.5" cy="11.5" r="9.5" stroke="currentColor" stroke-width="1.5" opacity="0.5"></circle>
+                                                                            <path d="M18.5 18.5L22 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                                                                        </svg>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="table-responsive">
+                                                    <table class="table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>N°</th>
+                                                                <th>Action</th>
+                                                                <th>Référence</th>
+                                                                <th>Montant</th>
+                                                                <th>Type</th>
+                                                                <th>Statut</th>
+                                                                <th>Date</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody *ngIf="listOperation?.length >= 0">
+                                                            <tr *ngFor="let item of listOperation | filter:informationOperation; let i = index;">
+                                                                <td>{{i+1}}</td>
+                                                                <td class="text-center">
+                                                                    <ul class="flex gap-2">
+                                                                        <li *ngIf="item?.status == 1">
+                                                                            <a href="javascript:;" x-tooltip="Annuler l'opération" (click)="itemCancel(item)">
+                                                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 m-auto text-danger">
+                                                                                    <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
+                                                                                    <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                                                                </svg>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li *ngIf="item?.status != 1">
+                                                                            ---
+                                                                        </li>
+                                                                    </ul>
+                                                                </td>
+                                                                <td>{{item?.reference}}</td>
+                                                                <td>{{item?.amount | number:'':'fr-FR'}} FCFA</td>
+                                                                <td>{{item?.type}}</td>
+                                                                <td> 
+                                                                    <span class="badge bg-success" *ngIf="item?.status == 1">{{item?.status_label}}</span>
+                                                                    <span class="badge bg-danger" *ngIf="item?.status != 1">{{item?.status_label}}</span>
+                                                                </td>
+                                                                <td>{{item?.created_at | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <h1 *ngIf="listOperation?.length <= 0" class="text-center items-center p-2">Aucune donnée à afficher</h1>
+                                                </div>
+                                                <div class="flex justify-center flex-col w-full mt-2">
+                                                    <div class="grid grid-cols-1 grid-cols-2 gap-2">
+                                                        <div style="padding-top: 10px;">
+                                                            <div class="d-flex mr-5" *ngIf="total">
+                                                                <b>Affichage de {{from}} à {{to}} sur {{total | number:'':'fr-FR'}} éléments</b>
+                                                            </div>
+                                                            <div class="d-flex mr-5" *ngIf="!total">
+                                                                <b>Affichage de 0 à 0 sur 0 élément</b>
+                                                            </div>
+                                                        </div>
+                                                        <div class="inline-flex items-center space-x-1 rtl:space-x-reverse m-auto mb-4">
+                                                            <ul class="inline-flex items-center space-x-1 rtl:space-x-reverse m-auto mb-4" *ngIf="total > per_page">
+                                                                <li (click)="firstPage()">
+                                                                    <button type="button" [disabled]="current_page <= 1" class="flex justify-center font-semibold p-2 rounded-full transition bg-white-light text-dark hover:text-white hover:bg-primary dark:text-white-light dark:bg-[#191e3a] dark:hover:bg-primary">
+                                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 rtl:rotate-180">
+                                                                            <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                                            <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                                        </svg>
+                                                                    </button>
+                                                                </li>
+                                                                <li (click)="previousPage()">
+                                                                    <button type="button" [disabled]="current_page <= 1" class="flex justify-center font-semibold p-2 rounded-full transition bg-white-light text-dark hover:text-white hover:bg-primary dark:text-white-light dark:bg-[#191e3a] dark:hover:bg-primary">
+                                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 rtl:rotate-180">
+                                                                            <path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                                        </svg>
+                                                                    </button>
+                                                                </li>
+                                                                <li *ngIf="current_page > 2 && (from - (per_page * 2)) < total">
+                                                                    <button type="button" (click)="otherPageLeft2()" class="flex justify-center font-semibold px-3.5 py-2 rounded-full transition bg-white-light text-dark hover:text-white hover:bg-primary dark:text-white-light dark:bg-[#191e3a] dark:hover:bg-primary">
+                                                                        {{current_page - 2}}
+                                                                    </button>
+                                                                </li>
+                                                                <li *ngIf="current_page > 1 && (from - per_page) < total">
+                                                                    <button type="button" (click)="otherPageLeft1()" class="flex justify-center font-semibold px-3.5 py-2 rounded-full transition bg-white-light text-dark hover:text-white hover:bg-primary dark:text-white-light dark:bg-[#191e3a] dark:hover:bg-primary">
+                                                                        {{current_page - 1}}
+                                                                    </button>
+                                                                </li>
+                                                                <li *ngIf="current_page == 1">
+                                                                    <button type="button" class="flex justify-center font-semibold px-3.5 py-2 rounded-full transition bg-primary text-white dark:text-white-light dark:bg-primary">
+                                                                        {{current_page}}
+                                                                    </button>
+                                                                </li>
+                                                                <li *ngIf="current_page > 1">
+                                                                    <button type="button" class="flex justify-center font-semibold px-3.5 py-2 rounded-full transition bg-primary text-white dark:text-white-light dark:bg-primary">
+                                                                        {{current_page}}
+                                                                    </button>
+                                                                </li>
+                                                                <li *ngIf="(from + per_page) < total">
+                                                                    <button type="button" (click)="otherPageRigth1()" class="flex justify-center font-semibold px-3.5 py-2 rounded-full transition bg-white-light text-dark hover:text-white hover:bg-primary dark:text-white-light dark:bg-[#191e3a] dark:hover:bg-primary">
+                                                                        {{current_page + 1}}
+                                                                    </button>
+                                                                </li>
+                                                                <li *ngIf="(from + (per_page * 2)) < total">
+                                                                    <button type="button" (click)="otherPageRigth2()" class="flex justify-center font-semibold px-3.5 py-2 rounded-full transition bg-white-light text-dark hover:text-white hover:bg-primary dark:text-white-light dark:bg-[#191e3a] dark:hover:bg-primary">
+                                                                        {{(current_page / 1) + 2}}
+                                                                    </button>
+                                                                </li>
+                                                                <li (click)="nextPage()">
+                                                                    <button type="button" [disabled]="to >= total" class="flex justify-center font-semibold p-2 rounded-full transition bg-white-light text-dark hover:text-white hover:bg-primary dark:text-white-light dark:bg-[#191e3a] dark:hover:bg-primary">
+                                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 rtl:rotate-180">
+                                                                            <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                                        </svg>
+                                                                    </button>
+                                                                </li>
+                                                                <li (click)="lastPage()" tabindex="-1">
+                                                                    <button type="button" [disabled]="to >= total" class="flex justify-center font-semibold p-2 rounded-full transition bg-white-light text-dark hover:text-white hover:bg-primary dark:text-white-light dark:bg-[#191e3a] dark:hover:bg-primary">
+                                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 rtl:rotate-180">
+                                                                            <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                                            <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                                        </svg>
+                                                                    </button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="flex justify-end items-center mt-8">
-                                                <button type="button" (click)="itemSelected = !itemSelected" class="btn btn-outline-danger">Fermer</button>
+                                                <button type="button" (click)="itemSelected = !itemSelected; operationHistoryItem = false;" class="btn btn-outline-danger">Fermer</button>
                                             </div>
                                         </div>
                                         
@@ -483,9 +549,9 @@
                                                 </div>
                     
                                                 <div class="flex justify-end items-center mt-8">
-                                                    <button type="button" (click)="resetAll(); itemSelected = !itemSelected; itemDetail = !itemDetail" class="btn btn-outline-danger">Annuler</button>
-                                                    <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submittedDeposit" *ngIf="!submittedDeposit">Enregistrer</button>
-                                                    <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submittedDeposit" *ngIf="submittedDeposit">
+                                                    <button type="button" (click)="resetAll(); depositItem = !depositItem" class="btn btn-outline-danger">Annuler</button>
+                                                    <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitDeposit" *ngIf="!submitDeposit">Enregistrer</button>
+                                                    <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitDeposit" *ngIf="submitDeposit">
                                                         <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
                                                             <line x1="12" y1="2" x2="12" y2="6"></line>
                                                             <line x1="12" y1="18" x2="12" y2="22"></line>
@@ -579,6 +645,42 @@
                         </div>
                     </div>
                 </div>
+                <div class="pt-5" *ngIf="itemSelected && walletSelected && operationHistorySelected">
+                    <div class="row mb-5">
+                        <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
+                            <div class="flex items-start justify-center min-h-screen px-4">
+                                <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
+                                    <h5 class="font-bold text-lg p-5">Désactivation de {{itemSelected?.name}}</h5>
+                                    <div class="p-5">
+                                        <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
+                                            <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
+                                        </div>
+                                        <div class="flex justify-center items-center mt-8">
+                                            Voulez-vous annuler le rechargement de {{operationHistorySelected?.amount| number:'':'fr-FR'}} FCFA  pour le portefeuille {{walletSelected?.product_concerned?.name}} du pisteur {{itemSelected?.name}} ?
+                                        </div>
+                                        <div class="flex justify-end items-center mt-8">
+                                            <button type="button" (click)="resetAll(); itemSelected = !itemSelected" class="btn btn-outline-danger">Non</button>
+                                            <button type="submit" (click)="cancel()" [disabled]="submit" *ngIf="!submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Oui</button>
+                                            <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="submit">
+                                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
+                                                    <line x1="12" y1="2" x2="12" y2="6"></line>
+                                                    <line x1="12" y1="18" x2="12" y2="22"></line>
+                                                    <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                                                    <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                                                    <line x1="2" y1="12" x2="6" y2="12"></line>
+                                                    <line x1="18" y1="12" x2="22" y2="12"></line>
+                                                    <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                                                    <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                                                </svg>
+                                                Patientez ...
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="pt-5" *ngIf="itemSelected && operationItem">
                     <div class="row mb-5">
                         <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
@@ -629,8 +731,8 @@
                 
                                             <div class="flex justify-end items-center mt-8">
                                                 <button type="button" (click)="resetAll(); itemDetail = !itemDetail; operationItem = !operationItem" class="btn btn-outline-danger">Annuler</button>
-                                                <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submittedOperation" *ngIf="!submittedOperation">Enregistrer</button>
-                                                <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submittedOperation" *ngIf="submittedOperation">
+                                                <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperation" *ngIf="!submitOperation">Enregistrer</button>
+                                                <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperation" *ngIf="submitOperation">
                                                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
                                                         <line x1="12" y1="2" x2="12" y2="6"></line>
                                                         <line x1="12" y1="18" x2="12" y2="22"></line>
@@ -669,7 +771,7 @@
                                                 </div>
                                                 <div class="mb-3" [formGroup]="formGroupWallet">
                                                     <label for="gridPassword">Produit <span style="color:red">*</span></label>
-                                                    <ng-select id="entity_product_id" name="entity_product_id" formControlName="entity_product_id" [(ngModel)]="entity_product_id" (change)="onChangeProduct($event)" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submittedWallet && fWallet['entity_product_id'].errors }">
+                                                    <ng-select id="entity_product_id" name="entity_product_id" formControlName="entity_product_id" [(ngModel)]="entity_product_id" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submittedWallet && fWallet['entity_product_id'].errors }">
                                                         <ng-option *ngFor="let item of listProduct" [value]="item.id">{{item.product_name}}</ng-option>
                                                     </ng-select>
                                                     <div *ngIf="submittedWallet && fWallet['entity_product_id'].errors" class="mt-1">
@@ -688,8 +790,8 @@
                 
                                             <div class="flex justify-end items-center mt-8">
                                                 <button type="button" (click)="resetAll(); itemDetail = !itemDetail; walletItem = !walletItem" class="btn btn-outline-danger">Annuler</button>
-                                                <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submittedWallet" *ngIf="!submittedWallet">Enregistrer</button>
-                                                <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submittedWallet" *ngIf="submittedWallet">
+                                                <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitWallet" *ngIf="!submitWallet">Enregistrer</button>
+                                                <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitWallet" *ngIf="submitWallet">
                                                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
                                                         <line x1="12" y1="2" x2="12" y2="6"></line>
                                                         <line x1="12" y1="18" x2="12" y2="22"></line>

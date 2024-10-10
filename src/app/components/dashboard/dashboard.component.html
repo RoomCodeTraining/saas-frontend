@@ -12,9 +12,44 @@
                 </ul>
     
                 <div class="pt-5">
-                    <div *ngIf="user_logged?.role?.name === 'admin'">
+                    <div>
+                        <form class="space-y-5" style="padding-bottom: 10px; padding-left: 0%; padding-right: 0%;" (submit)="save()">
+                            <div class="grid grid-cols-1 grid-cols-3 gap-3">
+                                <div class="mb-3" [formGroup]="formGroup">
+                                    <label>Date de début <span style="color:red">*</span></label>
+                                    <input type="date" class="form-input" formControlName="date_from" [ngClass]="{ 'is-invalid': submitted && f['date_from'].errors }"
+                                        name="date_from" [(ngModel)]="date_from" min="1" />
+                                    <div *ngIf="submitted && f['date_from'].errors" class="mt-1">
+                                        <div *ngIf="submitted && f['date_from'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3" [formGroup]="formGroup">
+                                    <label>Date de fin <span style="color:red">*</span></label>
+                                    <input type="date" class="form-input" formControlName="date_to" [ngClass]="{ 'is-invalid': submitted && f['date_to'].errors }"
+                                        name="date_to" [(ngModel)]="date_to" min="1" />
+                                    <div *ngIf="submitted && f['date_to'].errors" class="mt-1">
+                                        <div *ngIf="submitted && f['date_to'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                    </div>
+                                </div>
+                                <div class="mt-6">
+                                    <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="!submit">Filter</button>
+                                    <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="submit">
+                                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
+                                            <line x1="12" y1="2" x2="12" y2="6"></line>
+                                            <line x1="12" y1="18" x2="12" y2="22"></line>
+                                            <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                                            <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                                            <line x1="2" y1="12" x2="6" y2="12"></line>
+                                            <line x1="18" y1="12" x2="22" y2="12"></line>
+                                            <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                                            <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                                        </svg>
+                                        Patientez ...
+                                    </button>
+                                </div>
+                            </div>                                        
+                        </form>
                         <div>
-                            <h2 class="text-xl">Total utilisateurs</h2>
                             <div class="grid sm:grid-cols-3 xl:grid-cols-3 gap-3 mb-6">
                                 <div class="panel h-full">
                                     <div class="flex p-5">
@@ -37,11 +72,11 @@
                                         </svg>
                                         </div>
                                         <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Actifs</p>
+                                            <p class="text-xl dark:text-white-light">Utilisateurs</p>
                                         </div>
                                     </div>
                                     <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalAbleUser | number:'':'fr-FR'}}</h1>
+                                        <h1 class="text-primary">{{item?.users | number:'':'fr-FR'}}</h1>
                                     </div>
                                 </div>
                                 <div class="panel h-full">
@@ -65,11 +100,11 @@
                                         </svg>
                                         </div>
                                         <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Inactifs</p>
+                                            <p class="text-xl dark:text-white-light">Pisteurs</p>
                                         </div>
                                     </div>
                                     <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalEnableUser | number:'':'fr-FR'}}</h1>
+                                        <h1 class="text-primary">{{item?.trackers | number:'':'fr-FR'}}</h1>
                                     </div>
                                 </div>
                                 <div class="panel h-full">
@@ -93,44 +128,11 @@
                                         </svg>
                                         </div>
                                         <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Total Utilisateurs </p>
+                                            <p class="text-xl dark:text-white-light">Opérations </p>
                                         </div>
                                     </div>
                                     <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalUser | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                        <div>
-                            <h2 class="text-xl">Total commande</h2>
-                            <div class="grid sm:grid-cols-3 xl:grid-cols-3 gap-3 mb-6">
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">En attente de validation </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalOrderApproved | number:'':'fr-FR'}}</h1>
+                                        <h1 class="text-primary">{{item?.operations | number:'':'fr-FR'}}</h1>
                                     </div>
                                 </div>
                                 <div class="panel h-full">
@@ -154,11 +156,11 @@
                                         </svg>
                                         </div>
                                         <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">En attente de réception </p>
+                                            <p class="text-xl dark:text-white-light">Vendeurs </p>
                                         </div>
                                     </div>
                                     <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalOrderAwaitingConfirmation | number:'':'fr-FR'}}</h1>
+                                        <h1 class="text-primary">{{item?.entities_sellers | number:'':'fr-FR'}}</h1>
                                     </div>
                                 </div>
                                 <div class="panel h-full">
@@ -182,44 +184,11 @@
                                         </svg>
                                         </div>
                                         <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Total commandes </p>
+                                            <p class="text-xl dark:text-white-light">Clients </p>
                                         </div>
                                     </div>
                                     <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalOrder | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                        <div>
-                            <h2 class="text-xl">Total entités</h2>
-                            <div class="grid sm:grid-cols-3 xl:grid-cols-3 gap-3 mb-6">
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Total Compagnies </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalInsurers | number:'':'fr-FR'}}</h1>
+                                        <h1 class="text-primary">{{item?.entities_buyers | number:'':'fr-FR'}}</h1>
                                     </div>
                                 </div>
                                 <div class="panel h-full">
@@ -243,11 +212,11 @@
                                         </svg>
                                         </div>
                                         <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Total Courtiers </p>
+                                            <p class="text-xl dark:text-white-light">Produits </p>
                                         </div>
                                     </div>
                                     <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalBrokers | number:'':'fr-FR'}}</h1>
+                                        <h1 class="text-primary">{{item?.products_managed | number:'':'fr-FR'}}</h1>
                                     </div>
                                 </div>
                                 <div class="panel h-full">
@@ -271,79 +240,11 @@
                                         </svg>
                                         </div>
                                         <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Total Bancassurances </p>
+                                            <p class="text-xl dark:text-white-light">Achats </p>
                                         </div>
                                     </div>
                                     <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalBancassurance | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <h2 class="text-xl">Total attestations éditées</h2>
-                            <div class="grid sm:grid-cols-3 xl:grid-cols-3 gap-3 mb-6">
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light" style="background-color: rgba(166, 77, 21, 0.5); color: rgb(166, 77, 21);">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">CEDEAO </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalCedeao | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                    </div>
-                    <div *ngIf="user_logged?.role?.name === 'operating_admin'">
-                        <div>
-                            <h2 class="text-xl">Total commande</h2>
-                            <div class="grid sm:grid-cols-3 xl:grid-cols-3 gap-3 mb-6">
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">En attente de traitement </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalOrderPending | number:'':'fr-FR'}}</h1>
+                                        <h1 class="text-primary">{{item?.purchases | number:'':'fr-FR'}}</h1>
                                     </div>
                                 </div>
                                 <div class="panel h-full">
@@ -367,11 +268,11 @@
                                         </svg>
                                         </div>
                                         <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">En attente de réception </p>
+                                            <p class="text-xl dark:text-white-light">Ventes </p>
                                         </div>
                                     </div>
                                     <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalOrderAwaitingConfirmation | number:'':'fr-FR'}}</h1>
+                                        <h1 class="text-primary">{{item?.sales | number:'':'fr-FR'}}</h1>
                                     </div>
                                 </div>
                                 <div class="panel h-full">
@@ -395,46 +296,11 @@
                                         </svg>
                                         </div>
                                         <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Total commandes </p>
+                                            <p class="text-xl dark:text-white-light">Portefeuilles </p>
                                         </div>
                                     </div>
                                     <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalOrder | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                    </div>   
-                    <div *ngIf="user_logged?.role?.name === 'main_office_admin' &&  user_logged.organization.organization_type.code == 'supplier'">
-                        <div>
-                            <h2 class="text-xl">Total commande</h2>
-                            <div class="grid sm:grid-cols-3 xl:grid-cols-3 gap-3 mb-6">
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">En attente de traitement </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalOrderApproved | number:'':'fr-FR'}}</h1>
+                                        <h1 class="text-primary">{{item?.wallets | number:'':'fr-FR'}}</h1>
                                     </div>
                                 </div>
                                 <div class="panel h-full">
@@ -458,11 +324,11 @@
                                         </svg>
                                         </div>
                                         <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">En attente de réception </p>
+                                            <p class="text-xl dark:text-white-light">Total achat </p>
                                         </div>
                                     </div>
                                     <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalOrderAwaitingConfirmation | number:'':'fr-FR'}}</h1>
+                                        <h1 class="text-primary">{{item?.total_purchases_amount | number:'':'fr-FR'}}</h1>
                                     </div>
                                 </div>
                                 <div class="panel h-full">
@@ -486,46 +352,11 @@
                                         </svg>
                                         </div>
                                         <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Total commandes </p>
+                                            <p class="text-xl dark:text-white-light">Total vente </p>
                                         </div>
                                     </div>
                                     <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalOrder | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                    </div>
-                    <div *ngIf="user_logged?.role?.name === 'main_office_admin' &&  user_logged.organization.organization_type.code == 'insurer'">
-                        <div>
-                            <h2 class="text-xl">Total utilisateurs</h2>
-                            <div class="grid sm:grid-cols-3 xl:grid-cols-3 gap-3 mb-6">
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Actifs</p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalAbleUser | number:'':'fr-FR'}}</h1>
+                                        <h1 class="text-primary">{{item?.total_sales_amount | number:'':'fr-FR'}}</h1>
                                     </div>
                                 </div>
                                 <div class="panel h-full">
@@ -549,647 +380,11 @@
                                         </svg>
                                         </div>
                                         <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Inactifs</p>
+                                            <p class="text-xl dark:text-white-light">Total portefeuille </p>
                                         </div>
                                     </div>
                                     <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalEnableUser | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Total Utilisateurs </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalUser | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                        <div>
-                            <h2 class="text-xl">Total entités</h2>
-                            <div class="grid sm:grid-cols-3 xl:grid-cols-3 gap-3 mb-6">
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Total Bureaux directs </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalOffices | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Total Agent généraux </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalAgent | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Total Agent Mandataire </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalAgentMandataire | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>  
-                    <div *ngIf="user_logged?.role?.name === 'stock_manager'">
-                        <div>
-                            <h2 class="text-xl">Total Commande BNICB</h2>
-                            <div class="grid sm:grid-cols-3 xl:grid-cols-3 gap-3 mb-6">
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">En attente de traitement </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalOrderApproved | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">En attente de réception </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalOrderAwaitingConfirmation | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Total commandes </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalOrder | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                        <div>
-                            <h2 class="text-xl">Total Commande Intermédiaire</h2>
-                            <div class="grid sm:grid-cols-3 xl:grid-cols-3 gap-3 mb-6">
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">En attente de traitement </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalTransactionApproved | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">En attente de réception </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalTransactionAwaitingConfirmation | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Total commandes </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalTransaction | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="user_logged?.role?.name === 'broker_manager' || user_logged?.role?.name === 'office_manager'">
-                        <div>
-                            <h2 class="text-xl">Total Commande Intermédiaire</h2>
-                            <div class="grid sm:grid-cols-3 xl:grid-cols-3 gap-3 mb-6">
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">En attente de traitement </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalTransactionApproved | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">En attente de réception </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalTransactionAwaitingConfirmation | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Total commandes </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalTransaction | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                    </div>
-                    <div *ngIf="(((user_logged?.role?.name === 'main_office_admin') && (user_logged.organization.organization_type.code != 'insurer' && user_logged.organization.organization_type.code != 'supplier')) || user_logged?.role?.name == 'office_admin')">
-                        <div>
-                            <h2 class="text-xl">Total utilisateurs</h2>
-                            <div class="grid sm:grid-cols-3 xl:grid-cols-3 gap-3 mb-6">
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Actifs</p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalAbleUser | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Inactifs</p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalEnableUser | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Total Utilisateurs </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalUser | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                        <div>
-                            <h2 class="text-xl">Total Commande</h2>
-                            <div class="grid sm:grid-cols-3 xl:grid-cols-3 gap-3 mb-6">
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">En attente de traitement </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalTransactionApproved | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">En attente de réception </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalTransactionAwaitingConfirmation | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="bg-primary/10 text-primary rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">Total commandes </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalTransaction | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <h2 class="text-xl">Total attestations éditées</h2>
-                            <div class="grid sm:grid-cols-3 xl:grid-cols-3 gap-3 mb-6">
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light" style="background-color: rgba(166, 77, 21, 0.5); color: rgb(166, 77, 21);">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">CEDEAO </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalCedeao | number:'':'fr-FR'}}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                    </div>
-                    <div *ngIf="user_logged?.role?.name === 'office_master' || user_logged?.role?.name === 'standard_user'">
-                        <div>
-                            <h2 class="text-xl">Total attestations éditées</h2>
-                            <div class="grid sm:grid-cols-3 xl:grid-cols-3 gap-3 mb-6">
-                                <div class="panel h-full">
-                                    <div class="flex p-5">
-                                        <div class="rounded-xl w-11 h-11 flex justify-center items-center dark:bg-primary dark:text-white-light" style="background-color: rgba(166, 77, 21, 0.5); color: rgb(166, 77, 21);">
-                        
-                                            <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        </div>
-                                        <div class="ltr:ml-3 rtl:mr-3 font-semibold">
-                                            <p class="text-xl dark:text-white-light">CEDEAO </p>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; align-items: center; font-size: 30px; padding-top: 15px;">
-                                        <h1 class="text-primary">{{totalCedeao | number:'':'fr-FR'}}</h1>
+                                        <h1 class="text-primary">{{item?.wallet_total_amount | number:'':'fr-FR'}}</h1>
                                     </div>
                                 </div>
                             </div>

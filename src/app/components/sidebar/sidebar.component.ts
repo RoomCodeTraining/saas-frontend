@@ -20,11 +20,11 @@ export class SidebarComponent implements OnInit {
   t_attestation_edite: string = "Liste des attestations éditées pour le compte de votre entité";
   t_stock_cima: string = "Vos stocks d’attestations CIMA disponibles";
   t_stock_pool_tpv: string = "Vos stocks d’attestations POOL TPV disponibles";
-  t_nouvelle_demande_edition: string = "Effectuer une nouvelle demande d'édition d’attestation";
+  t_nouvelle_demande_edition: string = "Effectué(e) une nouvelle demande d'édition d’attestation";
   t_liste_demande_edition_a_finaliser: string = "Liste de vos demandes d'édition d’attestation à finaliser";
   t_historique_demande_edition: string = "Historique de vos demandes d'édition d’attestation";
-  t_nouvelle_commande_cima: string = "Effectuer une nouvelle commande d’attestation CIMA";
-  t_nouvelle_commande_pool_tpv: string = " Effectuer une nouvelle commande d’attestation POOL TPV";
+  t_nouvelle_commande_cima: string = "Effectué(e) une nouvelle commande d’attestation CIMA";
+  t_nouvelle_commande_pool_tpv: string = " Effectué(e) une nouvelle commande d’attestation POOL TPV";
   t_commande_en_attente_de_traitement: string = "Vos commandes en attente traitement par les compagnies";
   t_commande_en_attente_de_confirmation: string = "Vos commandes en attente de confirmation par votre entité";
   t_historique_commande: string = "Historique de vos commandes";

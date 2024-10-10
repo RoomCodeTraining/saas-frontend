@@ -470,6 +470,11 @@ export class ListPurchaseComponent implements OnInit {
     this.avatar = this.itemSelected.avatar;
     this.status_id = this.itemSelected.status_id;
   }
+
+  itemCancel(item:any) {
+    this.editItem = false;
+    this.itemSelected = item;
+  }
  
   hide_message() {
     this.exist_error = false;
@@ -757,28 +762,14 @@ export class ListPurchaseComponent implements OnInit {
 
   get f2() { return this.formGroup2.controls; }
 
-  update(){
+  cancel(){
     this.submit = true;
-    const formData:any = new FormData();
-    formData.append("email",this.email);
-    formData.append("contact",this.mobile);
-    formData.append("first_name",this.firstname);
-    formData.append("last_name",this.lastname);
-    if(this.avatarfiles){
-      formData.append("avatar",this.avatarfiles,this.avatarfiles.name);
-    } else {
-      formData.append("avatar",null);
-    }
-
+   
     let requestData = {
-      email: this.email,
-      contact: this.mobile,
-      first_name: this.firstname,
-      last_name: this.lastname,
-      role: this.role,
+      purchase_id: this.itemSelected.id,
     }
 
-    this.appService.updateUser(requestData,this.itemSelected.id).subscribe(res => {
+    this.appService.cancelPurchase(this.itemSelected.id,requestData).subscribe(res => {
       this.message = res;
       if(this.message.success == false){
         this.submit = false;
