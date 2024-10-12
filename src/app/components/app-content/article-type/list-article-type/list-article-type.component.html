@@ -6,13 +6,13 @@
             <div x-data="sales">
                 <ul class="flex space-x-2 rtl:space-x-reverse">
                     <li class="before:content-['/'] ltr:before:mr-1 rtl:before:ml-1">
-                        <span>Liste des vendeurs</span>
+                        <span>Liste des types d'article</span>
                     </li>
                 </ul>
     
                 <div class="pt-5" *ngIf="!itemSelected && !addItem">
                     <div class="flex items-center justify-between flex-wrap gap-4">
-                        <h2 class="text-xl">Liste des vendeurs</h2>
+                        <h2 class="text-xl">Liste des types d'article</h2>
                         <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
                             <div class="flex gap-3">
                                 <div class="relative ">
@@ -33,33 +33,20 @@
                                             <line x1="12" y1="5" x2="12" y2="19"></line>
                                             <line x1="5" y1="12" x2="19" y2="12"></line>
                                         </svg>
-                                        Nouveau vendeur
+                                        Nouveau type d'article
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- <form class="space-y-5" style="padding-bottom: 10px; padding-left: 0%; padding-right: 0%;">
-                        <div class="grid grid-cols-1 grid-cols-3 gap-3">
-                            <div>
-                                <ng-select id="entity_type_id" name="entity_type_id" [(ngModel)]="entity_type_id" (change)="onChange($event)" placeholder="Type d'organisation">
-                                    <ng-option *ngFor="let item of listEntityType" [value]="item.id">{{item.name}}</ng-option>
-                                </ng-select>
-                            </div>
-                        </div>                                        
-                    </form> -->
                     <div class="table-responsive">
                         <table class="table-hover">
                             <thead>
                                 <tr>
                                     <th>N°</th>
                                     <th>Action</th>
-                                    <th>Logo</th>
-                                    <th>Type</th>
                                     <th>Nom</th>
-                                    <th>Adresse</th>
-                                    <th>Email</th>
-                                    <th>Téléphone</th>
+                                    <th>Description</th>
                                     <th>Statut</th>
                                     <th>Date de création</th>
                                 </tr>
@@ -82,15 +69,6 @@
                                                     </svg>
                                                 </a>
                                             </li>    
-                                            <li>
-                                                <a href="javascript:;" x-tooltip="Effectué(e) un achat" (click)="itemAddAdmin(item)">
-                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 text-info">
-                                                        <circle cx="10" cy="6" r="4" stroke="currentColor" stroke-width="1.5" />
-                                                        <path opacity="0.5" d="M18 17.5C18 19.9853 18 22 10 22C2 22 2 19.9853 2 17.5C2 15.0147 5.58172 13 10 13C14.4183 13 18 15.0147 18 17.5Z" stroke="currentColor" stroke-width="1.5" />
-                                                        <path d="M21 10H19M19 10H17M19 10L19 8M19 10L19 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                                    </svg>
-                                                </a>
-                                            </li>                                        
                                             <li>
                                                 <a x-tooltip="Modifier" (click)="itemEdit(item)">
                                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 text-success">
@@ -120,21 +98,8 @@
                                             </li>
                                         </ul>
                                     </td>
-                                    <td>
-                                        <div class="flex items-center w-max">
-                                            <div class="w-max" *ngIf="!item?.logo">
-                                                <img src="../../../assets/images/_.png" width="100" height="50" alt="logo" />
-                                            </div>
-                                            <div class="w-max" *ngIf="item?.logo">
-                                                <img src="{{item?.logo}}" width="100" height="50" alt="logo" />
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>{{item?.entitytype?.label}}</td>
                                     <td>{{item?.name}}</td>
-                                    <td>{{item?.address}}</td>
-                                    <td>{{item?.email}}</td>
-                                    <td>{{item?.contact}}</td>
+                                    <td>{{item?.description}}</td>
                                     <td> 
                                         <span class="badge bg-success" *ngIf="!item?.is_disabled">Actif(ve)</span>
                                         <span class="badge bg-danger" *ngIf="item?.is_disabled">Inactif(ve)</span>
@@ -227,7 +192,7 @@
                         <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
                             <div class="flex items-start justify-center min-h-screen px-4">
                                 <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
-                                    <h5 class="font-bold text-lg p-5">Ajout d'un nouveau vendeur</h5>
+                                    <h5 class="font-bold text-lg p-5">Ajout d'un nouveau client</h5>
                                     <div class="p-5">
                                         <form class="space-y-5" style="padding-bottom: 100px;" (submit)="save()">
                                             <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
@@ -235,7 +200,7 @@
                                             </div>
                                             <div class="grid grid-cols-1 grid-cols-2 gap-2">
                                                 <div class="mb-3" [formGroup]="formGroupAdd">
-                                                    <label>Nom <span style="color:red">*</span></label>
+                                                    <label>Libellé <span style="color:red">*</span></label>
                                                     <input type="text" class="form-input" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f['name'].errors }"
                                                         name="name" [(ngModel)]="name" />
                                                     <div *ngIf="submitted && f['name'].errors" class="mt-1">
@@ -243,43 +208,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-3" [formGroup]="formGroupAdd">
-                                                    <label>Adresse géographique <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" formControlName="address" [ngClass]="{ 'is-invalid': submitted && f['address'].errors }"
-                                                        name="address" [(ngModel)]="address" />
-                                                    <div *ngIf="submitted && f['address'].errors" class="mt-1">
-                                                        <div *ngIf="submitted && f['address'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    <label>Description</label>
+                                                    <input type="text" class="form-input" formControlName="description" [ngClass]="{ 'is-invalid': submitted && f['description'].errors }"
+                                                        name="description" [(ngModel)]="description" />
+                                                    <div *ngIf="submitted && f['description'].errors" class="mt-1">
+                                                        <div *ngIf="submitted && f['description'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3" [formGroup]="formGroupAdd">
-                                                    <label>Téléphone <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" formControlName="contact" [ngClass]="{ 'is-invalid': submitted && f['contact'].errors }"
-                                                        name="contact" [(ngModel)]="contact" />
-                                                    <div *ngIf="submitted && f['contact'].errors" class="mt-1">
-                                                        <div *ngIf="submitted && f['contact'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                    <div *ngIf="exist_phone_error" class="mt-1">
-                                                        <div class="text-danger">{{phone_error}}</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroupAdd">
-                                                    <label>Email <span style="color:red">*</span></label>
-                                                    <input type="email" class="form-input" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
-                                                        name="email" [(ngModel)]="email" />
-                                                    <div *ngIf="submitted && f['email'].errors" class="mt-1">
-                                                        <div *ngIf="submitted && f['email'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                        <div *ngIf="submitted && f['email'].errors?.['email']" class="text-danger">Ce champ doit être une adresse email !</div>
-                                                    </div>
-                                                </div>
-                                                <!-- <div class="mb-3">
-                                                    <label>Logo (png,jpg,jpeg,gif)</label>
-                                                    <div class="user-pro-img">
-                                                        <img id="blah" [src]="logoSrc || 'assets/images/_.png' || logo == ''" width="300" height="50" alt="logo" />
-                                                    </div>
-                                                    <input type="file" name="logo" [(ngModel)]="logo" class="multi file-upload-input with-preview" (change)="onSelectLogo($event)" id="customFileLang" [ngClass]="{ 'is-invalid': submitted && f['logo'].errors }" lang="fr">
-                                                    <div *ngIf="logoError" class="mt-1">
-                                                        <div class="text-danger">{{logoErrorMessage}}</div>
-                                                    </div>
-                                                </div> -->
                                             </div>
                 
                                             <div class="flex justify-end items-center mt-8">
@@ -318,15 +253,6 @@
                                                 <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
                                             </div>
                                             <div class="grid grid-cols-1 grid-cols-2 gap-2">
-                                                <!-- <div class="mb-3" [formGroup]="formGroupEdit">
-                                                    <label>Type d'entité<span style="color:red">*</span></label>
-                                                    <ng-select id="entity_type_id" name="entity_type_id" formControlName="entity_type_id" [(ngModel)]="entity_type_id">
-                                                        <ng-option *ngFor="let item of listEntityType" [value]="item.id">{{item.name}}</ng-option>
-                                                    </ng-select>
-                                                    <div *ngIf="submitted && f['entity_type_id'].errors" class="mt-1">
-                                                        <div *ngIf="submitted && f['entity_type_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div> -->
                                                 <div class="mb-3" [formGroup]="formGroupEdit">
                                                     <label>Nom <span style="color:red">*</span></label>
                                                     <input type="text" class="form-input" formControlName="name" [ngClass]="{ 'is-invalid': submitted3 && f3['name'].errors }"
@@ -335,45 +261,14 @@
                                                         <div *ngIf="submitted3 && f3['name'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3" [formGroup]="formGroupEdit">
-                                                    <label>Adresse géographique <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" formControlName="address" [ngClass]="{ 'is-invalid': submitted3 && f3['address'].errors }"
-                                                        name="address" [(ngModel)]="address" />
-                                                    <div *ngIf="submitted3 && f3['address'].errors" class="mt-1">
-                                                        <div *ngIf="submitted3 && f3['address'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                <div class="mb-3" [formGroup]="formGroupAdd">
+                                                    <label>Description</label>
+                                                    <input type="text" class="form-input" formControlName="description" [ngClass]="{ 'is-invalid': submitted && f['description'].errors }"
+                                                        name="description" [(ngModel)]="description" />
+                                                    <div *ngIf="submitted && f['description'].errors" class="mt-1">
+                                                        <div *ngIf="submitted && f['description'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3" [formGroup]="formGroupEdit">
-                                                    <label>Téléphone <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" formControlName="contact" [ngClass]="{ 'is-invalid': submitted3 && f3['contact'].errors }"
-                                                        name="contact" [(ngModel)]="contact" />
-                                                    <div *ngIf="submitted3 && f3['contact'].errors" class="mt-1">
-                                                        <div *ngIf="submitted3 && f3['contact'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                    <div *ngIf="exist_phone_error" class="mt-1">
-                                                        <div class="text-danger">{{phone_error}}</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroupEdit">
-                                                    <label>Email <span style="color:red">*</span></label>
-                                                    <input type="email" class="form-input" formControlName="email" [ngClass]="{ 'is-invalid': submitted3 && f3['email'].errors }"
-                                                        name="email" [(ngModel)]="email" />
-                                                    <div *ngIf="submitted3 && f3['email'].errors" class="mt-1">
-                                                        <div *ngIf="submitted3 && f3['email'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                        <div *ngIf="submitted3 && f3['email'].errors?.['pattern']" class="text-danger">Ce champ doit être une adresse email !</div>
-                                                    </div>
-                                                </div>
-                                                <!-- <div class="mb-3">
-                                                    <label>Logo</label>
-                                                    <div class="user-pro-img" *ngIf="logofiles">
-                                                        <img id="blah" [src]="logoSrc || 'assets/images/_.png'" width="300" height="50" alt="logo" />
-                                                    </div>
-                                                    <div class="user-pro-img" *ngIf="!logofiles">
-                                                        <img src="{{itemSelected.logo}}" width="300" height="50" alt="logo" *ngIf="itemSelected.logo"/>
-                                                        <img src="../../../assets/images/_.png" width="300" height="50" alt="logo" *ngIf="!itemSelected.logo"/>
-                                                    </div>
-                                                    <input type="file" [(ngModel)]="logo" class="multi file-upload-input with-preview" name="logo" (change)="onSelectLogo($event)" id="customFileLang" lang="fr">
-                                                </div> -->
                                             </div>
                 
                                             <div class="flex justify-end items-center mt-8">
@@ -400,73 +295,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="pt-5" *ngIf="addAdminItem">
-                    <div class="row mb-5">
-                        <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
-                            <div class="flex items-start justify-center min-h-screen px-4">
-                                <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
-                                    <h5 class="font-bold text-lg p-5">Ajout d'un administrateur à {{itemSelected.name}}</h5>
-                                    <div class="p-5">
-                                        <form class="space-y-5" style="padding-bottom: 100px;" (submit)="create()">
-                                            <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
-                                                <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
-                                            </div>
-                                            <div class="grid grid-cols-1 grid-cols-2 gap-2">
-                                                <div class="mb-3">
-                                                    <label for="gridPassword">Vendeur <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="itemSelected.name" readonly disabled />
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroup2">
-                                                    <label for="gridPassword">Produit <span style="color:red">*</span></label>
-                                                    <ng-select id="entity_product_id" name="entity_product_id" formControlName="entity_product_id" [(ngModel)]="entity_product_id" placeholder="Produit" [ngClass]="{ 'is-invalid': submitted2 && f2['entity_product_id'].errors }">
-                                                        <ng-option *ngFor="let item of listProduct" [value]="item.id">{{item.name}}</ng-option>
-                                                    </ng-select>
-                                                    <div *ngIf="submitted2 && f2['entity_product_id'].errors" class="mt-1">
-                                                        <div *ngIf="submitted2 && f2['entity_product_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroup2">
-                                                    <label>Poids <span style="color:red">*</span></label>
-                                                    <input type="number" class="form-input" formControlName="weight" [ngClass]="{ 'is-invalid': submitted2 && f2['weight'].errors }"
-                                                        name="weight" [(ngModel)]="weight" />
-                                                    <div *ngIf="submitted2 && f2['weight'].errors" class="mt-1">
-                                                        <div *ngIf="submitted2 && f2['weight'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroup2">
-                                                    <label>Prix <span style="color:red">*</span></label>
-                                                    <input type="number" class="form-input" formControlName="price" [ngClass]="{ 'is-invalid': submitted2 && f2['price'].errors }"
-                                                        name="price" [(ngModel)]="price" />
-                                                    <div *ngIf="submitted2 && f2['price'].errors" class="mt-1">
-                                                        <div *ngIf="submitted2 && f2['price'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                            </div>
                 
-                                            <div class="flex justify-end items-center mt-8">
-                                                <button type="button" (click)="resetAll(); itemSelected = !itemSelected; addAdminItem = !addAdminItem" class="btn btn-outline-danger">Annuler</button>
-                                                <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="!submit">Enregistrer</button>
-                                                <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="submit">
-                                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
-                                                        <line x1="12" y1="2" x2="12" y2="6"></line>
-                                                        <line x1="12" y1="18" x2="12" y2="22"></line>
-                                                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
-                                                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
-                                                        <line x1="2" y1="12" x2="6" y2="12"></line>
-                                                        <line x1="18" y1="12" x2="22" y2="12"></line>
-                                                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
-                                                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
-                                                    </svg>
-                                                    Patientez ...
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="pt-5" *ngIf="itemSelected && itemDetail">
                     <div class="row mb-5">
                         <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
@@ -482,20 +311,8 @@
                                                         <td>{{itemSelected.name}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <th>Type</th>
-                                                        <td>{{itemSelected.entitytype.label}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Adresse</th>
-                                                        <td>{{itemSelected.address}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Email</th>
-                                                        <td>{{itemSelected.email}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Téléphone</th>
-                                                        <td>{{itemSelected.contact}}</td>
+                                                        <th>Description</th>
+                                                        <td>{{itemSelected.description}}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Statut</th>
@@ -507,19 +324,6 @@
                                                     <tr>
                                                         <th>Date de création</th>
                                                         <td>{{itemSelected.created_at | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Logo</th>
-                                                        <td>
-                                                            <div class="flex items-center w-max">
-                                                                <div class="w-max" *ngIf="!itemSelected?.logo">
-                                                                    <img src="../../../assets/images/_.png" width="100" height="50" alt="logo" />
-                                                                </div>
-                                                                <div class="w-max" *ngIf="itemSelected?.logo">
-                                                                    <img src="{{itemSelected?.logo}}" width="100" height="50" alt="logo" />
-                                                                </div>
-                                                            </div>
-                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>

@@ -25,6 +25,12 @@ import { ListProductComponent } from './components/app-content/product/list-prod
 import { AddProductComponent } from './components/app-content/product/add-product/add-product.component';
 import { ListPriceComponent } from './components/app-content/price/list-price/list-price.component';
 import { AddPriceComponent } from './components/app-content/price/add-price/add-price.component';
+import { ListArticleTypeComponent } from './components/app-content/article-type/list-article-type/list-article-type.component';
+import { AddArticleTypeComponent } from './components/app-content/article-type/add-article-type/add-article-type.component';
+import { ListArticleComponent } from './components/app-content/article/list-article/list-article.component';
+import { AddArticleComponent } from './components/app-content/article/add-article/add-article.component';
+import { ListCheckoutComponent } from './components/app-content/checkout/list-checkout/list-checkout.component';
+import { AddCheckoutComponent } from './components/app-content/checkout/add-checkout/add-checkout.component';
 
 const routes: Routes = [
   {
@@ -159,6 +165,39 @@ const routes: Routes = [
   {
     path:'add-price',
     component: AddPriceComponent,
+    canActivate: [AfterLoginService]
+  },
+
+  {
+    path:'list-article-type',
+    component: ListArticleTypeComponent,
+    canActivate: [AfterLoginService]
+  },
+  {
+    path:'add-article-type',
+    component: AddArticleTypeComponent,
+    canActivate: [AfterLoginService]
+  },
+
+  {
+    path:'list-article',
+    component: ListArticleComponent,
+    canActivate: [AfterLoginService]
+  },
+  {
+    path:'add-article',
+    component: AddArticleComponent,
+    canActivate: [AfterLoginService]
+  },
+
+  {
+    path:'list-checkout',
+    component: ListCheckoutComponent,
+    canActivate: [AfterLoginService]
+  },
+  {
+    path:'add-checkout',
+    component: AddCheckoutComponent,
     canActivate: [AfterLoginService]
   },
   

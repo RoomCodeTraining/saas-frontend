@@ -420,6 +420,89 @@ export class AppService {
   }
 
 
+  getAllArticleType(): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/article-types`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getArticleType(page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/article-types?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getArticleTypePaginate(page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/article-types?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getArticleTypeSearch(page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/article-types?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getArticleTypePaginateSearch(page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/article-types?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  addArticleType(data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/article-types`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  updateArticleType(sale_id:any,data:any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/article-types/`+sale_id, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+
+  getAllArticle(): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/articles`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getArticle(page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/articles?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getArticlePaginate(page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/articles?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getArticleSearch(page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/articles?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getArticlePaginateSearch(page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/articles?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  addArticle(data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/articles`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  updateArticle(sale_id:any,data:any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/articles/`+sale_id, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  
+  getCheckout(page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/checkouts?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getCheckoutPaginate(page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/checkouts?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getCheckoutSearch(page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/checkouts?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getCheckoutPaginateSearch(page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/checkouts?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  addCheckout(data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/checkouts`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  updateCheckout(sale_id:any,data:any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/checkouts/`+sale_id, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+
   errorHandler<T>(operation: any, result?: T) {
     return (error: any): Observable<T> => {
       //console.log(error); // pour afficher dans la console

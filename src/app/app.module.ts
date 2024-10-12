@@ -56,6 +56,12 @@ import { AddProductComponent } from './components/app-content/product/add-produc
 import { ListProductComponent } from './components/app-content/product/list-product/list-product.component';
 import { ListPriceComponent } from './components/app-content/price/list-price/list-price.component';
 import { AddPriceComponent } from './components/app-content/price/add-price/add-price.component';
+import { AddArticleComponent } from './components/app-content/article/add-article/add-article.component';
+import { AddArticleTypeComponent } from './components/app-content/article-type/add-article-type/add-article-type.component';
+import { ListArticleTypeComponent } from './components/app-content/article-type/list-article-type/list-article-type.component';
+import { ListArticleComponent } from './components/app-content/article/list-article/list-article.component';
+import { ListCheckoutComponent } from './components/app-content/checkout/list-checkout/list-checkout.component';
+import { AddCheckoutComponent } from './components/app-content/checkout/add-checkout/add-checkout.component';
 
 function resourceProviderFactory(JarwisService: JarwisService) {
   return () => {
@@ -107,6 +113,12 @@ function resourceProviderFactory(JarwisService: JarwisService) {
     ListProductComponent,
     ListPriceComponent,
     AddPriceComponent,
+    AddArticleComponent,
+    AddArticleTypeComponent,
+    ListArticleTypeComponent,
+    ListArticleComponent,
+    ListCheckoutComponent,
+    AddCheckoutComponent,
   ],
   imports: [
     BrowserModule,

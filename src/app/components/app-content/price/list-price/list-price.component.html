@@ -107,7 +107,7 @@
                                             </li>
                                         </ul>
                                     </td>
-                                    <td>{{item?.price}}</td>
+                                    <td>{{item?.price | number:'':'fr-FR'}} FCFA</td>
                                     <td>{{item?.product}}</td>
                                     <td> 
                                         <span class="badge bg-success" *ngIf="!item?.is_disabled">Actif(ve)</span>
