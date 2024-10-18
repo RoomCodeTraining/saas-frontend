@@ -77,8 +77,8 @@
                                     <td>{{item?.wallet?.product_concerned?.name}}</td>
                                     <td>{{item?.amount | number:'':'fr-FR'}} FCFA</td>
                                     <td>{{item?.type}}</td>
-                                    <td>{{item?.user?.name}}</td>
-                                    <td>{{item?.user?.name}}</td>
+                                    <td>{{item?.operator?.name}}</td>
+                                    <td>{{item?.wallet?.user?.name}}</td>
                                     <td> 
                                         <span class="badge bg-success" *ngIf="item?.status == 1">{{item?.status_label}}</span>
                                         <span class="badge bg-danger" *ngIf="item?.status != 1">{{item?.status_label}}</span>
