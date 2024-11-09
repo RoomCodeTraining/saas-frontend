@@ -81,7 +81,7 @@ export class ListArticleTypeComponent implements OnInit {
   addItem: boolean = false;  
   addAdminItem: boolean = false;  
   editItem: boolean = false;
-  ableItem: boolean = false;  
+  enableItem: boolean = false;  
   disableItem: boolean = false;
 
   activeDropdown!: any;  
@@ -125,7 +125,6 @@ export class ListArticleTypeComponent implements OnInit {
     /** spinner starts on init */
     this.SpinnerService.show();
     
-    this.getItems();
     this.getUserLogged();
 
     this.formGroupAdd = new FormGroup({
@@ -160,12 +159,13 @@ export class ListArticleTypeComponent implements OnInit {
   getUserLogged(){
     this.appService.getUserProfile().subscribe((data: any) => {
       this.user_logged = data.data;
-      this.permissions = this.user_logged.permissions;
-      if(this.permissions.includes("organization.view")){
-        this.permitted = true;
-      } else {
-        //this.notPermission();
-      }
+      this.getItems();
+      // this.permissions = this.user_logged.permissions;
+      // if(this.permissions.includes("organization.view")){
+      //   this.permitted = true;
+      // } else {
+      //   //this.notPermission();
+      // }
     },
     (err: HttpErrorResponse) => {
         //console.log("API indisponible");
@@ -216,7 +216,7 @@ export class ListArticleTypeComponent implements OnInit {
   }
 
   getItems(){
-    this.appService.getArticleType(this.current_page).subscribe((data: any) => {
+    this.appService.getArticleCategory(this.user_logged.entity.id, this.current_page).subscribe((data: any) => {
       this.listItem = data.data;
 
       this.getPaginate(data);
@@ -228,7 +228,7 @@ export class ListArticleTypeComponent implements OnInit {
 
   search(){
     this.SpinnerService.show();
-    this.appService.getArticleTypeSearch(this.current_page,this.information).subscribe((data: any) => {
+    this.appService.getArticleCategorySearch(this.user_logged.entity.id, this.current_page,this.information).subscribe((data: any) => {
       this.listItem = data.data;
       
       this.getPaginate(data);
@@ -243,7 +243,7 @@ export class ListArticleTypeComponent implements OnInit {
       this.search()
     } else {
       this.SpinnerService.show();
-      this.appService.getArticleTypePaginate(this.current_page).subscribe((data: any) => {
+      this.appService.getArticleCategoryPaginate(this.user_logged.entity.id, this.current_page).subscribe((data: any) => {
         this.listItem = data.data;
         
         this.getPaginate(data);
@@ -300,7 +300,7 @@ export class ListArticleTypeComponent implements OnInit {
     this.addItem = true;
     this.editItem = false;
     this.itemDetail = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = false;
     this.resetAll();
@@ -310,7 +310,7 @@ export class ListArticleTypeComponent implements OnInit {
     this.addItem = false;
     this.editItem = true;
     this.itemDetail = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = false;
     this.itemSelected = item;
@@ -322,7 +322,7 @@ export class ListArticleTypeComponent implements OnInit {
     this.addItem = false;
     this.editItem = false;
     this.itemDetail = true;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = false;
     this.itemSelected = item;
@@ -334,7 +334,7 @@ export class ListArticleTypeComponent implements OnInit {
     this.addItem = false;
     this.editItem = false;
     this.itemDetail = false;
-    this.ableItem = true;
+    this.enableItem = true;
     this.disableItem = false;
     this.addAdminItem = false;
     this.itemSelected = item;
@@ -345,7 +345,7 @@ export class ListArticleTypeComponent implements OnInit {
     this.addItem = false;
     this.editItem = false;
     this.itemDetail = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = true;
     this.addAdminItem = false;
     this.itemSelected = item;
@@ -369,11 +369,11 @@ export class ListArticleTypeComponent implements OnInit {
       this.submit = true;
 
       let requestData = {
-        name: this.name,
+        label: this.name,
         description: this.description,
       }
 
-      this.appService.addArticleType(requestData).subscribe(res => {
+      this.appService.addArticleCategory(requestData).subscribe(res => {
         this.message = res;
         if(this.message.success == false){
           this.submit = false;
@@ -440,11 +440,11 @@ export class ListArticleTypeComponent implements OnInit {
       this.submit = true;
       
       let requestData = {
-        name: this.name,
+        label: this.name,
         description: this.description,
       }
 
-      this.appService.updateArticleType(this.itemSelected.id,requestData).subscribe(res => {
+      this.appService.updateArticleCategory(this.itemSelected.id,requestData).subscribe(res => {
         this.message = res;
         if(this.message.success == false){
           this.submit = false;

@@ -420,53 +420,53 @@ export class AppService {
   }
 
 
-  getAllArticleType(): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/article-types`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getAllArticleCategory(entity_id:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/article-categories?entity_id=` +entity_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getArticleType(page:number): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/article-types?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getArticleCategory(entity_id:number, page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/article-categories?entity_id=` +entity_id+` &page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getArticleTypePaginate(page:number): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/article-types?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getArticleCategoryPaginate(entity_id:number, page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/article-categories?entity_id=` +entity_id+` &page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getArticleTypeSearch(page:number,information:any): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/article-types?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getArticleCategorySearch(entity_id:number, page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/article-categories?entity_id=` +entity_id+` &page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getArticleTypePaginateSearch(page:number,information:any): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/article-types?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getArticleCategoryPaginateSearch(entity_id:number, page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/article-categories?entity_id=` +entity_id+` &page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  addArticleType(data:any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/article-types`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  addArticleCategory(data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/article-categories`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  updateArticleType(sale_id:any,data:any): Observable<any> {
-    return this.http.put<any>(`${this.baseUrl}/article-types/`+sale_id, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  updateArticleCategory(sale_id:any,data:any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/article-categories/`+sale_id, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
 
-  getAllArticle(): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/articles`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getAllArticle(entity_id:number, ): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/articles?entity_id=` +entity_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getArticle(page:number): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/articles?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getArticle(entity_id:number, page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/articles?entity_id=` +entity_id+` &page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getArticlePaginate(page:number): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/articles?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getArticlePaginate(entity_id:number, page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/articles?entity_id=` +entity_id+` &page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getArticleSearch(page:number,information:any): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/articles?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getArticleSearch(entity_id:number, page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/articles?entity_id=` +entity_id+` &page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getArticlePaginateSearch(page:number,information:any): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/articles?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getArticlePaginateSearch(entity_id:number, page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/articles?entity_id=` +entity_id+` &page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
   addArticle(data:any): Observable<any> {
@@ -478,28 +478,264 @@ export class AppService {
   }
 
   
-  getCheckout(page:number): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/checkouts?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getCashRegister(entity_id:number, page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/cash-registers?entity_id=` +entity_id+` &page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getCheckoutPaginate(page:number): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/checkouts?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getCashRegisterPaginate(entity_id:number, page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/cash-registers?entity_id=` +entity_id+` &page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getCheckoutSearch(page:number,information:any): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/checkouts?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getCashRegisterSearch(entity_id:number, page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/cash-registers?entity_id=` +entity_id+` &page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getCheckoutPaginateSearch(page:number,information:any): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/checkouts?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getCashRegisterPaginateSearch(entity_id:number, page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/cash-registers?entity_id=` +entity_id+` &page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  addCheckout(data:any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/checkouts`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  addCashRegister(data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/cash-registers`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  updateCheckout(sale_id:any,data:any): Observable<any> {
-    return this.http.put<any>(`${this.baseUrl}/checkouts/`+sale_id, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  updateCashRegister(sale_id:any,data:any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/cash-registers/`+sale_id, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+
+
+
+
+
+
+  getAllSupplier(type:string): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities?type=`+type,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getSupplier(page:number,type:string): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities?page=${page}&type=`+type,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getSupplierPaginate(page:number,type:string): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities?page=${page}&type=`+type,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getSupplierSearch(page:number,type:string,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities?page=${page}` +`&type=`+type+`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getSupplierPaginateSearch(page:number,type:string,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities?page=${page}` +`&type=`+type+`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  addSupplier(data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/entities`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  updateSupplier(data:any,user_id:string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/entities/`+ user_id, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  enableSupplier(user_id:string,data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/entities/`+ user_id +`/enable`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  disableSupplier(user_id:string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/entities/`+ user_id +`/disable`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  
+  getAllDelegate(type:string): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities?type=`+type,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getDelegate(page:number,type:string): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities?page=${page}&type=`+type,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getDelegatePaginate(page:number,type:string): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities?page=${page}&type=`+type,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getDelegateSearch(page:number,type:string,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities?page=${page}` +`&type=`+type+`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getDelegatePaginateSearch(page:number,type:string,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities?page=${page}` +`&type=`+type+`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  addDelegate(data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/entities`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  updateDelegate(data:any,user_id:string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/entities/`+ user_id, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  enableDelegate(user_id:string,data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/entities/`+ user_id +`/enable`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  disableDelegate(user_id:string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/entities/`+ user_id +`/disable`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getEntityStatistics(entity_id:string,entity_product_id:string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/entities/statistics/`+ entity_id+`/`+entity_product_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getSupplierStatistics(entity_id:string,entity_product_id:string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/entities/supplier-statistics/`+ entity_id+`/`+entity_product_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getDelegateStatistics(entity_id:string,entity_product_id:string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/entities/delegate-statistics/`+ entity_id+`/`+entity_product_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+
+  getWalletByEntityId(entity_id:number, page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/wallets?entity_id=` +entity_id+` &page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getWalletByEntityIdPaginate(entity_id:number, page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/wallets?entity_id=` +entity_id+` &page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getWalletByEntityIdSearch(entity_id:number, page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/wallets?entity_id=` +entity_id+` &page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getWalletByEntityIdPaginateSearch(entity_id:number, page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/wallets?entity_id=` +entity_id+` &page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  addWalletByEntityId(entity_id:number, data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/wallets`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  updateWallet(wallet_id:number, data:any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/wallets/`+wallet_id, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+
+  getOperationByWalletId(wallet_id:number,page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/operations?page=${page}`+`&wallet_id=`+ wallet_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getOperationByWalletIdPaginate(wallet_id:number,page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/operations?page=${page}`+`&wallet_id=`+ wallet_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getOperationByWalletIdSearch(wallet_id:number,page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/operations?page=${page}`+`&wallet_id=`+ wallet_id +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getOperationByWalletIdPaginateSearch(wallet_id:number,page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/operations?page=${page}`+`&wallet_id=`+ wallet_id +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+
+  getAllEntityProduct(entity_id:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entity-products?entity_id=` +entity_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getEntityProduct(entity_id:number, page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entity-products?entity_id=` +entity_id+` &page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getEntityProductPaginate(entity_id:number, page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entity-products?entity_id=` +entity_id+` &page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getEntityProductSearch(entity_id:number, page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entity-products?entity_id=` +entity_id+` &page=${page}`+`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getEntityProductPaginateSearch(entity_id:number, page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entity-products?entity_id=` +entity_id+` &page=${page}`+`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  addEntityProduct(data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/entity-products`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  enableEntityProduct(user_id:string,data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/entity-products/`+ user_id +`/enable`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  disableEntityProduct(user_id:string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/entity-products/`+ user_id +`/disable`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+
+  getAllEntityCampaign(entity_id:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/campaigns?entity_id=` +entity_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getEntityCampaign(entity_id:number, page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/campaigns?entity_id=` +entity_id+` &page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getEntityCampaignPaginate(entity_id:number, page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/campaigns?entity_id=` +entity_id+` &page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getEntityCampaignSearch(entity_id:number, page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/campaigns?entity_id=` +entity_id+` &page=${page}`+`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getEntityCampaignPaginateSearch(entity_id:number, page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/campaigns?entity_id=` +entity_id+` &page=${page}`+`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  addEntityCampaign(data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/campaigns`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  updateEntityCampaign(user_id:string,data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/campaigns/`+ user_id +`/update`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  enableEntityCampaign(user_id:string,data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/campaigns/`+ user_id +`/enable`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  disableEntityCampaign(user_id:string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/campaigns/`+ user_id +`/disable`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+
+  getAllPaymentMethod(): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/payment-methods`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getPaymentMethod(page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/payment-methods?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getPaymentMethodPaginate(page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/payment-methods?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getPaymentMethodSearch(page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/payment-methods?page=${page}`+`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getPaymentMethodPaginateSearch(page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/payment-methods?page=${page}`+`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  addPaymentMethod(data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/payment-methods`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  enablePaymentMethod(user_id:string,data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/payment-methods/`+ user_id +`/enable`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  disablePaymentMethod(user_id:string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/payment-methods/`+ user_id +`/disable`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
 

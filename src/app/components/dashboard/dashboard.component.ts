@@ -293,9 +293,10 @@ export class DashboardComponent implements OnInit {
   getUserLogged(){
     this.appService.getUserProfile().subscribe((data: any) => {
       this.user_logged = data.data;
-      this.userprofile_id = this.user_logged.role.id;  
+      this.userprofile_id = this.user_logged.profile.id;  
       //console.log("userprofile_id",this.userprofile_id);
-      this.getItems(this.userprofile_id);
+      // this.getItems(this.userprofile_id);
+      this.SpinnerService.hide();  
     },
     (err: HttpErrorResponse) => {
         //console.log("API indisponible");

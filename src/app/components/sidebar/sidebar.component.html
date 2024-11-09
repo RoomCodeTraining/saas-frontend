@@ -4,10 +4,11 @@
         <div class="bg-white dark:bg-[#0e1726] h-full">
             <div class="flex justify-between items-center px-4 py-3">
                 <a routerLink="/" class="main-logo flex items-center shrink-0">
-                    <img class="w-8 ml-[5px] flex-none" src="assets/images/logo.png" alt="image" style="width: 5%; height: 3%;"/>
+                    <img class="w-8 ml-[5px] flex-none" src="assets/images/logo.png" alt="image" style="width: 150px; height: 100px;"/>
                     <span
                         class="text-2xl ltr:ml-1.5 rtl:mr-1.5  font-semibold  align-middle lg:inline dark:text-white-light"></span>
                 </a>
+                
                 <a href="javascript:;"
                     class="collapse-icon w-8 h-8 rounded-full flex items-center hover:bg-gray-500/10 dark:hover:bg-dark-light/10 dark:text-white-light transition duration-300 rtl:rotate-180" (click)="sidebarToggle()">
                     <svg class="w-5 h-5 m-auto" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -51,7 +52,7 @@
                     <li class="nav-item">
                         <ul>
                             <li class="nav-item">
-                                <a routerLink="/entity/seller/list" [routerLinkActive]="['active']" class="group">
+                                <a routerLink="/supplier-list" [routerLinkActive]="['active']" class="group">
                                     <div class="flex items-center">
 
                                         <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
@@ -70,12 +71,12 @@
                                                 fill="currentColor" />
                                         </svg>
                                         <span
-                                            class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Liste des vendeurs</span>
+                                            class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Liste des fournisseurs</span>
                                     </div>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a routerLink="/entity/client/list" [routerLinkActive]="['active']" class="group">
+                                <a routerLink="/delegate-list" [routerLinkActive]="['active']" class="group">
                                     <div class="flex items-center">
 
                                         <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
@@ -94,83 +95,7 @@
                                                 fill="currentColor" />
                                         </svg>
                                         <span
-                                            class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Liste des clients</span>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <h2
-                        class="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
-
-                        <svg class="w-4 h-5 flex-none hidden" viewBox="0 0 24 24" stroke="currentColor"
-                            stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        <span>ACHATS</span>
-                    </h2>
-                    <li class="nav-item">
-                        <ul>
-                            <li class="nav-item">
-                                <a routerLink="/list-purchase" [routerLinkActive]="['active']" class="group">
-                                    <div class="flex items-center">
-
-                                        <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        <span
-                                            class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Liste des achats</span>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <h2
-                        class="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
-
-                        <svg class="w-4 h-5 flex-none hidden" viewBox="0 0 24 24" stroke="currentColor"
-                            stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        <span>VENTES</span>
-                    </h2>
-                    <li class="nav-item">
-                        <ul>
-                            <li class="nav-item">
-                                <a routerLink="/list-sale" [routerLinkActive]="['active']" class="group">
-                                    <div class="flex items-center">
-
-                                        <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        <span
-                                            class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Liste des ventes</span>
+                                            class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Liste des délégués</span>
                                     </div>
                                 </a>
                             </li>
@@ -260,12 +185,12 @@
                             stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                         </svg>
-                        <span>PRIX</span>
+                        <span>CAMPAGNE</span>
                     </h2>
                     <li class="nav-item">
                         <ul>
                             <li class="nav-item">
-                                <a routerLink="/list-price" [routerLinkActive]="['active']" class="group">
+                                <a routerLink="/campaign-list" [routerLinkActive]="['active']" class="group">
                                     <div class="flex items-center">
 
                                         <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
@@ -284,7 +209,7 @@
                                                 fill="currentColor" />
                                         </svg>
                                         <span
-                                            class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Liste des prix</span>
+                                            class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Liste des campagnes</span>
                                     </div>
                                 </a>
                             </li>
@@ -298,7 +223,7 @@
                             stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                         </svg>
-                        <span>COMPTABILITE</span>
+                        <span>CAISSE</span>
                     </h2>
                     <li class="nav-item">
                         <ul>
@@ -322,7 +247,7 @@
                                                 fill="currentColor" />
                                         </svg>
                                         <span
-                                            class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Liste des types d'article</span>
+                                            class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Liste des catégories d'article</span>
                                     </div>
                                 </a>
                             </li>
@@ -370,45 +295,7 @@
                                                 fill="currentColor" />
                                         </svg>
                                         <span
-                                            class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Liste des sorties de caisse</span>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <h2
-                        class="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
-
-                        <svg class="w-4 h-5 flex-none hidden" viewBox="0 0 24 24" stroke="currentColor"
-                            stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        <span>PISTEURS</span>
-                    </h2>
-                    <li class="nav-item">
-                        <ul>
-                            <li class="nav-item">
-                                <a routerLink="/list-tracker" [routerLinkActive]="['active']" class="group">
-                                    <div class="flex items-center">
-
-                                        <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5"
-                                                d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 12C18.75 12.4142 18.4142 12.75 18 12.75H6C5.58579 12.75 5.25 12.4142 5.25 12C5.25 11.5858 5.58579 11.25 6 11.25H18C18.4142 11.25 18.75 11.5858 18.75 12Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                        <span
-                                            class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Liste des pisteurs</span>
+                                            class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Liste des mouvements de caisse</span>
                                     </div>
                                 </a>
                             </li>
@@ -453,6 +340,8 @@
                         </ul>
                     </li>
                 </div>
+
+                <br><br><br>
 
                 <!-- <h2 class="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1" style="position: relative;bottom: 0px;">
                     <div class="text-dark text-center items-center order-2 order-md-1 pt-5" style="position: relative; bottom: 30px; width: 100%; padding-top: 50px;">

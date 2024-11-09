@@ -112,7 +112,7 @@ export class ListTrackerComponent implements OnInit {
   editItem: boolean = false;  
   itemDetail: boolean = false;  
   operationItem: boolean = false;  
-  ableItem: boolean = false;  
+  enableItem: boolean = false;  
   disableItem: boolean = false;
   walletItem: boolean = false;
   depositItem: boolean = false;
@@ -530,7 +530,7 @@ export class ListTrackerComponent implements OnInit {
   itemAdd() {
     this.addItem = true;
     this.itemDetail = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.walletItem = false;
     this.resetAll();
@@ -540,7 +540,7 @@ export class ListTrackerComponent implements OnInit {
     this.editItem = true;
     this.itemDetail = false;
     this.operationItem = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.walletItem = false;
     this.itemSelected = item;
@@ -559,7 +559,7 @@ export class ListTrackerComponent implements OnInit {
     this.editItem = false;
     this.itemDetail = true;
     this.operationItem = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.walletItem = false;
     this.itemSelected = item;
@@ -578,7 +578,7 @@ export class ListTrackerComponent implements OnInit {
     this.editItem = false;
     this.itemDetail = false;
     this.operationItem = false;
-    this.ableItem = true;
+    this.enableItem = true;
     this.disableItem = false;
     this.walletItem = false;
     this.itemSelected = item;
@@ -595,7 +595,7 @@ export class ListTrackerComponent implements OnInit {
     this.editItem = false;
     this.itemDetail = false;
     this.operationItem = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = true;
     this.walletItem = false;
     this.itemSelected = item;
@@ -612,7 +612,7 @@ export class ListTrackerComponent implements OnInit {
     this.editItem = false;
     this.itemDetail = false;
     this.operationItem = true;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.walletItem = false;
     this.itemSelected = item;
@@ -631,7 +631,7 @@ export class ListTrackerComponent implements OnInit {
     this.editItem = false;
     this.itemDetail = false;
     this.operationItem = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.walletItem = true;
     this.itemSelected = item;
@@ -663,7 +663,7 @@ export class ListTrackerComponent implements OnInit {
     this.editItem = false;
     this.itemDetail = false;
     this.operationItem = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.walletItem = false;
     this.operationHistorySelected = item;
   }

@@ -79,7 +79,7 @@ export class ListCheckoutComponent implements OnInit {
   addItem: boolean = false;  
   addAdminItem: boolean = false;  
   editItem: boolean = false;
-  ableItem: boolean = false;  
+  enableItem: boolean = false;  
   disableItem: boolean = false;
 
   activeDropdown!: any;  
@@ -102,6 +102,8 @@ export class ListCheckoutComponent implements OnInit {
   permissions!: any;
   permitted: boolean = false;
 
+  cash_register_movement_id: number = 2;
+
   constructor(
     public Jarwis: JarwisService,
     public appService: AppService,
@@ -123,8 +125,6 @@ export class ListCheckoutComponent implements OnInit {
     /** spinner starts on init */
     this.SpinnerService.show();
 
-    this.getArticle();
-    this.getItems();
     this.getUserLogged();
 
     this.formGroupAdd = new FormGroup({
@@ -161,12 +161,14 @@ export class ListCheckoutComponent implements OnInit {
   getUserLogged(){
     this.appService.getUserProfile().subscribe((data: any) => {
       this.user_logged = data.data;
-      this.permissions = this.user_logged.permissions;
-      if(this.permissions.includes("organization.view")){
-        this.permitted = true;
-      } else {
-        //this.notPermission();
-      }
+      this.getArticle();
+      this.getItems();
+      // this.permissions = this.user_logged.permissions;
+      // if(this.permissions.includes("organization.view")){
+      //   this.permitted = true;
+      // } else {
+      //   this.notPermission();
+      // }
     },
     (err: HttpErrorResponse) => {
         //console.log("API indisponible");
@@ -204,7 +206,7 @@ export class ListCheckoutComponent implements OnInit {
   }
 
   getArticle(){
-    this.appService.getAllArticle().subscribe((data: any) => {
+    this.appService.getAllArticle(this.user_logged.entity.id).subscribe((data: any) => {
       this.listArticle = data.data;
     });
   }
@@ -224,7 +226,7 @@ export class ListCheckoutComponent implements OnInit {
   }
 
   getItems(){
-    this.appService.getCheckout(this.current_page).subscribe((data: any) => {
+    this.appService.getCashRegister(this.user_logged.entity.id,this.current_page).subscribe((data: any) => {
       this.listItem = data.data;
 
       this.getPaginate(data);
@@ -236,7 +238,7 @@ export class ListCheckoutComponent implements OnInit {
 
   search(){
     this.SpinnerService.show();
-    this.appService.getCheckoutSearch(this.current_page,this.information).subscribe((data: any) => {
+    this.appService.getCashRegisterSearch(this.user_logged.entity.id,this.current_page,this.information).subscribe((data: any) => {
       this.listItem = data.data;
       
       this.getPaginate(data);
@@ -251,7 +253,7 @@ export class ListCheckoutComponent implements OnInit {
       this.search()
     } else {
       this.SpinnerService.show();
-      this.appService.getCheckoutPaginate(this.current_page).subscribe((data: any) => {
+      this.appService.getCashRegisterPaginate(this.user_logged.entity.id,this.current_page).subscribe((data: any) => {
         this.listItem = data.data;
         
         this.getPaginate(data);
@@ -308,7 +310,7 @@ export class ListCheckoutComponent implements OnInit {
     this.addItem = true;
     this.editItem = false;
     this.itemDetail = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = false;
     this.resetAll();
@@ -318,7 +320,7 @@ export class ListCheckoutComponent implements OnInit {
     this.addItem = false;
     this.editItem = true;
     this.itemDetail = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = false;
     this.itemSelected = item;
@@ -331,7 +333,7 @@ export class ListCheckoutComponent implements OnInit {
     this.addItem = false;
     this.editItem = false;
     this.itemDetail = true;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = false;
     this.itemSelected = item;
@@ -344,7 +346,7 @@ export class ListCheckoutComponent implements OnInit {
     this.addItem = false;
     this.editItem = false;
     this.itemDetail = false;
-    this.ableItem = true;
+    this.enableItem = true;
     this.disableItem = false;
     this.addAdminItem = false;
     this.itemSelected = item;
@@ -356,7 +358,7 @@ export class ListCheckoutComponent implements OnInit {
     this.addItem = false;
     this.editItem = false;
     this.itemDetail = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = true;
     this.addAdminItem = false;
     this.itemSelected = item;
@@ -382,10 +384,11 @@ export class ListCheckoutComponent implements OnInit {
       let requestData = {
         article_id: this.article_id,
         amount: this.amount,
-        note: this.note,
+        label: this.note,
+        cash_register_movement_id: this.cash_register_movement_id,
       }
 
-      this.appService.addCheckout(requestData).subscribe(res => {
+      this.appService.addCashRegister(requestData).subscribe(res => {
         this.message = res;
         if(this.message.success == false){
           this.submit = false;
@@ -457,7 +460,7 @@ export class ListCheckoutComponent implements OnInit {
         note: this.note,
       }
 
-      this.appService.updateCheckout(this.itemSelected.id,requestData).subscribe(res => {
+      this.appService.updateCashRegister(this.itemSelected.id,requestData).subscribe(res => {
         this.message = res;
         if(this.message.success == false){
           this.submit = false;

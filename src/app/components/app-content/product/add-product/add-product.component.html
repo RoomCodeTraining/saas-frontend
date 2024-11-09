@@ -24,7 +24,7 @@
                                                 <div class="mb-3" [formGroup]="formGroup">
                                                     <label for="gridPassword">Produit <span style="color:red">*</span></label>
                                                     <ng-select id="entity_product" name="entity_product" formControlName="entity_product" (change)="onChangeProduct($event)" [(ngModel)]="entity_product" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submitted && f['entity_product'].errors }">
-                                                        <ng-option *ngFor="let item of listProduct" [value]="item">{{item.name}}</ng-option>
+                                                        <ng-option *ngFor="let item of listProduct" [value]="item">{{item.label}}</ng-option>
                                                     </ng-select>
                                                     <div *ngIf="submitted && f['entity_product'].errors" class="mt-1">
                                                         <div *ngIf="submitted && f['entity_product'].errors?.['required']" class="text-danger">Ce champ est requis !</div>

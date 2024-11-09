@@ -62,6 +62,13 @@ import { ListArticleTypeComponent } from './components/app-content/article-type/
 import { ListArticleComponent } from './components/app-content/article/list-article/list-article.component';
 import { ListCheckoutComponent } from './components/app-content/checkout/list-checkout/list-checkout.component';
 import { AddCheckoutComponent } from './components/app-content/checkout/add-checkout/add-checkout.component';
+import { ListSupplierComponent } from './components/app-content/entity/supplier/list-supplier/list-supplier.component';
+import { AddSupplierComponent } from './components/app-content/entity/supplier/add-supplier/add-supplier.component';
+import { AddDelegateComponent } from './components/app-content/entity/delegate/add-delegate/add-delegate.component';
+import { ListDelegateComponent } from './components/app-content/entity/delegate/list-delegate/list-delegate.component';
+import { DetailDelegateComponent } from './components/app-content/entity/delegate/detail-delegate/detail-delegate.component';
+import { DetailSupplierComponent } from './components/app-content/entity/supplier/detail-supplier/detail-supplier.component';
+import { ListCampaignComponent } from './components/app-content/campaign/list-campaign/list-campaign.component';
 
 function resourceProviderFactory(JarwisService: JarwisService) {
   return () => {
@@ -119,6 +126,13 @@ function resourceProviderFactory(JarwisService: JarwisService) {
     ListArticleComponent,
     ListCheckoutComponent,
     AddCheckoutComponent,
+    ListSupplierComponent,
+    AddSupplierComponent,
+    AddDelegateComponent,
+    ListDelegateComponent,
+    DetailDelegateComponent,
+    DetailSupplierComponent,
+    ListCampaignComponent,
   ],
   imports: [
     BrowserModule,

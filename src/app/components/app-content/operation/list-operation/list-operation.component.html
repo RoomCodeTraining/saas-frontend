@@ -44,23 +44,23 @@
                             <thead>
                                 <tr>
                                     <th>N°</th>
-                                    <th>Actions</th>
+                                    <th>Action</th>
                                     <th>Référence</th>
-                                    <th>Produit</th>
                                     <th>Montant</th>
                                     <th>Type</th>
-                                    <th>Bénéficiaire</th>
+                                    <th>Méthode de paiement</th>
+                                    <th>Bénéficaire</th>
                                     <th>Effectué(e) par</th>
                                     <th>Statut</th>
-                                    <th>Date de création</th>
+                                    <th>Date</th>
                                 </tr>
                             </thead>
-                            <tbody *ngIf="listItem?.length > 0">
+                            <tbody *ngIf="listItem?.length >= 0">
                                 <tr *ngFor="let item of listItem | filter:information; let i = index;">
                                     <td>{{i+1}}</td>
                                     <td class="text-center">
                                         <ul class="flex gap-2">
-                                            <li *ngIf="item?.status == 1">
+                                            <li *ngIf="item?.status?.id == 3">
                                                 <a href="javascript:;" x-tooltip="Annuler l'opération" (click)="itemCancel(item)">
                                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 m-auto text-danger">
                                                         <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
@@ -68,20 +68,20 @@
                                                     </svg>
                                                 </a>
                                             </li>
-                                            <li *ngIf="item?.status != 1">
+                                            <li *ngIf="item?.status?.id != 3">
                                                 ---
                                             </li>
                                         </ul>
                                     </td>
                                     <td>{{item?.reference}}</td>
-                                    <td>{{item?.wallet?.product_concerned?.name}}</td>
-                                    <td>{{item?.amount | number:'':'fr-FR'}} FCFA</td>
-                                    <td>{{item?.type}}</td>
-                                    <td>{{item?.operator?.name}}</td>
-                                    <td>{{item?.wallet?.user?.name}}</td>
+                                    <td>{{item?.total_price | number:'':'fr-FR'}} FCFA</td>
+                                    <td>{{item?.operation_type?.label}}</td>
+                                    <td>{{item?.payment_method?.label}}</td>
+                                    <td>{{item?.wallet?.entity?.name}}</td>
+                                    <td>{{item?.user?.name}}</td>
                                     <td> 
-                                        <span class="badge bg-success" *ngIf="item?.status == 1">{{item?.status_label}}</span>
-                                        <span class="badge bg-danger" *ngIf="item?.status != 1">{{item?.status_label}}</span>
+                                        <span class="badge bg-success" *ngIf="item?.status?.id == 3">{{item?.status?.label}}</span>
+                                        <span class="badge bg-danger" *ngIf="item?.status?.id != 3">{{item?.status?.label}}</span>
                                     </td>
                                     <td>{{item?.created_at | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
                                 </tr>

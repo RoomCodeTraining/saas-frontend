@@ -104,7 +104,7 @@ export class ListOperationComponent implements OnInit {
   editItem: boolean = false;  
   itemDetail: boolean = false;  
   resetItem: boolean = false;  
-  ableItem: boolean = false;  
+  enableItem: boolean = false;  
   disableItem: boolean = false;
 
   activeDropdown!: any;  
@@ -378,7 +378,7 @@ export class ListOperationComponent implements OnInit {
   itemAdd() {
     this.addItem = true;
     this.itemDetail = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.resetAll();
   }
@@ -387,7 +387,7 @@ export class ListOperationComponent implements OnInit {
     this.editItem = true;
     this.itemDetail = false;
     this.resetItem = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.itemSelected = item;
     this.email = this.itemSelected.email;
@@ -405,7 +405,7 @@ export class ListOperationComponent implements OnInit {
     this.editItem = false;
     this.itemDetail = true;
     this.resetItem = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.itemSelected = item;
     this.email = this.itemSelected.email;
@@ -423,7 +423,7 @@ export class ListOperationComponent implements OnInit {
     this.editItem = false;
     this.itemDetail = false;
     this.resetItem = false;
-    this.ableItem = true;
+    this.enableItem = true;
     this.disableItem = false;
     this.itemSelected = item;
     this.email = this.itemSelected.email;
@@ -441,7 +441,7 @@ export class ListOperationComponent implements OnInit {
     this.editItem = false;
     this.itemDetail = false;
     this.resetItem = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = true;
     this.itemSelected = item;
     this.email = this.itemSelected.id.email;
@@ -459,7 +459,7 @@ export class ListOperationComponent implements OnInit {
     this.editItem = false;
     this.itemDetail = false;
     this.resetItem = true;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.itemSelected = item;
     this.email = this.itemSelected.id.email;

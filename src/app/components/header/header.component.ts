@@ -69,7 +69,7 @@ export class HeaderComponent implements OnInit {
 
     this.appService.getUserProfile().subscribe((data: any) => {
       this.user_logged = data.data;
-        this.userprofile_id = this.user_logged.role.id; 
+        this.userprofile_id = this.user_logged.profile.id; 
     },
     (err: HttpErrorResponse) => {
         //console.log("API indisponible");

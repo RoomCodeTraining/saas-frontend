@@ -31,6 +31,13 @@ import { ListArticleComponent } from './components/app-content/article/list-arti
 import { AddArticleComponent } from './components/app-content/article/add-article/add-article.component';
 import { ListCheckoutComponent } from './components/app-content/checkout/list-checkout/list-checkout.component';
 import { AddCheckoutComponent } from './components/app-content/checkout/add-checkout/add-checkout.component';
+import { ListSupplierComponent } from './components/app-content/entity/supplier/list-supplier/list-supplier.component';
+import { AddSupplierComponent } from './components/app-content/entity/supplier/add-supplier/add-supplier.component';
+import { ListDelegateComponent } from './components/app-content/entity/delegate/list-delegate/list-delegate.component';
+import { AddDelegateComponent } from './components/app-content/entity/delegate/add-delegate/add-delegate.component';
+import { DetailDelegateComponent } from './components/app-content/entity/delegate/detail-delegate/detail-delegate.component';
+import { DetailSupplierComponent } from './components/app-content/entity/supplier/detail-supplier/detail-supplier.component';
+import { ListCampaignComponent } from './components/app-content/campaign/list-campaign/list-campaign.component';
 
 const routes: Routes = [
   {
@@ -198,6 +205,44 @@ const routes: Routes = [
   {
     path:'add-checkout',
     component: AddCheckoutComponent,
+    canActivate: [AfterLoginService]
+  },
+
+  {
+    path:'supplier-list',
+    component: ListSupplierComponent,
+    canActivate: [AfterLoginService]
+  },
+  {
+    path:'supplier-add',
+    component: AddSupplierComponent,
+    canActivate: [AfterLoginService]
+  },
+  {
+    path:'supplier-detail',
+    component: DetailSupplierComponent,
+    canActivate: [AfterLoginService]
+  },
+
+  {
+    path:'delegate-list',
+    component: ListDelegateComponent,
+    canActivate: [AfterLoginService]
+  },
+  {
+    path:'delegate-add',
+    component: AddDelegateComponent,
+    canActivate: [AfterLoginService]
+  },
+  {
+    path:'delegate-detail',
+    component: DetailDelegateComponent,
+    canActivate: [AfterLoginService]
+  },
+
+  {
+    path:'campaign-list',
+    component: ListCampaignComponent,
     canActivate: [AfterLoginService]
   },
   

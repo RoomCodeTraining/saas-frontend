@@ -104,7 +104,7 @@ export class ListClientComponent implements OnInit {
   addItem: boolean = false;  
   addAdminItem: boolean = false;  
   editItem: boolean = false;
-  ableItem: boolean = false;  
+  enableItem: boolean = false;  
   disableItem: boolean = false;
 
   activeDropdown!: any;  
@@ -409,7 +409,7 @@ export class ListClientComponent implements OnInit {
     this.addItem = true;
     this.editItem = false;
     this.itemDetail = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = false;
     this.resetAll();
@@ -419,7 +419,7 @@ export class ListClientComponent implements OnInit {
     this.addItem = false;
     this.editItem = true;
     this.itemDetail = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = false;
     this.itemSelected = item;
@@ -437,7 +437,7 @@ export class ListClientComponent implements OnInit {
     this.addItem = false;
     this.editItem = false;
     this.itemDetail = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = true;
     this.itemSelected = item;
@@ -447,7 +447,7 @@ export class ListClientComponent implements OnInit {
     this.addItem = false;
     this.editItem = false;
     this.itemDetail = true;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = false;
     this.itemSelected = item;
@@ -464,7 +464,7 @@ export class ListClientComponent implements OnInit {
     this.addItem = false;
     this.editItem = false;
     this.itemDetail = false;
-    this.ableItem = true;
+    this.enableItem = true;
     this.disableItem = false;
     this.addAdminItem = false;
     this.itemSelected = item;
@@ -481,7 +481,7 @@ export class ListClientComponent implements OnInit {
     this.addItem = false;
     this.editItem = false;
     this.itemDetail = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = true;
     this.addAdminItem = false;
     this.itemSelected = item;

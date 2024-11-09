@@ -104,7 +104,7 @@ export class ListProductComponent implements OnInit {
   editItem: boolean = false;  
   itemDetail: boolean = false;  
   resetItem: boolean = false;  
-  ableItem: boolean = false;  
+  enableItem: boolean = false;  
   disableItem: boolean = false;
 
   activeDropdown!: any;  
@@ -149,9 +149,9 @@ export class ListProductComponent implements OnInit {
 
     /** spinner starts on init */
     this.SpinnerService.show();
-    
-    this.getItems();
 
+    this.getUserLogged();
+    
   }
 
   logout() {
@@ -174,12 +174,13 @@ export class ListProductComponent implements OnInit {
   getUserLogged(){
     this.appService.getUserProfile().subscribe((data: any) => {
       this.user_logged = data.data;
-      this.permissions = this.user_logged.permissions;
-      if(this.permissions.includes("user.view")){
-        this.permitted = true;
-      } else {
-        this.notPermission();
-      }
+      this.getItems();
+      // this.permissions = this.user_logged.permissions;
+      // if(this.permissions.includes("user.view")){
+      //   this.permitted = true;
+      // } else {
+      //   this.notPermission();
+      // }
     },
     (err: HttpErrorResponse) => {
         //console.log("API indisponible");
@@ -256,7 +257,7 @@ export class ListProductComponent implements OnInit {
   }
 
   getItems(){
-    this.appService.getProduct(this.current_page).subscribe((data: any) => {
+    this.appService.getEntityProduct(this.user_logged.entity.id, this.current_page).subscribe((data: any) => {
       this.listItem = data.data;
 
       this.getPaginate(data);
@@ -268,7 +269,7 @@ export class ListProductComponent implements OnInit {
 
   search(){
     this.SpinnerService.show();
-    this.appService.getProductSearch(this.current_page,this.information).subscribe((data: any) => {
+    this.appService.getEntityProductSearch(this.user_logged.entity.id, this.current_page,this.information).subscribe((data: any) => {
       this.listItem = data.data;
       
       this.getPaginate(data);
@@ -283,7 +284,7 @@ export class ListProductComponent implements OnInit {
       this.search()
     } else {
       this.SpinnerService.show();
-        this.appService.getProductPaginate(this.current_page).subscribe((data: any) => {
+        this.appService.getEntityProductPaginate(this.user_logged.entity.id, this.current_page).subscribe((data: any) => {
           this.listItem = data.data;
           
           this.getPaginate(data);
@@ -339,7 +340,7 @@ export class ListProductComponent implements OnInit {
   itemAdd() {
     this.addItem = true;
     this.itemDetail = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.resetAll();
   }
@@ -348,7 +349,7 @@ export class ListProductComponent implements OnInit {
     this.editItem = true;
     this.itemDetail = false;
     this.resetItem = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.itemSelected = item;
     this.email = this.itemSelected.email;
@@ -366,7 +367,7 @@ export class ListProductComponent implements OnInit {
     this.editItem = false;
     this.itemDetail = true;
     this.resetItem = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.itemSelected = item;
     this.email = this.itemSelected.email;
@@ -384,7 +385,7 @@ export class ListProductComponent implements OnInit {
     this.editItem = false;
     this.itemDetail = false;
     this.resetItem = false;
-    this.ableItem = true;
+    this.enableItem = true;
     this.disableItem = false;
     this.itemSelected = item;
     this.email = this.itemSelected.email;
@@ -402,7 +403,7 @@ export class ListProductComponent implements OnInit {
     this.editItem = false;
     this.itemDetail = false;
     this.resetItem = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = true;
     this.itemSelected = item;
     this.email = this.itemSelected.id.email;
@@ -420,7 +421,7 @@ export class ListProductComponent implements OnInit {
     this.editItem = false;
     this.itemDetail = false;
     this.resetItem = true;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.itemSelected = item;
     this.email = this.itemSelected.id.email;

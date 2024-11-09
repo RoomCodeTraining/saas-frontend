@@ -84,7 +84,7 @@ export class AddPurchaseComponent implements OnInit {
   editItem: boolean = false;  
   itemDetail: boolean = false;  
   resetItem: boolean = false;  
-  ableItem: boolean = false;  
+  enableItem: boolean = false;  
   disableItem: boolean = false;
 
   activeDropdown!: any;  

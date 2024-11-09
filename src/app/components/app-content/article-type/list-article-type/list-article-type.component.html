@@ -6,13 +6,13 @@
             <div x-data="sales">
                 <ul class="flex space-x-2 rtl:space-x-reverse">
                     <li class="before:content-['/'] ltr:before:mr-1 rtl:before:ml-1">
-                        <span>Liste des types d'article</span>
+                        <span>Liste des catégories d'article</span>
                     </li>
                 </ul>
     
                 <div class="pt-5" *ngIf="!itemSelected && !addItem">
                     <div class="flex items-center justify-between flex-wrap gap-4">
-                        <h2 class="text-xl">Liste des types d'article</h2>
+                        <h2 class="text-xl">Liste des catégories d'article</h2>
                         <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
                             <div class="flex gap-3">
                                 <div class="relative ">
@@ -33,7 +33,7 @@
                                             <line x1="12" y1="5" x2="12" y2="19"></line>
                                             <line x1="5" y1="12" x2="19" y2="12"></line>
                                         </svg>
-                                        Nouveau type d'article
+                                        Nouvelle catégorie d'article
                                     </button>
                                 </div>
                             </div>
@@ -98,7 +98,7 @@
                                             </li>
                                         </ul>
                                     </td>
-                                    <td>{{item?.name}}</td>
+                                    <td>{{item?.label}}</td>
                                     <td>{{item?.description}}</td>
                                     <td> 
                                         <span class="badge bg-success" *ngIf="!item?.is_disabled">Actif(ve)</span>
@@ -307,8 +307,8 @@
                                             <table class="table-hover">
                                                 <tbody>
                                                     <tr>
-                                                        <th>Nom</th>
-                                                        <td>{{itemSelected.name}}</td>
+                                                        <th>Libellé</th>
+                                                        <td>{{itemSelected.label}}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Description</th>
@@ -337,7 +337,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="pt-5" *ngIf="itemSelected && ableItem">
+                <div class="pt-5" *ngIf="itemSelected && enableItem">
                     <div class="row mb-5">
                         <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
                             <div class="flex items-start justify-center min-h-screen px-4">

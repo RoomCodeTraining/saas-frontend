@@ -79,7 +79,7 @@ export class ListArticleComponent implements OnInit {
   addItem: boolean = false;  
   addAdminItem: boolean = false;  
   editItem: boolean = false;
-  ableItem: boolean = false;  
+  enableItem: boolean = false;  
   disableItem: boolean = false;
 
   activeDropdown!: any;  
@@ -123,8 +123,6 @@ export class ListArticleComponent implements OnInit {
     /** spinner starts on init */
     this.SpinnerService.show();
 
-    this.getArticleType();
-    this.getItems();
     this.getUserLogged();
 
     this.formGroupAdd = new FormGroup({
@@ -161,12 +159,14 @@ export class ListArticleComponent implements OnInit {
   getUserLogged(){
     this.appService.getUserProfile().subscribe((data: any) => {
       this.user_logged = data.data;
-      this.permissions = this.user_logged.permissions;
-      if(this.permissions.includes("organization.view")){
-        this.permitted = true;
-      } else {
-        //this.notPermission();
-      }
+      this.getArticleType();
+      this.getItems();
+      // this.permissions = this.user_logged.permissions;
+      // if(this.permissions.includes("organization.view")){
+      //   this.permitted = true;
+      // } else {
+      //   //this.notPermission();
+      // }
     },
     (err: HttpErrorResponse) => {
         //console.log("API indisponible");
@@ -204,7 +204,7 @@ export class ListArticleComponent implements OnInit {
   }
 
   getArticleType(){
-    this.appService.getAllArticleType().subscribe((data: any) => {
+    this.appService.getAllArticleCategory(this.user_logged.entity.id).subscribe((data: any) => {
       this.listArticleType = data.data;
     });
   }
@@ -224,7 +224,7 @@ export class ListArticleComponent implements OnInit {
   }
 
   getItems(){
-    this.appService.getArticle(this.current_page).subscribe((data: any) => {
+    this.appService.getArticle(this.user_logged.entity.id, this.current_page).subscribe((data: any) => {
       this.listItem = data.data;
 
       this.getPaginate(data);
@@ -236,7 +236,7 @@ export class ListArticleComponent implements OnInit {
 
   search(){
     this.SpinnerService.show();
-    this.appService.getArticleSearch(this.current_page,this.information).subscribe((data: any) => {
+    this.appService.getArticleSearch(this.user_logged.entity.id, this.current_page,this.information).subscribe((data: any) => {
       this.listItem = data.data;
       
       this.getPaginate(data);
@@ -251,7 +251,7 @@ export class ListArticleComponent implements OnInit {
       this.search()
     } else {
       this.SpinnerService.show();
-      this.appService.getArticlePaginate(this.current_page).subscribe((data: any) => {
+      this.appService.getArticlePaginate(this.user_logged.entity.id, this.current_page).subscribe((data: any) => {
         this.listItem = data.data;
         
         this.getPaginate(data);
@@ -308,7 +308,7 @@ export class ListArticleComponent implements OnInit {
     this.addItem = true;
     this.editItem = false;
     this.itemDetail = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = false;
     this.resetAll();
@@ -318,7 +318,7 @@ export class ListArticleComponent implements OnInit {
     this.addItem = false;
     this.editItem = true;
     this.itemDetail = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = false;
     this.itemSelected = item;
@@ -331,7 +331,7 @@ export class ListArticleComponent implements OnInit {
     this.addItem = false;
     this.editItem = false;
     this.itemDetail = true;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = false;
     this.itemSelected = item;
@@ -344,7 +344,7 @@ export class ListArticleComponent implements OnInit {
     this.addItem = false;
     this.editItem = false;
     this.itemDetail = false;
-    this.ableItem = true;
+    this.enableItem = true;
     this.disableItem = false;
     this.addAdminItem = false;
     this.itemSelected = item;
@@ -356,7 +356,7 @@ export class ListArticleComponent implements OnInit {
     this.addItem = false;
     this.editItem = false;
     this.itemDetail = false;
-    this.ableItem = false;
+    this.enableItem = false;
     this.disableItem = true;
     this.addAdminItem = false;
     this.itemSelected = item;
@@ -380,9 +380,9 @@ export class ListArticleComponent implements OnInit {
       this.submit = true;
 
       let requestData = {
-        article_type_id: this.article_type_id,
-        title: this.title,
-        content: this.content,
+        article_category_id: this.article_type_id,
+        label: this.title,
+        description: this.content,
       }
 
       this.appService.addArticle(requestData).subscribe(res => {
@@ -453,8 +453,8 @@ export class ListArticleComponent implements OnInit {
       
       let requestData = {
         article_type_id: this.article_type_id,
-        title: this.title,
-        content: this.content,
+        label: this.title,
+        description: this.content,
       }
 
       this.appService.updateArticle(this.itemSelected.id,requestData).subscribe(res => {
