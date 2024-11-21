@@ -31,6 +31,8 @@ export class ListCheckoutComponent implements OnInit {
 
   listItem: any;
   listArticle: any;
+  listEntityProduct: any;
+  listEntityCampaign: any;
   
   itemSelected: any;
 
@@ -103,6 +105,8 @@ export class ListCheckoutComponent implements OnInit {
   permitted: boolean = false;
 
   cash_register_movement_id: number = 2;
+  entity_product_id!: number;
+  campaign_id!: number;
 
   constructor(
     public Jarwis: JarwisService,
@@ -129,6 +133,8 @@ export class ListCheckoutComponent implements OnInit {
 
     this.formGroupAdd = new FormGroup({
       article_id: new FormControl('', [Validators.required]),
+      entity_product_id: new FormControl('', [Validators.required]),
+      campaign_id: new FormControl('', [Validators.required]),
       amount: new FormControl('', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]),
       note: new FormControl('', []),
     });
@@ -162,6 +168,8 @@ export class ListCheckoutComponent implements OnInit {
     this.appService.getUserProfile().subscribe((data: any) => {
       this.user_logged = data.data;
       this.getArticle();
+      this.getEntityProduct();
+      this.getEntityCampaign();
       this.getItems();
       // this.permissions = this.user_logged.permissions;
       // if(this.permissions.includes("organization.view")){
@@ -208,6 +216,18 @@ export class ListCheckoutComponent implements OnInit {
   getArticle(){
     this.appService.getAllArticle(this.user_logged.entity.id).subscribe((data: any) => {
       this.listArticle = data.data;
+    });
+  }
+
+  getEntityProduct(){
+    this.appService.getAllEntityProduct(this.user_logged.entity.id).subscribe((data: any) => {
+      this.listEntityProduct = data.data;
+    });
+  }
+
+  getEntityCampaign(){
+    this.appService.getAllEntityCampaign(this.user_logged.entity.id).subscribe((data: any) => {
+      this.listEntityCampaign = data.data;
     });
   }
 
@@ -383,6 +403,8 @@ export class ListCheckoutComponent implements OnInit {
 
       let requestData = {
         article_id: this.article_id,
+        entity_product_id: this.entity_product_id,
+        campaign_id: this.campaign_id,
         amount: this.amount,
         label: this.note,
         cash_register_movement_id: this.cash_register_movement_id,

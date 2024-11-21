@@ -69,6 +69,11 @@ import { ListDelegateComponent } from './components/app-content/entity/delegate/
 import { DetailDelegateComponent } from './components/app-content/entity/delegate/detail-delegate/detail-delegate.component';
 import { DetailSupplierComponent } from './components/app-content/entity/supplier/detail-supplier/detail-supplier.component';
 import { ListCampaignComponent } from './components/app-content/campaign/list-campaign/list-campaign.component';
+import { SupplierStatisticComponent } from './components/app-content/statistic/supplier-statistic/supplier-statistic.component';
+import { DelegateStatisticComponent } from './components/app-content/statistic/delegate-statistic/delegate-statistic.component';
+import { SpecialSupplierStatisticComponent } from './components/app-content/statistic/special-supplier-statistic/special-supplier-statistic.component';
+import { ListSpecialSupplierComponent } from './components/app-content/entity/list-special-supplier/list-special-supplier.component';
+import { DetailSpecialSupplierComponent } from './components/app-content/entity/detail-special-supplier/detail-special-supplier.component';
 
 function resourceProviderFactory(JarwisService: JarwisService) {
   return () => {
@@ -133,6 +138,11 @@ function resourceProviderFactory(JarwisService: JarwisService) {
     DetailDelegateComponent,
     DetailSupplierComponent,
     ListCampaignComponent,
+    SupplierStatisticComponent,
+    DelegateStatisticComponent,
+    SpecialSupplierStatisticComponent,
+    ListSpecialSupplierComponent,
+    DetailSpecialSupplierComponent,
   ],
   imports: [
     BrowserModule,

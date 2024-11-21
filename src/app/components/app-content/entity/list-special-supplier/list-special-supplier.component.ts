@@ -23,11 +23,11 @@ import { EntityFirm } from 'src/app/models/entity-firm.model';
 import { AppService } from 'src/app/services/app-content/app.service';
 
 @Component({
-  selector: 'app-list-supplier',
-  templateUrl: './list-supplier.component.html',
-  styleUrls: ['./list-supplier.component.css']
+  selector: 'app-list-special-supplier',
+  templateUrl: './list-special-supplier.component.html',
+  styleUrls: ['./list-special-supplier.component.css']
 })
-export class ListSupplierComponent implements OnInit {
+export class ListSpecialSupplierComponent implements OnInit {
 
   listItem: any;
   listEntityType: any;
@@ -63,8 +63,8 @@ export class ListSupplierComponent implements OnInit {
   submitted2 = false;
   submitted3 = false;
 
-  entity_type_id: number = 3;
-  type: string = "3";
+  entity_type_id: number = 5;
+  type: string = "5";
   name: string = "";
   profil_id!:number;
   password: string = "";
@@ -300,14 +300,10 @@ export class ListSupplierComponent implements OnInit {
     this._location.back();
   }  
 
-  goBack(){
-    this._location.back();
-  }
-
   goToDetail(data: any){
     // @ts-ignore
-    localStorage.setItem("SUPPLIER_DATA", JSON.stringify(data));
-    this.router.navigateByUrl("/supplier-detail");
+    localStorage.setItem("SPECIAL_SUPPLIER_DATA", JSON.stringify(data));
+    this.router.navigateByUrl("/special-supplier-detail");
   }
 
   resetAll() {
@@ -415,7 +411,7 @@ export class ListSupplierComponent implements OnInit {
   }
 
   getItems(){
-    this.appService.getSupplier(this.current_page,this.type).subscribe((data: any) => {
+    this.appService.getSpecialSupplier(this.current_page,this.type).subscribe((data: any) => {
       this.listItem = data.data;
 
       this.getPaginate(data);
@@ -427,7 +423,7 @@ export class ListSupplierComponent implements OnInit {
 
   search(){
     this.SpinnerService.show();
-    this.appService.getSupplierSearch(this.current_page,this.type,this.information).subscribe((data: any) => {
+    this.appService.getSpecialSupplierSearch(this.current_page,this.type,this.information).subscribe((data: any) => {
       this.listItem = data.data;
       
       this.getPaginate(data);
@@ -442,7 +438,7 @@ export class ListSupplierComponent implements OnInit {
       this.search()
     } else {
       this.SpinnerService.show();
-      this.appService.getSupplierPaginate(this.current_page,this.type).subscribe((data: any) => {
+      this.appService.getSpecialSupplierPaginate(this.current_page,this.type).subscribe((data: any) => {
         this.listItem = data.data;
         
         this.getPaginate(data);

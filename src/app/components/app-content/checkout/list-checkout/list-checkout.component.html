@@ -219,7 +219,25 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-3" [formGroup]="formGroupAdd">
-                                                    <label>Prix <span style="color:red">*</span></label>
+                                                    <label for="gridPassword">Produit <span style="color:red">*</span></label>
+                                                    <ng-select id="entity_product_id" name="entity_product_id" formControlName="entity_product_id" [(ngModel)]="entity_product_id" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submitted && f['entity_product_id'].errors }">
+                                                        <ng-option *ngFor="let item of listEntityProduct" [value]="item.id">{{item.product.label}}</ng-option>
+                                                    </ng-select>
+                                                    <div *ngIf="submitted && f['entity_product_id'].errors" class="mt-1">
+                                                        <div *ngIf="submitted && f['entity_product_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3" [formGroup]="formGroupAdd">
+                                                    <label for="gridPassword">Campagne <span style="color:red">*</span></label>
+                                                    <ng-select id="campaign_id" name="campaign_id" formControlName="campaign_id" [(ngModel)]="campaign_id" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submitted && f['campaign_id'].errors }">
+                                                        <ng-option *ngFor="let item of listEntityCampaign" [value]="item.id">{{item.label}}</ng-option>
+                                                    </ng-select>
+                                                    <div *ngIf="submitted && f['campaign_id'].errors" class="mt-1">
+                                                        <div *ngIf="submitted && f['campaign_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3" [formGroup]="formGroupAdd">
+                                                    <label>Montant <span style="color:red">*</span></label>
                                                     <input type="number" class="form-input" formControlName="amount" [ngClass]="{ 'is-invalid': submitted && f['amount'].errors }"
                                                         name="amount" [(ngModel)]="amount" />
                                                     <div *ngIf="submitted && f['amount'].errors" class="mt-1">

@@ -6,22 +6,13 @@
             <div x-data="sales">
                 <ul class="flex space-x-2 rtl:space-x-reverse">
                     <li class="before:content-['/'] ltr:before:mr-1 rtl:before:ml-1">
-                        <span>Liste des partenaires</span>
+                        <span>Liste des partenaires spéciaux</span>
                     </li>
                 </ul>
     
                 <div class="pt-5" *ngIf="!itemSelected && !addItem">
-                    <div class="flex items-center justify-between flex-wrap gap-4 mb-5">
-                        <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
-                            <div class="flex gap-3">
-                                <div class="relative ">
-                                    <button type="button" (click)="goBack();" class="btn btn-dark">Retour</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="flex items-center justify-between flex-wrap gap-4">
-                        <h2 class="text-xl">Liste des partenaires</h2>
+                        <h2 class="text-xl">Liste des partenaires spéciaux</h2>
                         <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
                             <div class="flex gap-3">
                                 <div class="relative ">
@@ -42,7 +33,7 @@
                                             <line x1="12" y1="5" x2="12" y2="19"></line>
                                             <line x1="5" y1="12" x2="19" y2="12"></line>
                                         </svg>
-                                        Nouveau partenaire
+                                        Nouveau partenaire spécial
                                     </button>
                                 </div>
                             </div>
@@ -236,7 +227,7 @@
                         <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
                             <div class="flex items-start justify-center min-h-screen px-4">
                                 <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
-                                    <h5 class="font-bold text-lg p-5">Ajout d'un nouveau partenaire</h5>
+                                    <h5 class="font-bold text-lg p-5">Ajout d'un nouveau partenaire spécial</h5>
                                     <div class="p-5">
                                         <form class="space-y-5" style="padding-bottom: 100px;" (submit)="save()">
                                             <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">

@@ -11,6 +11,15 @@
                 </ul>
     
                 <div class="pt-5" *ngIf="!itemSelected && !addItem && !walletItem">
+                    <div class="flex items-center justify-between flex-wrap gap-4 mb-5">
+                        <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
+                            <div class="flex gap-3">
+                                <div class="relative ">
+                                    <button type="button" (click)="goBack();" class="btn btn-dark">Retour</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="flex items-center justify-between flex-wrap gap-4">
                         <h2 class="text-xl">Liste des portefeuilles de {{entity?.name}}</h2>
                         <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
@@ -282,24 +291,6 @@
                                             <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
                                                 <div class="flex gap-3">
                                                     <div>
-                                                        <button type="button" (click)="itemOperationMandate(itemSelected)" class="btn btn-primary">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                                                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                            </svg>
-                                                            Nouveau mandat
-                                                        </button>
-                                                    </div>
-                                                    <div>
-                                                        <button type="button" (click)="itemOperationDelivery(itemSelected)" class="btn btn-primary">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                                                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                            </svg>
-                                                            Nouvelle livraison
-                                                        </button>
-                                                    </div>
-                                                    <!-- <div>
                                                         <button type="button" (click)="itemOperationPayment(itemSelected)" class="btn btn-primary">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
                                                                 <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -307,7 +298,7 @@
                                                             </svg>
                                                             Versement
                                                         </button>
-                                                    </div> -->
+                                                    </div>
                                                     <div>
                                                         <button type="button" (click)="itemOperationRepayment(itemSelected)" class="btn btn-primary">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
@@ -315,6 +306,24 @@
                                                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                                                             </svg>
                                                             Remboursement
+                                                        </button>
+                                                    </div>
+                                                    <div>
+                                                        <button type="button" (click)="itemOperationPaymentOther(itemSelected)" class="btn btn-primary">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                                                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                            </svg>
+                                                            Achat (Carburant, ...)
+                                                        </button>
+                                                    </div>
+                                                    <div>
+                                                        <button type="button" (click)="itemOperationRepaymentOther(itemSelected)" class="btn btn-primary">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                                                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                            </svg>
+                                                            Remboursement d'achat (Carburant, ...)
                                                         </button>
                                                     </div>
                                                 </div>
@@ -557,94 +566,34 @@
                         </div>
                     </div>
                     <form class="space-y-5" style="padding-bottom: 10px; padding-left: 0%; padding-right: 0%;" *ngIf="listStatistics">
-                        <div class="grid grid-cols-1 grid-cols-4 gap-4">
+                        <div class="grid grid-cols-1 grid-cols-2 gap-2">
                             <div class="mb-3">
-                                <label>Mandats</label>
-                                <h3 class="form-input">{{listStatistics.mandate | number:'':'fr-FR'}} FCFA</h3>
-                            </div>
-                            <div class="mb-3">
-                                <label>Livraison</label>
-                                <h3 class="form-input">{{listStatistics.delivery | number:'':'fr-FR'}} FCFA</h3>
-                            </div>
-                            <!-- <div class="mb-3">
                                 <label>Versement</label>
                                 <h3 class="form-input">{{listStatistics.payment | number:'':'fr-FR'}} FCFA</h3>
-                            </div> -->
+                            </div>
                             <div class="mb-3">
                                 <label>Remboursement</label>
                                 <h3 class="form-input">{{listStatistics.repayment | number:'':'fr-FR'}} FCFA</h3>
                             </div>
                             <div class="mb-3">
+                                <label>Achat (carburant, ...)</label>
+                                <h3 class="form-input">{{listStatistics.payment_other | number:'':'fr-FR'}} FCFA</h3>
+                            </div>
+                            <div class="mb-3">
+                                <label>pour achat de carburant, ...</label>
+                                <h3 class="form-input">{{listStatistics.repayment_other | number:'':'fr-FR'}} FCFA</h3>
+                            </div>
+                            <div class="mb-3">
                                 <label>Solde</label>
                                 <h3 class="form-input">{{listStatistics.balance | number:'':'fr-FR'}} FCFA</h3>
                             </div>
-                        </div>
-                        <div class="grid grid-cols-1 grid-cols-3 gap-3">
-                            <div class="mb-3">
-                                <label>Total de sacs déclarés </label>
-                                <h3 class="form-input">{{listStatistics.nb_supplier_bags_declared | number:'':'fr-FR'}}</h3>
-                            </div>
-                            <div class="mb-3">
-                                <label>Total de poids déclarés </label>
-                                <h3 class="form-input">{{listStatistics.nb_supplier_weight_declared | number:'':'fr-FR'}}</h3>
-                            </div>
-                            <div class="mb-3">
-                                <label>Total de réfractions</label>
-                                <h3 class="form-input">{{listStatistics.nb_supplier_refact | number:'':'fr-FR'}}</h3>
-                            </div>
-                        </div>  
-                        <div class="grid grid-cols-1 grid-cols-3 gap-3">
-                            <div class="mb-3">
-                                <label>Total de sacs livrés </label>
-                                <h3 class="form-input">{{listStatistics.nb_supplier_bags_accepted | number:'':'fr-FR'}}</h3>
-                            </div>
-                            <div class="mb-3">
-                                <label>Total de poids livrés </label>
-                                <h3 class="form-input">{{listStatistics.nb_supplier_bags_accepted | number:'':'fr-FR'}}</h3>
-                            </div>
-                            <div class="mb-3">
-                                <label>Montant Total des livraison</label>
-                                <h3 class="form-input">{{listStatistics.nb_supplier_total_price | number:'':'fr-FR'}}</h3>
-                            </div>
-                        </div> 
-                        <div class="grid grid-cols-1 grid-cols-3 gap-3">
-                            <div class="mb-3">
-                                <label>Montant total TKM </label>
-                                <h3 class="form-input">{{listStatistics.nb_supplier_tkm_amount | number:'':'fr-FR'}}</h3>
-                            </div>
-                            <div class="mb-3">
-                                <label>Valeur totale de production plus TKM </label>
-                                <h3 class="form-input">{{listStatistics.nb_supplier_value_prod_plus_tkm | number:'':'fr-FR'}}</h3>
-                            </div>
-                            <div class="mb-3">
-                                <label>Valeur BIC totale</label>
-                                <h3 class="form-input">{{listStatistics.nb_supplier_bic_value | number:'':'fr-FR'}}</h3>
-                            </div>
-                        </div>                                       
+                        </div>                                      
                     </form>
                     <div class="flex items-center justify-between flex-wrap gap-4 pb-5">
                         <h2></h2>
                         <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
                             <div class="flex gap-3">
                                 <div>
-                                    <button type="button" (click)="itemOperationMandate(itemSelected)" class="btn btn-primary">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                                        </svg>
-                                        Nouveau mandat
-                                    </button>
-                                </div>
-                                <div>
-                                    <button type="button" (click)="itemOperationDelivery(itemSelected)" class="btn btn-primary">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                                        </svg>
-                                        Nouvelle livraison
-                                    </button>
-                                </div>
-                                <!-- <div>
                                     <button type="button" (click)="itemOperationPayment(itemSelected)" class="btn btn-primary">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
                                             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -652,7 +601,7 @@
                                         </svg>
                                         Versement
                                     </button>
-                                </div> -->
+                                </div>
                                 <div>
                                     <button type="button" (click)="itemOperationRepayment(itemSelected)" class="btn btn-primary">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
@@ -660,6 +609,24 @@
                                             <line x1="5" y1="12" x2="19" y2="12"></line>
                                         </svg>
                                         Remboursement
+                                    </button>
+                                </div>
+                                <div>
+                                    <button type="button" (click)="itemOperationPaymentOther(itemSelected)" class="btn btn-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        </svg>
+                                        Achat (Carburant, ...)
+                                    </button>
+                                </div>
+                                <div>
+                                    <button type="button" (click)="itemOperationRepaymentOther(itemSelected)" class="btn btn-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        </svg>
+                                        Remboursement d'achat (Carburant, ...)
                                     </button>
                                 </div>
                             </div>
@@ -1205,7 +1172,7 @@
                         <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
                             <div class="flex items-start justify-center min-h-screen px-4">
                                 <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
-                                    <h5 class="font-bold text-lg p-5">Remboursement au portefeuille {{itemSelected?.entity_product?.product?.label}} de {{entity?.name}}</h5>
+                                    <h5 class="font-bold text-lg p-5">Remboursement au portefeuille de {{entity?.name}}</h5>
                                     <div class="p-5">
                                         <form class="space-y-5" style="padding-bottom: 100px;" (submit)="saveOperationRepayment(5)">
                                             <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
@@ -1247,6 +1214,140 @@
                                                 <button type="button" (click)="resetAll(); itemDetail = !itemDetail; operationRepayment = !operationRepayment" class="btn btn-outline-danger">Annuler</button>
                                                 <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationRepayment" *ngIf="!submitOperationRepayment">Enregistrer</button>
                                                 <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationRepayment" *ngIf="submitOperationRepayment">
+                                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
+                                                        <line x1="12" y1="2" x2="12" y2="6"></line>
+                                                        <line x1="12" y1="18" x2="12" y2="22"></line>
+                                                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                                                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                                                        <line x1="2" y1="12" x2="6" y2="12"></line>
+                                                        <line x1="18" y1="12" x2="22" y2="12"></line>
+                                                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                                                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                                                    </svg>
+                                                    Patientez ...
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-5" *ngIf="itemSelected && operationPaymentOther">
+                    <div class="row mb-5">
+                        <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
+                            <div class="flex items-start justify-center min-h-screen px-4">
+                                <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
+                                    <h5 class="font-bold text-lg p-5">Achat (carburant, ...) chez {{entity?.name}}</h5>
+                                    <div class="p-5">
+                                        <form class="space-y-5" style="padding-bottom: 100px;" (submit)="saveOperationPaymentOther(9)">
+                                            <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
+                                                <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
+                                            </div>
+                                            <div class="grid grid-cols-1 grid-cols-2 gap-2">
+                                                <div class="mb-3">
+                                                    <label for="gridPassword">Délégué <span style="color:red">*</span></label>
+                                                    <input type="text" class="form-input" [value]="entity?.name" readonly disabled/>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="gridPassword">Produit <span style="color:red">*</span></label>
+                                                    <input type="text" class="form-input" [value]="itemSelected?.entity_product?.product?.label" readonly disabled/>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="gridPassword">Campagne <span style="color:red">*</span></label>
+                                                    <input type="text" class="form-input" [value]="itemSelected?.campaign?.label" readonly disabled/>
+                                                </div>
+                                                <div class="mb-3" [formGroup]="formGroupOperationPaymentOther">
+                                                    <label for="gridPassword">Méthode de paiement <span style="color:red">*</span></label>
+                                                    <ng-select id="payment_method_id" name="payment_method_id" formControlName="payment_method_id" [(ngModel)]="payment_method_id" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submittedOperationPaymentOther && fOperationPaymentOther['payment_method_id'].errors }">
+                                                        <ng-option *ngFor="let item of listPaymentMethod" [value]="item.id">{{item.label}}</ng-option>
+                                                    </ng-select>
+                                                    <div *ngIf="submittedOperationPaymentOther && fOperationPaymentOther['payment_method_id'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationPaymentOther && fOperationPaymentOther['payment_method_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3" [formGroup]="formGroupOperationPaymentOther">
+                                                    <label>Montant <span style="color:red">*</span></label>
+                                                    <input type="number" class="form-input" formControlName="total_price" [ngClass]="{ 'is-invalid': submittedOperationPaymentOther && fOperationPaymentOther['total_price'].errors }"
+                                                        name="total_price" [(ngModel)]="total_price" min="0" />
+                                                    <div *ngIf="submittedOperationPaymentOther && fOperationPaymentOther['total_price'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationPaymentOther && fOperationPaymentOther['total_price'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                            <div class="flex justify-end items-center mt-8">
+                                                <button type="button" (click)="resetAll(); itemDetail = !itemDetail; operationPaymentOther = !operationPaymentOther" class="btn btn-outline-danger">Annuler</button>
+                                                <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationPaymentOther" *ngIf="!submitOperationPaymentOther">Enregistrer</button>
+                                                <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationPaymentOther" *ngIf="submitOperationPaymentOther">
+                                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
+                                                        <line x1="12" y1="2" x2="12" y2="6"></line>
+                                                        <line x1="12" y1="18" x2="12" y2="22"></line>
+                                                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                                                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                                                        <line x1="2" y1="12" x2="6" y2="12"></line>
+                                                        <line x1="18" y1="12" x2="22" y2="12"></line>
+                                                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                                                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                                                    </svg>
+                                                    Patientez ...
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-5" *ngIf="itemSelected && operationRepaymentOther">
+                    <div class="row mb-5">
+                        <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
+                            <div class="flex items-start justify-center min-h-screen px-4">
+                                <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
+                                    <h5 class="font-bold text-lg p-5">Remboursement au portefeuille {{itemSelected?.entity_product?.product?.label}} de {{entity?.name}} pour achat de carburant, ... </h5>
+                                    <div class="p-5">
+                                        <form class="space-y-5" style="padding-bottom: 100px;" (submit)="saveOperationRepaymentOther(10)">
+                                            <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
+                                                <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
+                                            </div>
+                                            <div class="grid grid-cols-1 grid-cols-2 gap-2">
+                                                <div class="mb-3">
+                                                    <label for="gridPassword">Délégué <span style="color:red">*</span></label>
+                                                    <input type="text" class="form-input" [value]="entity?.name" readonly disabled/>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="gridPassword">Produit <span style="color:red">*</span></label>
+                                                    <input type="text" class="form-input" [value]="itemSelected?.entity_product?.product?.label" readonly disabled/>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="gridPassword">Campagne <span style="color:red">*</span></label>
+                                                    <input type="text" class="form-input" [value]="itemSelected?.campaign?.label" readonly disabled/>
+                                                </div>
+                                                <div class="mb-3" [formGroup]="formGroupOperationRepaymentOther">
+                                                    <label for="gridPassword">Méthode de paiement <span style="color:red">*</span></label>
+                                                    <ng-select id="payment_method_id" name="payment_method_id" formControlName="payment_method_id" [(ngModel)]="payment_method_id" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submittedOperationRepaymentOther && fOperationRepaymentOther['payment_method_id'].errors }">
+                                                        <ng-option *ngFor="let item of listPaymentMethod" [value]="item.id">{{item.label}}</ng-option>
+                                                    </ng-select>
+                                                    <div *ngIf="submittedOperationRepaymentOther && fOperationRepaymentOther['payment_method_id'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationRepaymentOther && fOperationRepaymentOther['payment_method_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3" [formGroup]="formGroupOperationRepaymentOther">
+                                                    <label>Montant <span style="color:red">*</span></label>
+                                                    <input type="number" class="form-input" formControlName="total_price" [ngClass]="{ 'is-invalid': submittedOperationRepaymentOther && fOperationRepaymentOther['total_price'].errors }"
+                                                        name="total_price" [(ngModel)]="total_price" min="0" />
+                                                    <div *ngIf="submittedOperationRepaymentOther && fOperationRepaymentOther['total_price'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationRepaymentOther && fOperationRepaymentOther['total_price'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                            <div class="flex justify-end items-center mt-8">
+                                                <button type="button" (click)="resetAll(); itemDetail = !itemDetail; operationRepaymentOther = !operationRepaymentOther" class="btn btn-outline-danger">Annuler</button>
+                                                <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationRepaymentOther" *ngIf="!submitOperationRepaymentOther">Enregistrer</button>
+                                                <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationRepaymentOther" *ngIf="submitOperationRepaymentOther">
                                                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
                                                         <line x1="12" y1="2" x2="12" y2="6"></line>
                                                         <line x1="12" y1="18" x2="12" y2="22"></line>

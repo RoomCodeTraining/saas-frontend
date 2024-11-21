@@ -23,16 +23,18 @@ import { EntityFirm } from 'src/app/models/entity-firm.model';
 import { AppService } from 'src/app/services/app-content/app.service';
 
 @Component({
-  selector: 'app-list-supplier',
-  templateUrl: './list-supplier.component.html',
-  styleUrls: ['./list-supplier.component.css']
+  selector: 'app-detail-special-supplier',
+  templateUrl: './detail-special-supplier.component.html',
+  styleUrls: ['./detail-special-supplier.component.css']
 })
-export class ListSupplierComponent implements OnInit {
+export class DetailSpecialSupplierComponent implements OnInit {
 
   listItem: any;
   listEntityType: any;
   listRole: any;
-  listProduct: any;
+  listEntityProduct: any;
+  listEntityCampaign: any;
+  listPaymentMethod: any;
   listEntityFirm: any;
 
   itemSelected: any;
@@ -85,8 +87,10 @@ export class ListSupplierComponent implements OnInit {
   avatar: any;
 
   entity_product_id!: number;
+  campaign_id!: number;
+  payment_method_id!: number;
   weight: number = 0;
-  price: number= 0;
+  price: number = 0;
 
 
   user_logged!: any;
@@ -139,10 +143,22 @@ export class ListSupplierComponent implements OnInit {
   walletSelected: any;
   operationHistorySelected: any;
 
+  formGroupOperationMandate!: FormGroup;
+  formGroupOperationDelivery!: FormGroup;
+  formGroupOperationPayment!: FormGroup;
+  formGroupOperationRepayment!: FormGroup;
+  formGroupOperationPaymentOther!: FormGroup;
+  formGroupOperationRepaymentOther!: FormGroup;
   formGroupOperation!: FormGroup;
   formGroupWallet!: FormGroup;
   formGroupDeposit!: FormGroup;
 
+  submittedOperationMandate = false;
+  submittedOperationDelivery = false;
+  submittedOperationPayment = false;
+  submittedOperationRepayment = false;
+  submittedOperationPaymentOther = false;
+  submittedOperationRepaymentOther = false;
   submittedOperation = false;
   submittedWallet = false;
   submittedDeposit = false;
@@ -150,6 +166,12 @@ export class ListSupplierComponent implements OnInit {
 
   informationOperation!: string;
   
+  submitOperationMandate: boolean = false;
+  submitOperationDelivery: boolean = false;
+  submitOperationPayment: boolean = false;
+  submitOperationRepayment: boolean = false;
+  submitOperationPaymentOther: boolean = false;
+  submitOperationRepaymentOther: boolean = false;
   submitOperation: boolean = false;
   submitWallet: boolean = false;
   submitDeposit: boolean = false;
@@ -159,6 +181,12 @@ export class ListSupplierComponent implements OnInit {
   walletItem: boolean = false;
   depositItem: boolean = false;
   operationHistoryItem: boolean = false;
+  operationMandate: boolean = false;
+  operationDelivery: boolean = false;
+  operationPayment: boolean = false;
+  operationRepayment: boolean = false;
+  operationPaymentOther: boolean = false;
+  operationRepaymentOther: boolean = false;
 
   operation_current_page: number=1;
   operation_first_page_url!: string;
@@ -183,6 +211,30 @@ export class ListSupplierComponent implements OnInit {
   balance!: number;
   user_id!: number;
 
+  entity!: any;
+  entity_id!: number;
+
+  unit_price_value: number = 1900;
+  conceive_number!: string;
+  vehicle_immatriculation!: string;
+  trailer!: string;
+  bags_declared: number = 0;
+  weight_declared: number = 0;
+  bags_accepted: number = 0;
+  weight_accepted: number = 0;
+  refact: number = 0;
+  commission: number = 0;
+  commission_applied: number = 0;
+  tkm: number = 7.14;
+  tkm_amount: number = 0;
+  bags_delivered: number = 0;
+  unit_price: number = this.unit_price_value + this.tkm - 2.5;
+  total_price: number = 0;
+  bic_value: number = 0;
+  value_prod_plus_tkm: number = 0;
+
+  listStatistics: any;
+
   constructor(
     public Jarwis: JarwisService,
     public appService: AppService,
@@ -198,20 +250,23 @@ export class ListSupplierComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     registerLocaleData( fr,'fr-FR' );
 
     this.exist_phone_error = false;
     
     /** spinner starts on init */
     this.SpinnerService.show();
-    
-    this.getProduct();
-    this.getRoles();
-    this.getEntityType();
-    this.getItems();
-    this.makePassword(12);
-    this.getUserLogged();
+
+    this.entity = localStorage.getItem("SPECIAL_SUPPLIER_DATA");
+    this.entity = JSON.parse(this.entity);
+    if(this.entity){
+      this.entity_id = this.entity.id;
+      this.getUserLogged();
+      this.getItems();
+      this.getPaymentMethod();
+    } else {
+      this._location.back();
+    }
 
     this.formGroupAdd = new FormGroup({
       // entity_type_id: new FormControl(''),
@@ -231,23 +286,69 @@ export class ListSupplierComponent implements OnInit {
 
     this.formGroup2 = new FormGroup({
       entity_product_id: new FormControl('', [Validators.required]),
-      weight: new FormControl('', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]),
-      price: new FormControl('', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]),
+      weight: new FormControl('', [Validators.required]),
+      price: new FormControl('', [Validators.required]),
+    });
+
+    this.formGroupOperationMandate = new FormGroup({
+      payment_method_id: new FormControl('', [Validators.required]),
+      total_price: new FormControl('', [Validators.required]),
+    });
+
+    this.formGroupOperationDelivery = new FormGroup({
+      conceive_number: new FormControl('', [Validators.required]),
+      // vehicle_immatriculation: new FormControl('', [Validators.required]),
+      // trailer: new FormControl('', [Validators.required]),
+      // commission_applied: new FormControl('', [Validators.required]),
+      bags_declared: new FormControl('', [Validators.required]),
+      weight_declared: new FormControl('', [Validators.required]),
+      bags_accepted: new FormControl('', [Validators.required]),
+      weight_accepted: new FormControl('', [Validators.required]),
+      refact: new FormControl('', [Validators.required]),
+      unit_price: new FormControl('', [Validators.required]),
+      // commission: new FormControl('', [Validators.required]),
+      total_price: new FormControl('', [Validators.required]),
+      tkm: new FormControl('', [Validators.required]),
+      tkm_amount: new FormControl('', [Validators.required]),
+      // bags_delivered: new FormControl('', [Validators.required]),
+      bic_value: new FormControl('', [Validators.required]),
+      value_prod_plus_tkm: new FormControl('', [Validators.required]),
+    });
+
+    this.formGroupOperationPayment = new FormGroup({
+      payment_method_id: new FormControl('', [Validators.required]),
+      total_price: new FormControl('', [Validators.required]),
+    });
+
+    this.formGroupOperationRepayment = new FormGroup({
+      payment_method_id: new FormControl('', [Validators.required]),
+      total_price: new FormControl('', [Validators.required]),
+    });
+
+    this.formGroupOperationPaymentOther = new FormGroup({
+      payment_method_id: new FormControl('', [Validators.required]),
+      total_price: new FormControl('', [Validators.required]),
+    });
+
+    this.formGroupOperationRepaymentOther = new FormGroup({
+      payment_method_id: new FormControl('', [Validators.required]),
+      total_price: new FormControl('', [Validators.required]),
     });
 
     this.formGroupOperation = new FormGroup({
       entity_product_id: new FormControl('', [Validators.required]),
-      weight: new FormControl('', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]),
-      price_id: new FormControl('', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]),
+      weight: new FormControl('', [Validators.required]),
+      price_id: new FormControl('', [Validators.required]),
     });
 
     this.formGroupWallet = new FormGroup({
       entity_product_id: new FormControl('', [Validators.required]),
-      balance: new FormControl('', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]),
+      campaign_id: new FormControl('', [Validators.required]),
+      // balance: new FormControl('', [Validators.required]),
     });
 
     this.formGroupDeposit = new FormGroup({
-      amount: new FormControl('', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]),
+      amount: new FormControl('', [Validators.required]),
     });
 
   }
@@ -272,12 +373,15 @@ export class ListSupplierComponent implements OnInit {
   getUserLogged(){
     this.appService.getUserProfile().subscribe((data: any) => {
       this.user_logged = data.data;
-      this.permissions = this.user_logged.permissions;
-      if(this.permissions.includes("organization.view")){
-        this.permitted = true;
-      } else {
-        //this.notPermission();
-      }
+      this.getEntityProduct();
+      this.getEntityCampaign();
+
+      // this.permissions = this.user_logged.permissions;
+      // if(this.permissions.includes("organization.view")){
+      //   this.permitted = true;
+      // } else {
+      //   this.notPermission();
+      // }
     },
     (err: HttpErrorResponse) => {
         //console.log("API indisponible");
@@ -300,6 +404,15 @@ export class ListSupplierComponent implements OnInit {
     this._location.back();
   }  
 
+  amountChange(){
+    this.unit_price_value = 1900;
+    this.tkm = 7.14;
+    this.unit_price = this.unit_price_value + (this.tkm - 2.5),
+    this.total_price = this.weight_accepted * this.unit_price;
+    this.bic_value = this.weight_accepted * 2.5;
+    this.value_prod_plus_tkm = this.total_price + this.tkm_amount;
+  }
+
   goBack(){
     this._location.back();
   }
@@ -307,13 +420,21 @@ export class ListSupplierComponent implements OnInit {
   goToDetail(data: any){
     // @ts-ignore
     localStorage.setItem("SUPPLIER_DATA", JSON.stringify(data));
-    this.router.navigateByUrl("/supplier-detail");
+    this.router.navigateByUrl("/special-supplier-detail");
   }
 
   resetAll() {
+    this.error_message = "";
     this.formGroupAdd.reset();
     this.formGroupEdit.reset();
     this.formGroup2.reset();
+    this.formGroupOperationMandate.reset();
+    this.formGroupOperationDelivery.reset();
+    this.formGroupOperationPayment.reset();
+    this.formGroupOperationRepayment.reset();
+    this.formGroupOperationPaymentOther.reset();
+    this.formGroupOperationRepaymentOther.reset();
+    this.formGroupWallet.reset();
 
     this.name = "";
     this.address = "";
@@ -327,12 +448,19 @@ export class ListSupplierComponent implements OnInit {
 
     this.weight = 0;
     this.amount = 0;
-  }
 
-  onChangeProduct(event:any) {
-    this.appService.getAllPriceByProductId(event).subscribe((data: any) => {
-      this.listPrice = data.data;
-    });
+    this.conceive_number = "";
+    this.vehicle_immatriculation = "";
+    this.trailer = "";
+    this.bags_declared = 0;
+    this.weight_declared = 0;
+    this.bags_accepted = 0;
+    this.weight_accepted = 0;
+    this.refact = 0;
+    this.tkm = 0;
+    this.tkm_amount = 0;
+    this.bags_delivered = 0;
+    this.amountChange();
   }
 
   onSelectLogo(event:any) {
@@ -388,15 +516,27 @@ export class ListSupplierComponent implements OnInit {
     });
   }
 
-  getProduct(){
-    this.appService.getAllProduct().subscribe((data: any) => {
-      this.listProduct = data.data;
+  getEntityProduct(){
+    this.appService.getAllEntityProduct(this.user_logged.entity.id).subscribe((data: any) => {
+      this.listEntityProduct = data.data;
     });
   }
 
-  getEntityType(){
-    this.appService.getEntityType().subscribe((data: any) => {
-      this.listEntityType = data.data;
+  getEntityCampaign(){
+    this.appService.getAllEntityCampaign(this.user_logged.entity.id).subscribe((data: any) => {
+      this.listEntityCampaign = data.data;
+    });
+  }
+
+  getEntityStatistics(){
+    this.appService.getSpecialSupplierStatistics(this.entity.id,this.itemSelected.entity_product.id,this.itemSelected.campaign.id).subscribe((data: any) => {
+      this.listStatistics = data.data;
+    });
+  }
+
+  getPaymentMethod(){
+    this.appService.getAllPaymentMethod().subscribe((data: any) => {
+      this.listPaymentMethod = data.data;
     });
   }
 
@@ -415,7 +555,7 @@ export class ListSupplierComponent implements OnInit {
   }
 
   getItems(){
-    this.appService.getSupplier(this.current_page,this.type).subscribe((data: any) => {
+    this.appService.getWalletByEntityId(this.entity_id,this.current_page).subscribe((data: any) => {
       this.listItem = data.data;
 
       this.getPaginate(data);
@@ -427,7 +567,7 @@ export class ListSupplierComponent implements OnInit {
 
   search(){
     this.SpinnerService.show();
-    this.appService.getSupplierSearch(this.current_page,this.type,this.information).subscribe((data: any) => {
+    this.appService.getWalletByEntityIdSearch(this.entity_id,this.current_page,this.information).subscribe((data: any) => {
       this.listItem = data.data;
       
       this.getPaginate(data);
@@ -442,7 +582,7 @@ export class ListSupplierComponent implements OnInit {
       this.search()
     } else {
       this.SpinnerService.show();
-      this.appService.getSupplierPaginate(this.current_page,this.type).subscribe((data: any) => {
+      this.appService.getWalletByEntityIdPaginate(this.entity_id,this.current_page).subscribe((data: any) => {
         this.listItem = data.data;
         
         this.getPaginate(data);
@@ -512,7 +652,7 @@ export class ListSupplierComponent implements OnInit {
 
   getOperation(){
     this.SpinnerService.show();
-    this.appService.getOperation(this.walletSelected.reference,this.operation_current_page).subscribe((data: any) => {
+    this.appService.getOperationByWalletId(this.itemSelected.id,this.operation_current_page).subscribe((data: any) => {
       this.listOperation = data?.data;
 
       this.getPaginateOperation(data);
@@ -524,7 +664,7 @@ export class ListSupplierComponent implements OnInit {
 
   searchOperation(){
     this.SpinnerService.show();
-    this.appService.getOperationSearch(this.walletSelected.id,this.operation_current_page,this.informationOperation).subscribe((data: any) => {
+    this.appService.getOperationByWalletIdSearch(this.itemSelected.id,this.operation_current_page,this.informationOperation).subscribe((data: any) => {
       this.listOperation = data?.data;
       
       this.getPaginateOperation(data);
@@ -539,7 +679,7 @@ export class ListSupplierComponent implements OnInit {
       this.searchOperation()
     } else {
       this.SpinnerService.show();
-        this.appService.getOperationPaginate(this.walletSelected.id,this.operation_current_page).subscribe((data: any) => {
+        this.appService.getOperationByWalletIdPaginate(this.itemSelected.id,this.operation_current_page).subscribe((data: any) => {
           this.listOperation = data?.data;
           
           this.getPaginateOperation(data);
@@ -552,33 +692,33 @@ export class ListSupplierComponent implements OnInit {
 
   nextPageOperation() {
     this.SpinnerService.show();
-    this.operation_current_page = this.current_page + 1;
+    this.operation_current_page = this.operation_current_page + 1;
     this.paginateOperation();
   }
 
   previousPageOperation() {
     this.SpinnerService.show();
-    this.operation_current_page = this.current_page - 1;
+    this.operation_current_page = this.operation_current_page - 1;
     this.paginateOperation();
   }
 
   otherPageLeft1Operation() {
-    this.operation_current_page = this.current_page - 1;
+    this.operation_current_page = this.operation_current_page - 1;
     this.paginateOperation();
   }
 
   otherPageLeft2Operation() {
-    this.operation_current_page = this.current_page - 2;
+    this.operation_current_page = this.operation_current_page - 2;
     this.paginateOperation();
   }
 
   otherPageRigth1Operation() {
-    this.operation_current_page = this.current_page + 1;
+    this.operation_current_page = this.operation_current_page + 1;
     this.paginateOperation();
   }
 
   otherPageRigth2Operation() {
-    this.operation_current_page = this.current_page + 2;
+    this.operation_current_page = this.operation_current_page + 2;
     this.paginateOperation();
   }
 
@@ -588,7 +728,7 @@ export class ListSupplierComponent implements OnInit {
   }
 
   lastPageOperation() {
-    this.operation_current_page = this.last_page;
+    this.operation_current_page = this.operation_last_page;
     this.paginateOperation();
   }
 
@@ -601,6 +741,14 @@ export class ListSupplierComponent implements OnInit {
     this.addAdminItem = false;
     this.walletItem = false;
     this.operationItem = false;
+    this.depositItem = false;
+    this.operationHistoryItem = false;
+    this.operationMandate = false;
+    this.operationDelivery = false;
+    this.operationPayment = false;
+    this.operationRepayment = false;
+    this.operationPaymentOther = false;
+    this.operationRepaymentOther = false;
     this.resetAll();
   }
 
@@ -613,15 +761,15 @@ export class ListSupplierComponent implements OnInit {
     this.addAdminItem = false;
     this.walletItem = false;
     this.operationItem = false;
+    this.depositItem = false;
+    this.operationHistoryItem = false;
+    this.operationMandate = false;
+    this.operationDelivery = false;
+    this.operationPayment = false;
+    this.operationRepayment = false;
+    this.operationPaymentOther = false;
+    this.operationRepaymentOther = false;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
-    this.name = this.itemSelected.name;
-    this.telephone = this.itemSelected.telephone;
-    this.email = this.itemSelected.email;
-    this.password = this.itemSelected.password;
-    this.address = this.itemSelected.address;
-    this.logo = this.itemSelected.logo;
-    this.status_id = this.itemSelected.status_id.id;
   }
 
   itemAddAdmin(item:any) {
@@ -633,6 +781,14 @@ export class ListSupplierComponent implements OnInit {
     this.addAdminItem = true;
     this.walletItem = false;
     this.operationItem = false;
+    this.depositItem = false;
+    this.operationHistoryItem = false;
+    this.operationMandate = false;
+    this.operationDelivery = false;
+    this.operationPayment = false;
+    this.operationRepayment = false;
+    this.operationPaymentOther = false;
+    this.operationRepaymentOther = false;
     this.itemSelected = item;
   }
 
@@ -645,14 +801,16 @@ export class ListSupplierComponent implements OnInit {
     this.addAdminItem = false;
     this.walletItem = false;
     this.operationItem = false;
+    this.depositItem = false;
+    this.operationHistoryItem = false;
+    this.operationMandate = false;
+    this.operationDelivery = false;
+    this.operationPayment = false;
+    this.operationRepayment = false;
+    this.operationPaymentOther = false;
+    this.operationRepaymentOther = false;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
-    this.name = this.itemSelected.name;
-    this.telephone = this.itemSelected.telephone;
-    this.email = this.itemSelected.email;
-    this.password = this.itemSelected.password;
-    this.address = this.itemSelected.address;
-    this.logo = this.itemSelected.logo_url;
+    
   }
 
   itemAble(item:any) {
@@ -664,14 +822,16 @@ export class ListSupplierComponent implements OnInit {
     this.addAdminItem = false;
     this.walletItem = false;
     this.operationItem = false;
+    this.depositItem = false;
+    this.operationHistoryItem = false;
+    this.operationMandate = false;
+    this.operationDelivery = false;
+    this.operationPayment = false;
+    this.operationRepayment = false;
+    this.operationPaymentOther = false;
+    this.operationRepaymentOther = false;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
-    this.name = this.itemSelected.name;
-    this.telephone = this.itemSelected.telephone;
-    this.email = this.itemSelected.email;
-    this.password = this.itemSelected.password;
-    this.address = this.itemSelected.address;
-    this.logo = this.itemSelected.logo_url;
+    
   }
 
   itemDisable(item:any) {
@@ -683,17 +843,19 @@ export class ListSupplierComponent implements OnInit {
     this.addAdminItem = false;
     this.walletItem = false;
     this.operationItem = false;
+    this.depositItem = false;
+    this.operationHistoryItem = false;
+    this.operationMandate = false;
+    this.operationDelivery = false;
+    this.operationPayment = false;
+    this.operationRepayment = false;
+    this.operationPaymentOther = false;
+    this.operationRepaymentOther = false;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
-    this.name = this.itemSelected.name;
-    this.telephone = this.itemSelected.telephone;
-    this.email = this.itemSelected.email;
-    this.password = this.itemSelected.password;
-    this.address = this.itemSelected.address;
-    this.logo = this.itemSelected.logo_url;
+    
   }
 
-  itemWallet(item:any) {
+  itemWallet() {
     this.addItem = false;
     this.editItem = false;
     this.itemDetail = false;
@@ -702,14 +864,13 @@ export class ListSupplierComponent implements OnInit {
     this.addAdminItem = false;
     this.walletItem = true;
     this.operationItem = false;
-    this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
-    this.name = this.itemSelected.name;
-    this.telephone = this.itemSelected.telephone;
-    this.email = this.itemSelected.email;
-    this.password = this.itemSelected.password;
-    this.address = this.itemSelected.address;
-    this.logo = this.itemSelected.logo_url;
+    this.depositItem = false;
+    this.operationMandate = false;
+    this.operationDelivery = false;
+    this.operationPayment = false;
+    this.operationRepayment = false;
+    this.operationPaymentOther = false;
+    this.operationRepaymentOther = false;
   }
 
   itemOperation(item:any) {
@@ -721,27 +882,167 @@ export class ListSupplierComponent implements OnInit {
     this.addAdminItem = false;
     this.walletItem = false;
     this.operationItem = true;
+    this.depositItem = false;
+    this.operationHistoryItem = false;
+    this.operationMandate = false;
+    this.operationDelivery = false;
+    this.operationPayment = false;
+    this.operationRepayment = false;
+    this.operationPaymentOther = false;
+    this.operationRepaymentOther = false;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
-    this.name = this.itemSelected.name;
-    this.telephone = this.itemSelected.telephone;
-    this.email = this.itemSelected.email;
-    this.password = this.itemSelected.password;
-    this.address = this.itemSelected.address;
-    this.logo = this.itemSelected.logo_url;
+  }
+
+  itemOperationMandate(item:any) {
+    this.addItem = false;
+    this.editItem = false;
+    this.itemDetail = false;
+    this.enableItem = false;
+    this.disableItem = false;
+    this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.depositItem = false;
+    this.operationHistoryItem = false;
+    this.operationMandate = true;
+    this.operationDelivery = false;
+    this.operationPayment = false;
+    this.operationRepayment = false;
+    this.operationPaymentOther = false;
+    this.operationRepaymentOther = false;
+    this.itemSelected = item;
+  }
+
+  itemOperationDelivery(item:any) {
+    this.addItem = false;
+    this.editItem = false;
+    this.itemDetail = false;
+    this.enableItem = false;
+    this.disableItem = false;
+    this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.depositItem = false;
+    this.operationHistoryItem = false;
+    this.operationMandate = false;
+    this.operationDelivery = true;
+    this.operationPayment = false;
+    this.operationRepayment = false;
+    this.operationPaymentOther = false;
+    this.operationRepaymentOther = false;
+    this.itemSelected = item;
+  }
+
+  itemOperationPayment(item:any) {
+    this.addItem = false;
+    this.editItem = false;
+    this.itemDetail = false;
+    this.enableItem = false;
+    this.disableItem = false;
+    this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.depositItem = false;
+    this.operationHistoryItem = false;
+    this.operationMandate = false;
+    this.operationDelivery = false;
+    this.operationPayment = true;
+    this.operationRepayment = false;
+    this.operationPaymentOther = false;
+    this.operationRepaymentOther = false;
+    this.itemSelected = item;
+  }
+
+  itemOperationRepayment(item:any) {
+    this.addItem = false;
+    this.editItem = false;
+    this.itemDetail = false;
+    this.enableItem = false;
+    this.disableItem = false;
+    this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.depositItem = false;
+    this.operationHistoryItem = false;
+    this.operationMandate = false;
+    this.operationDelivery = false;
+    this.operationPayment = false;
+    this.operationRepayment = true;
+    this.operationPaymentOther = false;
+    this.operationRepaymentOther = false;
+    this.itemSelected = item;
+  }
+
+  itemOperationPaymentOther(item:any) {
+    this.addItem = false;
+    this.editItem = false;
+    this.itemDetail = false;
+    this.enableItem = false;
+    this.disableItem = false;
+    this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.depositItem = false;
+    this.operationHistoryItem = false;
+    this.operationMandate = false;
+    this.operationDelivery = false;
+    this.operationPayment = false;
+    this.operationRepayment = false;
+    this.operationPaymentOther = true;
+    this.operationRepaymentOther = false;
+    this.itemSelected = item;
+  }
+
+  itemOperationRepaymentOther(item:any) {
+    this.addItem = false;
+    this.editItem = false;
+    this.itemDetail = false;
+    this.enableItem = false;
+    this.disableItem = false;
+    this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.depositItem = false;
+    this.operationHistoryItem = false;
+    this.operationMandate = false;
+    this.operationDelivery = false;
+    this.operationPayment = false;
+    this.operationRepayment = false;
+    this.operationPaymentOther = false;
+    this.operationRepaymentOther = true;
+    this.itemSelected = item;
   }
 
   itemDeposit(item:any) {
+    this.addItem = false;
+    this.editItem = false;
+    this.itemDetail = false;
+    this.enableItem = false;
+    this.disableItem = false;
+    this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
     this.depositItem = true;
     this.operationHistoryItem = false;
-    this.walletSelected = item;
+    this.itemSelected = item;
+    
   }
 
   itemOperationHistory(item:any) {
+    this.addItem = false;
+    this.editItem = false;
+    this.itemDetail = false;
+    this.enableItem = false;
+    this.disableItem = false;
+    this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
     this.depositItem = false;
     this.operationHistoryItem = true;
-    this.walletSelected = item;
+    this.itemSelected = item;
+    
     this.getOperation();
+    this.getEntityStatistics();
   }
 
   itemCancel(item:any) {
@@ -853,8 +1154,7 @@ export class ListSupplierComponent implements OnInit {
       },
       (err: HttpErrorResponse) => {
         this.exist_error = true;
-        // this.error_message = err.error.errors;
-        this.error_message = err.error.message;
+        this.error_message = err.error.errors;
         this.toast = {
           message: err.error.error,
           title: 'Erreur',
@@ -865,7 +1165,6 @@ export class ListSupplierComponent implements OnInit {
             progressBar: true,
           } as GlobalConfig,
         };
-        console.log('vcdgvgdsvgd',err);
         this.submit = false;
         this.SpinnerService.hide();
         this.cs.showToast(this.toast);
@@ -1219,6 +1518,467 @@ export class ListSupplierComponent implements OnInit {
     })
   }
 
+  get fOperationMandate() { return this.formGroupOperationMandate.controls; }
+
+  saveOperationMandate(operation_type_id: number){
+    this.submittedOperationMandate = true;
+    if(this.formGroupOperationMandate.invalid){
+      return;
+    } else {
+      this.submitOperationMandate = true;
+      
+      let requestData = {
+        entity_id: this.entity_id,
+        operation_type_id: operation_type_id,
+        campaign_id: this.campaign_id,
+        payment_method_id: this.payment_method_id,
+        total_price: this.total_price,
+      }
+
+      this.appService.updateWallet(this.itemSelected.id,requestData).subscribe(res => {
+        this.message = res;
+        if(this.message.success == false){
+          this.submitOperationMandate = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
+          this.toast = {
+            message: this.message.message,
+            title: 'Erreur',
+            type: 'error',
+            ic: {
+              timeOut: 5000,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.SpinnerService.hide();
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submitOperationMandate = false;
+          this.operationMandate = !this.operationMandate;
+          this.itemSelected = !this.itemSelected;
+          this.resetAll();
+          this.ngOnInit();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
+        this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submitOperationMandate = false;
+        this.toast = {
+          message: err.error.error,
+          title: 'Erreur',
+          type: 'error',
+          ic: {
+            timeOut: 5000,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submitOperationMandate = false;
+        this.SpinnerService.hide();
+        this.cs.showToast(this.toast);
+      })
+    }
+  }
+
+  get fOperationDelivery() { return this.formGroupOperationDelivery.controls; }
+
+  saveOperationDelivery(operation_type_id: number){
+    this.submittedOperationDelivery = true;
+    if(this.formGroupOperationDelivery.invalid){
+      return;
+    } else {
+      this.submitOperationDelivery = true;
+
+      if(this.commission > 0){
+        this.commission_applied = 1;
+      }
+      
+      let requestData = {
+        entity_id: this.entity_id,
+        operation_type_id: operation_type_id,
+        campaign_id: this.campaign_id,
+        conceive_number: this.conceive_number,
+        vehicle_immatriculation: this.vehicle_immatriculation,
+        trailer: this.trailer,
+        bags_declared: this.bags_declared,
+        weight_declared: this.weight_declared,
+        bags_accepted: this.bags_accepted,
+        weight_accepted: this.weight_accepted,
+        refact: this.refact,
+        unit_price: this.unit_price_value + (this.tkm - this.bic_value),
+        total_price: this.weight_accepted * this.unit_price,
+        tkm: this.tkm,
+        tkm_amount: this.tkm_amount,
+        bags_delivered: this.bags_delivered,
+        bic_value: this.weight_accepted * 2.5,
+        value_prod_plus_tkm: this.total_price + this.tkm_amount,
+      }
+
+      this.appService.updateWallet(this.itemSelected.id,requestData).subscribe(res => {
+        this.message = res;
+        if(this.message.success == false){
+          this.submitOperationDelivery = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
+          this.toast = {
+            message: this.message.message,
+            title: 'Erreur',
+            type: 'error',
+            ic: {
+              timeOut: 5000,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.SpinnerService.hide();
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submitOperationDelivery = false;
+          this.operationDelivery = !this.operationDelivery;
+          this.itemSelected = !this.itemSelected;
+          this.resetAll();
+          this.ngOnInit();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
+        this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submitOperationDelivery = false;
+        this.toast = {
+          message: err.error.error,
+          title: 'Erreur',
+          type: 'error',
+          ic: {
+            timeOut: 5000,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submitOperationDelivery = false;
+        this.SpinnerService.hide();
+        this.cs.showToast(this.toast);
+      })
+    }
+  }
+
+  get fOperationPayment() { return this.formGroupOperationPayment.controls; }
+
+  saveOperationPayment(operation_type_id: number){
+    this.submittedOperationPayment = true;
+    if(this.formGroupOperationPayment.invalid){
+      return;
+    } else {
+      this.submitOperationPayment = true;
+      
+      let requestData = {
+        entity_id: this.entity_id,
+        operation_type_id: operation_type_id,
+        campaign_id: this.campaign_id,
+        payment_method_id: this.payment_method_id,
+        total_price: this.total_price,
+      }
+
+      this.appService.updateWallet(this.itemSelected.id,requestData).subscribe(res => {
+        this.message = res;
+        if(this.message.success == false){
+          this.submitOperationPayment = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
+          this.toast = {
+            message: this.message.message,
+            title: 'Erreur',
+            type: 'error',
+            ic: {
+              timeOut: 5000,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.SpinnerService.hide();
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submitOperationPayment = false;
+          this.operationPayment = !this.operationPayment;
+          this.itemSelected = !this.itemSelected;
+          this.resetAll();
+          this.ngOnInit();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
+        this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submitOperationPayment = false;
+        this.toast = {
+          message: err.error.error,
+          title: 'Erreur',
+          type: 'error',
+          ic: {
+            timeOut: 5000,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submitOperationPayment = false;
+        this.SpinnerService.hide();
+        this.cs.showToast(this.toast);
+      })
+    }
+  }
+
+  get fOperationRepayment() { return this.formGroupOperationRepayment.controls; }
+
+  saveOperationRepayment(operation_type_id: number){
+    this.submittedOperationRepayment = true;
+    if(this.formGroupOperationRepayment.invalid){
+      return;
+    } else {
+      this.submitOperationRepayment = true;
+      
+      let requestData = {
+        entity_id: this.entity_id,
+        operation_type_id: operation_type_id,
+        campaign_id: this.campaign_id,
+        payment_method_id: this.payment_method_id,
+        total_price: this.total_price,
+      }
+
+      this.appService.updateWallet(this.itemSelected.id,requestData).subscribe(res => {
+        this.message = res;
+        if(this.message.success == false){
+          this.submitOperationRepayment = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
+          this.toast = {
+            message: this.message.message,
+            title: 'Erreur',
+            type: 'error',
+            ic: {
+              timeOut: 5000,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.SpinnerService.hide();
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submitOperationRepayment = false;
+          this.operationRepayment = !this.operationRepayment;
+          this.itemSelected = !this.itemSelected;
+          this.resetAll();
+          this.ngOnInit();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
+        this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submitOperationRepayment = false;
+        this.toast = {
+          message: err.error.error,
+          title: 'Erreur',
+          type: 'error',
+          ic: {
+            timeOut: 5000,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submitOperationRepayment = false;
+        this.SpinnerService.hide();
+        this.cs.showToast(this.toast);
+      })
+    }
+  }
+
+  get fOperationPaymentOther() { return this.formGroupOperationPaymentOther.controls; }
+
+  saveOperationPaymentOther(operation_type_id: number){
+    this.submittedOperationPaymentOther = true;
+    if(this.formGroupOperationPaymentOther.invalid){
+      return;
+    } else {
+      this.submitOperationPaymentOther = true;
+      
+      let requestData = {
+        entity_id: this.entity_id,
+        operation_type_id: operation_type_id,
+        campaign_id: this.campaign_id,
+        payment_method_id: this.payment_method_id,
+        total_price: this.total_price,
+      }
+
+      this.appService.updateWallet(this.itemSelected.id,requestData).subscribe(res => {
+        this.message = res;
+        if(this.message.success == false){
+          this.submitOperationPaymentOther = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
+          this.toast = {
+            message: this.message.message,
+            title: 'Erreur',
+            type: 'error',
+            ic: {
+              timeOut: 5000,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.SpinnerService.hide();
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submitOperationPaymentOther = false;
+          this.operationPaymentOther = !this.operationPaymentOther;
+          this.itemSelected = !this.itemSelected;
+          this.resetAll();
+          this.ngOnInit();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
+        this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submitOperationPaymentOther = false;
+        this.toast = {
+          message: err.error.error,
+          title: 'Erreur',
+          type: 'error',
+          ic: {
+            timeOut: 5000,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submitOperationPaymentOther = false;
+        this.SpinnerService.hide();
+        this.cs.showToast(this.toast);
+      })
+    }
+  }
+
+  get fOperationRepaymentOther() { return this.formGroupOperationRepaymentOther.controls; }
+
+  saveOperationRepaymentOther(operation_type_id: number){
+    this.submittedOperationRepaymentOther = true;
+    if(this.formGroupOperationRepaymentOther.invalid){
+      return;
+    } else {
+      this.submitOperationRepaymentOther = true;
+      
+      let requestData = {
+        entity_id: this.entity_id,
+        operation_type_id: operation_type_id,
+        campaign_id: this.campaign_id,
+        payment_method_id: this.payment_method_id,
+        total_price: this.total_price,
+      }
+
+      this.appService.updateWallet(this.itemSelected.id,requestData).subscribe(res => {
+        this.message = res;
+        if(this.message.success == false){
+          this.submitOperationRepaymentOther = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
+          this.toast = {
+            message: this.message.message,
+            title: 'Erreur',
+            type: 'error',
+            ic: {
+              timeOut: 5000,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.SpinnerService.hide();
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submitOperationRepaymentOther = false;
+          this.operationRepaymentOther = !this.operationRepaymentOther;
+          this.itemSelected = !this.itemSelected;
+          this.resetAll();
+          this.ngOnInit();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
+        this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submitOperationRepaymentOther = false;
+        this.toast = {
+          message: err.error.error,
+          title: 'Erreur',
+          type: 'error',
+          ic: {
+            timeOut: 5000,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submitOperationRepaymentOther = false;
+        this.SpinnerService.hide();
+        this.cs.showToast(this.toast);
+      })
+    }
+  }
+
   get fOperation() { return this.formGroupOperation.controls; }
 
   saveOperation(){
@@ -1303,9 +2063,9 @@ export class ListSupplierComponent implements OnInit {
       this.submitWallet = true;
       
       let requestData = {
-        product_id: this.entity_product_id,
-        balance: this.balance,
-        user_id: this.itemSelected.id,
+        entity_id: this.entity.id,
+        entity_product_id: this.entity_product_id,
+        campaign_id: this.campaign_id,
       }
 
       this.appService.addWallet(requestData).subscribe(res => {
@@ -1338,7 +2098,7 @@ export class ListSupplierComponent implements OnInit {
           };
           this.submitWallet = false;
           this.walletItem = !this.walletItem;
-          this.itemSelected = !this.itemSelected;
+          // this.itemSelected = !this.itemSelected;
           this.resetAll();
           this.ngOnInit();
         }

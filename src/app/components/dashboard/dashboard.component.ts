@@ -99,6 +99,9 @@ export class DashboardComponent implements OnInit {
   listUserService!: any;
   profile_id!:number;
 
+  listEntityProduct: any;
+  listEntityCampaign: any;
+
   token!: any;
   decode_token!: any;
   user_logged_id!: any;
@@ -243,6 +246,8 @@ export class DashboardComponent implements OnInit {
 
   date_from: any;
   date_to: any;
+  entity_product_id!: number;
+  campaign_id!: number;
 
 
   constructor(
@@ -279,6 +284,8 @@ export class DashboardComponent implements OnInit {
     this.formGroup = new FormGroup({
       date_from: new FormControl('', [Validators.required]),
       date_to: new FormControl('', [Validators.required]),
+      entity_product_id: new FormControl('', [Validators.required]),
+      campaign_id: new FormControl('', [Validators.required]),
     });
     
 
@@ -294,6 +301,9 @@ export class DashboardComponent implements OnInit {
     this.appService.getUserProfile().subscribe((data: any) => {
       this.user_logged = data.data;
       this.userprofile_id = this.user_logged.profile.id;  
+      this.getEntityProduct();
+      this.getEntityCampaign();
+      // this.getEntityStatistics();
       //console.log("userprofile_id",this.userprofile_id);
       // this.getItems(this.userprofile_id);
       this.SpinnerService.hide();  
@@ -329,6 +339,24 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  getEntityStatistics(){
+    this.appService.getEntityStatistics(2,1).subscribe((data: any) => {
+      this.item = data.data;
+    });
+  }
+
+  getEntityProduct(){
+    this.appService.getAllEntityProduct(this.user_logged.entity.id).subscribe((data: any) => {
+      this.listEntityProduct = data.data;
+    });
+  }
+
+  getEntityCampaign(){
+    this.appService.getAllEntityCampaign(this.user_logged.entity.id).subscribe((data: any) => {
+      this.listEntityCampaign = data.data;
+    });
+  }
+
   getItems(userprofile_id: number){
 
     this.appService.getStatistic().subscribe((data: any) => {
@@ -340,6 +368,69 @@ export class DashboardComponent implements OnInit {
   get f() { return this.formGroup.controls; }
 
   save(){
+    this.submitted = true;
+    if(this.formGroup.invalid){
+      return;
+    } else {
+      this.submit = true;
+
+      this.appService.getEntityStatistics(this.entity_product_id,this.campaign_id).subscribe((data: any) => {
+        this.message = data;
+        if(this.message.success == false){
+          this.submit = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
+          this.toast = {
+            message: this.message.message,
+            title: 'Erreur',
+            type: 'error',
+            ic: {
+              timeOut: 5000,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.SpinnerService.hide();
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submit = false;
+          this.item = data.data;
+          this.SpinnerService.hide();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
+        this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submit = false;
+        this.toast = {
+          message: err.error.error,
+          title: 'Erreur',
+          type: 'error',
+          ic: {
+            timeOut: 5000,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submit = false;
+        this.SpinnerService.hide();
+        this.cs.showToast(this.toast);
+      })
+    };
+
+  }
+
+  save_(){
     this.submitted = true;
     if(this.formGroup.invalid){
       return;

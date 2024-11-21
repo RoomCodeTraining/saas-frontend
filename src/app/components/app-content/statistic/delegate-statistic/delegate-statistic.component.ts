@@ -25,11 +25,11 @@ import { EmailVariable } from 'src/app/models/email-variable.model';
 import { AppService } from 'src/app/services/app-content/app.service';
 
 @Component({
-  selector: 'app-list-operation',
-  templateUrl: './list-operation.component.html',
-  styleUrls: ['./list-operation.component.css']
+  selector: 'app-delegate-statistic',
+  templateUrl: './delegate-statistic.component.html',
+  styleUrls: ['./delegate-statistic.component.css']
 })
-export class ListOperationComponent implements OnInit {
+export class DelegateStatisticComponent implements OnInit {
 
   listItem: any;
   listUserType: any;
@@ -54,12 +54,8 @@ export class ListOperationComponent implements OnInit {
   success_message: any;
   exist_success:boolean = false;
 
-  formGroupAdd!: FormGroup;
-  formGroupEdit!: FormGroup;
-  formGroup2!: FormGroup;
+  formGroup!: FormGroup;
   submitted = false;
-  submitted2 = false;
-  submitted3 = false;
 
   organization_type!: string;
   name: string = "";
@@ -72,7 +68,6 @@ export class ListOperationComponent implements OnInit {
   logo: string ="";
 
   userprofile_id!: number;
-  entity_type_id!: number;
   entityfirm_id!: any;
   username: string = "";
   role: string = "";
@@ -127,6 +122,15 @@ export class ListOperationComponent implements OnInit {
   permissions!: any;
   permitted: boolean = false;
 
+  listEntityProduct: any;
+  listEntityCampaign: any;
+
+  campaign_id!: number;
+  entity_type_id: number = 4;
+
+  listStatistics: any;
+  total_commission: number = 0;
+
   constructor(
     public Jarwis: JarwisService,
     public appService: AppService,
@@ -153,36 +157,10 @@ export class ListOperationComponent implements OnInit {
     this.SpinnerService.show();
     
     this.getUserLogged();
-    this.getProduct();
-    this.getItems();
-    this.makePassword(12);
-
-    this.formGroupAdd = new FormGroup({
-      organization_type: new FormControl('', [Validators.required]),
-      code: new FormControl('', [Validators.required]),
-      name: new FormControl('', [Validators.required]),
-      address: new FormControl('', [Validators.required]),
-      telephone: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
-      logo: new FormControl('', [Validators.required]),
-    });
-
-    this.formGroupEdit = new FormGroup({
-      organization_type: new FormControl('', [Validators.required]),
-      code: new FormControl('', [Validators.required]),
-      name: new FormControl('', [Validators.required]),
-      address: new FormControl('', [Validators.required]),
-      telephone: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
-    });
-
-    this.formGroup2 = new FormGroup({
-      role: new FormControl('', [Validators.required]),
-      //entityfirm_id: new FormControl('', [Validators.required]),
-      firstname: new FormControl('', [Validators.required]),
-      lastname: new FormControl('', [Validators.required]),
-      mobile: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
+    
+    this.formGroup = new FormGroup({
+      entity_product_id: new FormControl('', [Validators.required]),
+      campaign_id: new FormControl('', [Validators.required]),
     });
 
   }
@@ -207,6 +185,8 @@ export class ListOperationComponent implements OnInit {
   getUserLogged(){
     this.appService.getUserProfile().subscribe((data: any) => {
       this.user_logged = data.data;
+      this.getEntityProduct();
+      this.getEntityCampaign();
       // this.permissions = this.user_logged.permissions;
       // if(this.permissions.includes("user.view")){
       //   this.permitted = true;
@@ -236,9 +216,7 @@ export class ListOperationComponent implements OnInit {
   }
 
   resetAll() {
-    this.formGroupAdd.reset();
-    this.formGroupEdit.reset();
-    this.formGroup2.reset();
+    this.formGroup.reset();
 
     this.name = "";
     this.address = "";
@@ -274,9 +252,31 @@ export class ListOperationComponent implements OnInit {
     this.getItems();
   }
 
-  getProduct(){
-    this.appService.getAllProduct().subscribe((data: any) => {
-      this.listProduct = data.data;
+  getEntityProduct(){
+    this.appService.getAllEntityProduct(this.user_logged.entity.id).subscribe((data: any) => {
+      this.listEntityProduct = data.data;
+      this.SpinnerService.hide();
+    });
+  }
+
+  getEntityCampaign(){
+    this.appService.getAllEntityCampaign(this.user_logged.entity.id).subscribe((data: any) => {
+      this.listEntityCampaign = data.data;
+      this.SpinnerService.hide();
+    });
+  }
+
+  getEntityStatistics(item:any){
+    this.SpinnerService.show();
+    this.appService.getDelegateStatistics(item.entity_id,this.entity_product_id,this.campaign_id).subscribe((data: any) => {
+      this.listStatistics = data.data;
+      this.appService.getDelegateCommissions(item.entity_id,this.entity_product_id,this.campaign_id).subscribe((data: any) => {
+        this.total_commission = data.data.commissions;
+        this.itemSelected = item;
+        console.log('dvhafvyada',this.listStatistics);
+        this.itemDetail = true;
+        this.SpinnerService.hide();
+      });
     });
   }
 
@@ -295,7 +295,7 @@ export class ListOperationComponent implements OnInit {
   }
 
   getItems(){
-    this.appService.getAllOperation(this.current_page).subscribe((data: any) => {
+    this.appService.getEntitiesStatistics(this.entity_type_id,this.entity_product_id,this.campaign_id).subscribe((data: any) => {
       this.listItem = data.data;
 
       this.getPaginate(data);
@@ -483,88 +483,23 @@ export class ListOperationComponent implements OnInit {
     this.exist_success = false;
   }
 
-  makePassword(length:number) {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&^&*()-+={}[]:;<>?';
-    const charactersLength = characters.length;
-    let counter = 0;
-    while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
-    }
-    this.password = result;
-  }
-
-  get f() { return this.formGroupAdd.controls; }
+  get f() { return this.formGroup.controls; }
 
   save(){
     this.submitted = true;
-    if(this.formGroupAdd.invalid){
-      //console.log("Please enter");
+    if(this.formGroup.invalid){
       return;
     } else {
-      if(this.telephone.slice(0, 2) != "27" && this.telephone.slice(0, 2) != "01" && this.telephone.slice(0, 2) != "05" && this.telephone.slice(0, 2) != "07"){
-        this.exist_error = true;
-        this.phone_error = "Le numéro de téléphone doit commencer par 27 ou 01 ou 05 ou 07.";
-      } else if(this.telephone.length != 10){
-        this.exist_error = true;
-        this.phone_error = "Le numéro de téléphone doit contenir que 10 chiffres.";
-      } else {
-        this.submit = true;
-        const formData:any = new FormData();
-        formData.append("organization_type_id",this.organization_type);
-        formData.append("code",this.code);
-        formData.append("name",this.name);
-        formData.append("address",this.address);
-        formData.append("contact",this.telephone);
-        formData.append("email",this.email);
-        if(this.logofiles){
-          formData.append("logo_path",this.logofiles,this.logofiles.name);
-        } else {
-          formData.append("logo_path",null);
-        }
+      this.submit = true;
 
-        this.appService.addUser(formData).subscribe(res => {
-          this.message = res;
-          if(this.message.success == false){
-            this.submit = false;
-            this.error_message = this.message.message;
-            this.exist_error = false;
-            this.toast = {
-              message: this.message.message,
-              title: 'Erreur',
-              type: 'error',
-              ic: {
-                timeOut: 5000,
-                closeButton: true,
-                progressBar: true,
-              } as GlobalConfig,
-            };
-            this.SpinnerService.hide();
-          } else {
-            this.toast = {
-              message: this.message.message,
-              title: 'Succès',
-              type: 'success',
-              ic: {
-                timeOut: 2500,
-                closeButton: true,
-                progressBar: true,
-              } as GlobalConfig,
-            };
-            //this.registerMail();
-            this.submit = false;
-            this.addItem = !this.addItem
-            this.resetAll();
-            this.ngOnInit();
-          }
-          this.cs.showToast(this.toast);
-        },
-        (err: HttpErrorResponse) => {
-          this.exist_error = true;
-          this.error_message = err.error.errors;
+      this.appService.getEntitiesStatistics(this.entity_type_id,this.entity_product_id,this.campaign_id).subscribe((data: any) => {
+        this.message = data;
+        if(this.message.success == false){
+          this.submit = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
           this.toast = {
-            message: err.error.error,
+            message: this.message.message,
             title: 'Erreur',
             type: 'error',
             ic: {
@@ -573,30 +508,30 @@ export class ListOperationComponent implements OnInit {
               progressBar: true,
             } as GlobalConfig,
           };
-          this.submit = false;
           this.SpinnerService.hide();
-          this.cs.showToast(this.toast);
-        })
-      }      
-    }
-  }
-
-  get f3() { return this.formGroupEdit.controls; }
-
-  sendWelcome(){
-    this.submit = true;
-
-    const formData:any = new FormData();
-    formData.append("email",this.itemSelected.email);
-
-    this.appService.sendWelcome(formData).subscribe(res => {
-      this.message = res;
-      if(this.message.success == false){
-        this.error_message = this.message.message;
-        this.submit = !this.submit;
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submit = false;
+          this.listItem = data.data.entities;
+          this.SpinnerService.hide();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
         this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submit = false;
         this.toast = {
-          message: this.message.message,
+          message: err.error.error,
           title: 'Erreur',
           type: 'error',
           ic: {
@@ -605,225 +540,12 @@ export class ListOperationComponent implements OnInit {
             progressBar: true,
           } as GlobalConfig,
         };
+        this.submit = false;
         this.SpinnerService.hide();
-      } else {
-        this.toast = {
-          message: this.message.message,
-          title: 'Succès',
-          type: 'success',
-          ic: {
-            timeOut: 2500,
-            closeButton: true,
-            progressBar: true,
-          } as GlobalConfig,
-        };
-        this.submit = !this.submit;
-        this.itemSelected = !this.itemSelected;
-        this.ngOnInit();
-      }
-      this.cs.showToast(this.toast);
-    },
-    (err: HttpErrorResponse) => {
-      this.exist_error = true;
-      this.error_message = err.error.errors;
-      this.submit = false;
-      this.toast = {
-        message: err.error.message,
-        title: 'Erreur',
-        type: 'error',
-        ic: {
-          timeOut: 5000,
-          closeButton: true,
-          progressBar: true,
-        } as GlobalConfig,
-      };
-      this.submit = false;
-      this.SpinnerService.hide();
-      this.cs.showToast(this.toast);
-    })
-  }
+        this.cs.showToast(this.toast);
+      })
+    };
 
-  enable(){
-    this.submit = true;
-    const formData:any = new FormData();
-    formData.append("data","data");
-    this.appService.enableUser(this.itemSelected.id,formData).subscribe(res => {
-      this.message = res;
-      if(this.message.success == false){
-        this.error_message = this.message.message;
-        this.submit = false;
-        this.exist_error = true;
-        this.toast = {
-          message: this.message.message,
-          title: 'Erreur',
-          type: 'error',
-          ic: {
-            timeOut: 5000,
-            closeButton: true,
-            progressBar: true,
-          } as GlobalConfig,
-        };
-        this.SpinnerService.hide();
-      } else {
-        this.toast = {
-          message: this.message.message,
-          title: 'Succès',
-          type: 'success',
-          ic: {
-            timeOut: 2500,
-            closeButton: true,
-            progressBar: true,
-          } as GlobalConfig,
-        };
-        //this.ableUserAccountMail();
-        this.submit = false;
-        this.itemSelected = !this.itemSelected;
-        this.resetAll();
-        this.ngOnInit();
-      }
-      this.cs.showToast(this.toast);
-    },
-    (err: HttpErrorResponse) => {
-      this.exist_error = true;
-      this.error_message = err.error.errors;
-      this.submit = false;
-      this.toast = {
-        message: err.error.error,
-        title: 'Erreur',
-        type: 'error',
-        ic: {
-          timeOut: 5000,
-          closeButton: true,
-          progressBar: true,
-        } as GlobalConfig,
-      };
-      this.submit = false;
-      this.SpinnerService.hide();
-      this.cs.showToast(this.toast);
-    })
-  }
-
-  disable(){
-    this.submit = true;
-    
-    this.appService.disableUser(this.itemSelected.id).subscribe(res => {
-      this.message = res;
-      if(this.message.success == false){
-        this.error_message = this.message.message;
-        this.submit = false;
-        this.exist_error = true;
-        this.toast = {
-          message: this.message.message,
-          title: 'Erreur',
-          type: 'error',
-          ic: {
-            timeOut: 5000,
-            closeButton: true,
-            progressBar: true,
-          } as GlobalConfig,
-        };
-        this.SpinnerService.hide();
-      } else {
-        this.toast = {
-          message: this.message.message,
-          title: 'Succès',
-          type: 'success',
-          ic: {
-            timeOut: 2500,
-            closeButton: true,
-            progressBar: true,
-          } as GlobalConfig,
-        };
-        //this.disableUserAccountMail();
-        this.submit = false;
-        this.itemSelected = !this.itemSelected;
-        this.resetAll();
-        this.ngOnInit();
-      }
-      this.cs.showToast(this.toast);
-    },
-    (err: HttpErrorResponse) => {
-      this.exist_error = true;
-      this.error_message = err.error.errors;
-      this.submit = false;
-      this.toast = {
-        message: err.error.error,
-        title: 'Erreur',
-        type: 'error',
-        ic: {
-          timeOut: 5000,
-          closeButton: true,
-          progressBar: true,
-        } as GlobalConfig,
-      };
-      this.submit = false;
-      this.SpinnerService.hide();
-      this.cs.showToast(this.toast);
-    })
-  }
-
-  get f2() { return this.formGroup2.controls; }
-
-  cancel(){
-    this.submit = true;
-   
-    let requestData = {
-      sale_id: this.itemSelected.id,
-    }
-
-    this.appService.cancelOperation(this.itemSelected.id,requestData).subscribe(res => {
-      this.message = res;
-      if(this.message.success == false){
-        this.submit = false;
-        this.error_message = this.message.message;
-        this.exist_error = false;
-        this.toast = {
-          message: this.message.message,
-          title: 'Erreur',
-          type: 'error',
-          ic: {
-            timeOut: 5000,
-            closeButton: true,
-            progressBar: true,
-          } as GlobalConfig,
-        };
-        this.SpinnerService.hide();
-      } else {
-        this.toast = {
-          message: this.message.message,
-          title: 'Succès',
-          type: 'success',
-          ic: {
-            timeOut: 2500,
-            closeButton: true,
-            progressBar: true,
-          } as GlobalConfig,
-        };
-        this.submit = false;
-        this.editItem = !this.editItem;
-        this.itemSelected = !this.itemSelected;
-        this.ngOnInit();
-      }
-      this.cs.showToast(this.toast);
-    },
-    (err: HttpErrorResponse) => {
-      this.exist_error = true;
-      this.error_message = err.error.errors;
-      this.submit = false;
-      this.toast = {
-        message: err.error.error,
-        title: 'Erreur',
-        type: 'error',
-        ic: {
-          timeOut: 5000,
-          closeButton: true,
-          progressBar: true,
-        } as GlobalConfig,
-      };
-      this.submit = false;
-      this.SpinnerService.hide();
-      this.cs.showToast(this.toast);
-    })
   }
 
 }

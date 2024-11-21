@@ -90,7 +90,7 @@ export class DetailSupplierComponent implements OnInit {
   campaign_id!: number;
   payment_method_id!: number;
   weight: number = 0;
-  price: number= 0;
+  price: number = 0;
 
 
   user_logged!: any;
@@ -145,6 +145,7 @@ export class DetailSupplierComponent implements OnInit {
 
   formGroupOperationMandate!: FormGroup;
   formGroupOperationDelivery!: FormGroup;
+  formGroupOperationPayment!: FormGroup;
   formGroupOperationRepayment!: FormGroup;
   formGroupOperation!: FormGroup;
   formGroupWallet!: FormGroup;
@@ -152,6 +153,7 @@ export class DetailSupplierComponent implements OnInit {
 
   submittedOperationMandate = false;
   submittedOperationDelivery = false;
+  submittedOperationPayment = false;
   submittedOperationRepayment = false;
   submittedOperation = false;
   submittedWallet = false;
@@ -162,6 +164,7 @@ export class DetailSupplierComponent implements OnInit {
   
   submitOperationMandate: boolean = false;
   submitOperationDelivery: boolean = false;
+  submitOperationPayment: boolean = false;
   submitOperationRepayment: boolean = false;
   submitOperation: boolean = false;
   submitWallet: boolean = false;
@@ -174,6 +177,7 @@ export class DetailSupplierComponent implements OnInit {
   operationHistoryItem: boolean = false;
   operationMandate: boolean = false;
   operationDelivery: boolean = false;
+  operationPayment: boolean = false;
   operationRepayment: boolean = false;
 
   operation_current_page: number=1;
@@ -202,23 +206,24 @@ export class DetailSupplierComponent implements OnInit {
   entity!: any;
   entity_id!: number;
 
+  unit_price_value: number = 1900;
   conceive_number!: string;
   vehicle_immatriculation!: string;
   trailer!: string;
-  bags_declared: number =0;
-  weight_declared: number =0;
-  bags_accepted: number =0;
-  weight_accepted: number =0;
-  refact: number =0;
-  unit_price: number =0;
-  commission: number =0;
-  commission_applied: number =0;
+  bags_declared: number = 0;
+  weight_declared: number = 0;
+  bags_accepted: number = 0;
+  weight_accepted: number = 0;
+  refact: number = 0;
+  commission: number = 0;
+  commission_applied: number = 0;
   tkm: number = 7.14;
-  tkm_amount: number =0;
-  bags_delivered: number =0;
-  total_price: number = this.weight_accepted * this.unit_price;
-  bic_value: number = this.weight_accepted * 2.5;
-  value_prod_plus_tkm: number = this.total_price + this.tkm_amount;
+  tkm_amount: number = 0;
+  bags_delivered: number = 0;
+  unit_price: number = this.unit_price_value + this.tkm - 2.5;
+  total_price: number = 0;
+  bic_value: number = 0;
+  value_prod_plus_tkm: number = 0;
 
   listStatistics: any;
 
@@ -237,7 +242,6 @@ export class DetailSupplierComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.total_price = this.weight_accepted * this.unit_price;
     registerLocaleData( fr,'fr-FR' );
 
     this.exist_phone_error = false;
@@ -279,16 +283,11 @@ export class DetailSupplierComponent implements OnInit {
     });
 
     this.formGroupOperationMandate = new FormGroup({
-      entity_product_id: new FormControl('', [Validators.required]),
-      campaign_id: new FormControl('', [Validators.required]),
       payment_method_id: new FormControl('', [Validators.required]),
       total_price: new FormControl('', [Validators.required]),
     });
 
     this.formGroupOperationDelivery = new FormGroup({
-      entity_product_id: new FormControl('', [Validators.required]),
-      campaign_id: new FormControl('', [Validators.required]),
-      payment_method_id: new FormControl('', [Validators.required]),
       conceive_number: new FormControl('', [Validators.required]),
       // vehicle_immatriculation: new FormControl('', [Validators.required]),
       // trailer: new FormControl('', [Validators.required]),
@@ -299,7 +298,7 @@ export class DetailSupplierComponent implements OnInit {
       weight_accepted: new FormControl('', [Validators.required]),
       refact: new FormControl('', [Validators.required]),
       unit_price: new FormControl('', [Validators.required]),
-      commission: new FormControl('', [Validators.required]),
+      // commission: new FormControl('', [Validators.required]),
       total_price: new FormControl('', [Validators.required]),
       tkm: new FormControl('', [Validators.required]),
       tkm_amount: new FormControl('', [Validators.required]),
@@ -308,9 +307,12 @@ export class DetailSupplierComponent implements OnInit {
       value_prod_plus_tkm: new FormControl('', [Validators.required]),
     });
 
+    this.formGroupOperationPayment = new FormGroup({
+      payment_method_id: new FormControl('', [Validators.required]),
+      total_price: new FormControl('', [Validators.required]),
+    });
+
     this.formGroupOperationRepayment = new FormGroup({
-      entity_product_id: new FormControl('', [Validators.required]),
-      campaign_id: new FormControl('', [Validators.required]),
       payment_method_id: new FormControl('', [Validators.required]),
       total_price: new FormControl('', [Validators.required]),
     });
@@ -384,6 +386,15 @@ export class DetailSupplierComponent implements OnInit {
     this._location.back();
   }  
 
+  amountChange(){
+    this.unit_price_value = 1900;
+    this.tkm = 7.14;
+    this.unit_price = this.unit_price_value + (this.tkm - 2.5),
+    this.total_price = this.weight_accepted * this.unit_price;
+    this.bic_value = this.weight_accepted * 2.5;
+    this.value_prod_plus_tkm = this.total_price + this.tkm_amount;
+  }
+
   goToDetail(data: any){
     // @ts-ignore
     localStorage.setItem("SUPPLIER_DATA", JSON.stringify(data));
@@ -397,6 +408,7 @@ export class DetailSupplierComponent implements OnInit {
     this.formGroup2.reset();
     this.formGroupOperationMandate.reset();
     this.formGroupOperationDelivery.reset();
+    this.formGroupOperationPayment.reset();
     this.formGroupOperationRepayment.reset();
     this.formGroupWallet.reset();
 
@@ -421,14 +433,10 @@ export class DetailSupplierComponent implements OnInit {
     this.bags_accepted = 0;
     this.weight_accepted = 0;
     this.refact = 0;
-    this.unit_price = 0;
-    this.commission = 0;
     this.tkm = 0;
     this.tkm_amount = 0;
     this.bags_delivered = 0;
-    this.total_price = 0;
-    this.bic_value = 0;
-    this.value_prod_plus_tkm = 0;    
+    this.amountChange();
   }
 
   onSelectLogo(event:any) {
@@ -497,7 +505,7 @@ export class DetailSupplierComponent implements OnInit {
   }
 
   getEntityStatistics(){
-    this.appService.getSupplierStatistics(this.entity.id,this.itemSelected.entity_product.product.id).subscribe((data: any) => {
+    this.appService.getSupplierStatistics(this.entity.id,this.itemSelected.entity_product.id,this.itemSelected.campaign.id).subscribe((data: any) => {
       this.listStatistics = data.data;
     });
   }
@@ -713,6 +721,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationHistoryItem = false;
     this.operationMandate = false;
     this.operationDelivery = false;
+    this.operationPayment = false;
     this.operationRepayment = false;
     this.resetAll();
   }
@@ -730,6 +739,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationHistoryItem = false;
     this.operationMandate = false;
     this.operationDelivery = false;
+    this.operationPayment = false;
     this.operationRepayment = false;
     this.itemSelected = item;
   }
@@ -747,6 +757,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationHistoryItem = false;
     this.operationMandate = false;
     this.operationDelivery = false;
+    this.operationPayment = false;
     this.operationRepayment = false;
     this.itemSelected = item;
   }
@@ -764,6 +775,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationHistoryItem = false;
     this.operationMandate = false;
     this.operationDelivery = false;
+    this.operationPayment = false;
     this.operationRepayment = false;
     this.itemSelected = item;
     
@@ -782,6 +794,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationHistoryItem = false;
     this.operationMandate = false;
     this.operationDelivery = false;
+    this.operationPayment = false;
     this.operationRepayment = false;
     this.itemSelected = item;
     
@@ -800,6 +813,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationHistoryItem = false;
     this.operationMandate = false;
     this.operationDelivery = false;
+    this.operationPayment = false;
     this.operationRepayment = false;
     this.itemSelected = item;
     
@@ -817,6 +831,7 @@ export class DetailSupplierComponent implements OnInit {
     this.depositItem = false;
     this.operationMandate = false;
     this.operationDelivery = false;
+    this.operationPayment = false;
     this.operationRepayment = false;
   }
 
@@ -833,6 +848,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationHistoryItem = false;
     this.operationMandate = false;
     this.operationDelivery = false;
+    this.operationPayment = false;
     this.operationRepayment = false;
     this.itemSelected = item;
   }
@@ -850,6 +866,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationHistoryItem = false;
     this.operationMandate = true;
     this.operationDelivery = false;
+    this.operationPayment = false;
     this.operationRepayment = false;
     this.itemSelected = item;
   }
@@ -867,6 +884,25 @@ export class DetailSupplierComponent implements OnInit {
     this.operationHistoryItem = false;
     this.operationMandate = false;
     this.operationDelivery = true;
+    this.operationPayment = false;
+    this.operationRepayment = false;
+    this.itemSelected = item;
+  }
+
+  itemOperationPayment(item:any) {
+    this.addItem = false;
+    this.editItem = false;
+    this.itemDetail = false;
+    this.enableItem = false;
+    this.disableItem = false;
+    this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.depositItem = false;
+    this.operationHistoryItem = false;
+    this.operationMandate = false;
+    this.operationDelivery = false;
+    this.operationPayment = true;
     this.operationRepayment = false;
     this.itemSelected = item;
   }
@@ -884,6 +920,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationHistoryItem = false;
     this.operationMandate = false;
     this.operationDelivery = false;
+    this.operationPayment = false;
     this.operationRepayment = true;
     this.itemSelected = item;
   }
@@ -1403,8 +1440,8 @@ export class DetailSupplierComponent implements OnInit {
       this.submitOperationMandate = true;
       
       let requestData = {
+        entity_id: this.entity_id,
         operation_type_id: operation_type_id,
-        entity_product_id: this.entity_product_id,
         campaign_id: this.campaign_id,
         payment_method_id: this.payment_method_id,
         total_price: this.total_price,
@@ -1481,10 +1518,9 @@ export class DetailSupplierComponent implements OnInit {
       }
       
       let requestData = {
+        entity_id: this.entity_id,
         operation_type_id: operation_type_id,
-        entity_product_id: this.entity_product_id,
         campaign_id: this.campaign_id,
-        payment_method_id: this.payment_method_id,
         conceive_number: this.conceive_number,
         vehicle_immatriculation: this.vehicle_immatriculation,
         trailer: this.trailer,
@@ -1493,15 +1529,13 @@ export class DetailSupplierComponent implements OnInit {
         bags_accepted: this.bags_accepted,
         weight_accepted: this.weight_accepted,
         refact: this.refact,
-        unit_price: this.unit_price,
-        commission_applied: this.commission_applied,
-        commission: this.commission,
-        total_price: this.total_price,
+        unit_price: this.unit_price_value + (this.tkm - this.bic_value),
+        total_price: this.weight_accepted * this.unit_price,
         tkm: this.tkm,
         tkm_amount: this.tkm_amount,
         bags_delivered: this.bags_delivered,
-        bic_value: this.bic_value,
-        value_prod_plus_tkm: this.value_prod_plus_tkm,
+        bic_value: this.weight_accepted * 2.5,
+        value_prod_plus_tkm: this.total_price + this.tkm_amount,
       }
 
       this.appService.updateWallet(this.itemSelected.id,requestData).subscribe(res => {
@@ -1561,6 +1595,80 @@ export class DetailSupplierComponent implements OnInit {
     }
   }
 
+  get fOperationPayment() { return this.formGroupOperationPayment.controls; }
+
+  saveOperationPayment(operation_type_id: number){
+    this.submittedOperationPayment = true;
+    if(this.formGroupOperationPayment.invalid){
+      return;
+    } else {
+      this.submitOperationPayment = true;
+      
+      let requestData = {
+        entity_id: this.entity_id,
+        operation_type_id: operation_type_id,
+        campaign_id: this.campaign_id,
+        payment_method_id: this.payment_method_id,
+        total_price: this.total_price,
+      }
+
+      this.appService.updateWallet(this.itemSelected.id,requestData).subscribe(res => {
+        this.message = res;
+        if(this.message.success == false){
+          this.submitOperationPayment = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
+          this.toast = {
+            message: this.message.message,
+            title: 'Erreur',
+            type: 'error',
+            ic: {
+              timeOut: 5000,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.SpinnerService.hide();
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submitOperationPayment = false;
+          this.operationPayment = !this.operationPayment;
+          this.itemSelected = !this.itemSelected;
+          this.resetAll();
+          this.ngOnInit();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
+        this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submitOperationPayment = false;
+        this.toast = {
+          message: err.error.error,
+          title: 'Erreur',
+          type: 'error',
+          ic: {
+            timeOut: 5000,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submitOperationPayment = false;
+        this.SpinnerService.hide();
+        this.cs.showToast(this.toast);
+      })
+    }
+  }
+
   get fOperationRepayment() { return this.formGroupOperationRepayment.controls; }
 
   saveOperationRepayment(operation_type_id: number){
@@ -1571,8 +1679,8 @@ export class DetailSupplierComponent implements OnInit {
       this.submitOperationRepayment = true;
       
       let requestData = {
+        entity_id: this.entity_id,
         operation_type_id: operation_type_id,
-        entity_product_id: this.entity_product_id,
         campaign_id: this.campaign_id,
         payment_method_id: this.payment_method_id,
         total_price: this.total_price,
@@ -1617,7 +1725,7 @@ export class DetailSupplierComponent implements OnInit {
       (err: HttpErrorResponse) => {
         this.exist_error = true;
         this.error_message = err.error.errors;
-        this.submitOperationDelivery = false;
+        this.submitOperationRepayment = false;
         this.toast = {
           message: err.error.error,
           title: 'Erreur',
@@ -1628,7 +1736,7 @@ export class DetailSupplierComponent implements OnInit {
             progressBar: true,
           } as GlobalConfig,
         };
-        this.submitOperationDelivery = false;
+        this.submitOperationRepayment = false;
         this.SpinnerService.hide();
         this.cs.showToast(this.toast);
       })

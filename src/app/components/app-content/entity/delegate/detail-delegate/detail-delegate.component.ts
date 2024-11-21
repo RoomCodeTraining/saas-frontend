@@ -146,6 +146,7 @@ export class DetailDelegateComponent implements OnInit {
   formGroupOperationMandate!: FormGroup;
   formGroupOperationDelivery!: FormGroup;
   formGroupOperationRepayment!: FormGroup;
+  formGroupOperationCommission!: FormGroup;
   formGroupOperation!: FormGroup;
   formGroupWallet!: FormGroup;
   formGroupDeposit!: FormGroup;
@@ -153,6 +154,7 @@ export class DetailDelegateComponent implements OnInit {
   submittedOperationMandate = false;
   submittedOperationDelivery = false;
   submittedOperationRepayment = false;
+  submittedOperationCommission = false;
   submittedOperation = false;
   submittedWallet = false;
   submittedDeposit = false;
@@ -163,6 +165,7 @@ export class DetailDelegateComponent implements OnInit {
   submitOperationMandate: boolean = false;
   submitOperationDelivery: boolean = false;
   submitOperationRepayment: boolean = false;
+  submitOperationCommission: boolean = false;
   submitOperation: boolean = false;
   submitWallet: boolean = false;
   submitDeposit: boolean = false;
@@ -175,6 +178,7 @@ export class DetailDelegateComponent implements OnInit {
   operationMandate: boolean = false;
   operationDelivery: boolean = false;
   operationRepayment: boolean = false;
+  operationCommission: boolean = false;
 
   operation_current_page: number=1;
   operation_first_page_url!: string;
@@ -205,22 +209,24 @@ export class DetailDelegateComponent implements OnInit {
   conceive_number!: string;
   vehicle_immatriculation!: string;
   trailer!: string;
-  bags_declared: number =0;
-  weight_declared: number =0;
-  bags_accepted: number =0;
-  weight_accepted: number =0;
-  refact: number =0;
-  unit_price: number =0;
-  commission: number =0;
-  commission_applied: number =0;
+  bags_declared: number = 0;
+  weight_declared: number = 0;
+  bags_accepted: number = 0;
+  weight_accepted: number = 0;
+  refact: number = 0;
+  unit_price: number = 0;
+  commission: number = 0;
+  commission_applied: number = 0;
   tkm: number = 7.14;
-  tkm_amount: number =0;
-  bags_delivered: number =0;
+  tkm_amount: number = 0;
+  bags_delivered: number = 0;
   total_price: number = this.weight_accepted * this.unit_price;
   bic_value: number = this.weight_accepted * 2.5;
   value_prod_plus_tkm: number = this.total_price + this.tkm_amount;
 
   listStatistics: any;
+
+  total_commission: number = 0;
 
   constructor(
     public Jarwis: JarwisService,
@@ -278,44 +284,29 @@ export class DetailDelegateComponent implements OnInit {
     });
 
     this.formGroupOperationMandate = new FormGroup({
-      entity_product_id: new FormControl('', [Validators.required]),
-      campaign_id: new FormControl('', [Validators.required]),
       payment_method_id: new FormControl('', [Validators.required]),
       total_price: new FormControl('', [Validators.required]),
     });
 
     this.formGroupOperationDelivery = new FormGroup({
-      entity_product_id: new FormControl('', [Validators.required]),
-      campaign_id: new FormControl('', [Validators.required]),
-      payment_method_id: new FormControl('', [Validators.required]),
-      conceive_number: new FormControl('', [Validators.required]),
-      // vehicle_immatriculation: new FormControl('', [Validators.required]),
-      // trailer: new FormControl('', [Validators.required]),
-      // commission_applied: new FormControl('', [Validators.required]),
-      bags_declared: new FormControl('', [Validators.required]),
-      weight_declared: new FormControl('', [Validators.required]),
       bags_accepted: new FormControl('', [Validators.required]),
       weight_accepted: new FormControl('', [Validators.required]),
-      refact: new FormControl('', [Validators.required]),
       unit_price: new FormControl('', [Validators.required]),
       commission: new FormControl('', [Validators.required]),
       total_price: new FormControl('', [Validators.required]),
-      tkm: new FormControl('', [Validators.required]),
-      tkm_amount: new FormControl('', [Validators.required]),
-      // bags_delivered: new FormControl('', [Validators.required]),
-      bic_value: new FormControl('', [Validators.required]),
-      value_prod_plus_tkm: new FormControl('', [Validators.required]),
     });
 
     this.formGroupOperationRepayment = new FormGroup({
-      entity_product_id: new FormControl('', [Validators.required]),
-      campaign_id: new FormControl('', [Validators.required]),
+      payment_method_id: new FormControl('', [Validators.required]),
+      total_price: new FormControl('', [Validators.required]),
+    });
+
+    this.formGroupOperationCommission = new FormGroup({
       payment_method_id: new FormControl('', [Validators.required]),
       total_price: new FormControl('', [Validators.required]),
     });
 
     this.formGroupOperation = new FormGroup({
-      entity_product_id: new FormControl('', [Validators.required]),
       weight: new FormControl('', [Validators.required]),
       price_id: new FormControl('', [Validators.required]),
     });
@@ -383,6 +374,19 @@ export class DetailDelegateComponent implements OnInit {
     this._location.back();
   }  
 
+  amountChange(){
+    if(this.commission_applied == 0){
+      this.total_price = Math.ceil(this.weight_accepted * this.unit_price);
+    } else {
+      this.total_price = Math.ceil(this.weight_accepted * (this.unit_price + this.commission));
+    }
+  }
+
+  commissionApplied(action: number){
+    this.commission_applied = action;
+    this.amountChange();
+  }
+
   goToDetail(data: any){
     // @ts-ignore
     localStorage.setItem("DELEGATE_DATA", JSON.stringify(data));
@@ -397,6 +401,7 @@ export class DetailDelegateComponent implements OnInit {
     this.formGroupOperationMandate.reset();
     this.formGroupOperationDelivery.reset();
     this.formGroupOperationRepayment.reset();
+    this.formGroupOperationCommission.reset();
     this.formGroupWallet.reset();
 
     this.name = "";
@@ -412,22 +417,12 @@ export class DetailDelegateComponent implements OnInit {
     this.weight = 0;
     this.amount = 0;
 
-    this.conceive_number = "";
-    this.vehicle_immatriculation = "";
-    this.trailer = "";
-    this.bags_declared = 0;
-    this.weight_declared = 0;
+    
     this.bags_accepted = 0;
     this.weight_accepted = 0;
-    this.refact = 0;
     this.unit_price = 0;
     this.commission = 0;
-    this.tkm = 0;
-    this.tkm_amount = 0;
-    this.bags_delivered = 0;
     this.total_price = 0;
-    this.bic_value = 0;
-    this.value_prod_plus_tkm = 0;    
   }
 
   onSelectLogo(event:any) {
@@ -490,8 +485,14 @@ export class DetailDelegateComponent implements OnInit {
   }
 
   getEntityStatistics(){
-    this.appService.getDelegateStatistics(this.entity.id,this.itemSelected.entity_product.product.id).subscribe((data: any) => {
+    this.appService.getDelegateStatistics(this.entity.id,this.itemSelected.entity_product.id,this.itemSelected.campaign.id).subscribe((data: any) => {
       this.listStatistics = data.data;
+    });
+  }
+
+  getEntityCommissions(){
+    this.appService.getDelegateCommissions(this.entity.id,this.itemSelected.entity_product.id,this.itemSelected.campaign.id).subscribe((data: any) => {
+      this.total_commission = data.data.commissions;
     });
   }
 
@@ -713,6 +714,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationMandate = false;
     this.operationDelivery = false;
     this.operationRepayment = false;
+    this.operationCommission = false;
     this.resetAll();
   }
 
@@ -730,6 +732,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationMandate = false;
     this.operationDelivery = false;
     this.operationRepayment = false;
+    this.operationCommission = false;
     this.itemSelected = item;
   }
 
@@ -747,6 +750,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationMandate = false;
     this.operationDelivery = false;
     this.operationRepayment = false;
+    this.operationCommission = false;
     this.itemSelected = item;
   }
 
@@ -764,6 +768,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationMandate = false;
     this.operationDelivery = false;
     this.operationRepayment = false;
+    this.operationCommission = false;
     this.itemSelected = item;
     
   }
@@ -782,6 +787,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationMandate = false;
     this.operationDelivery = false;
     this.operationRepayment = false;
+    this.operationCommission = false;
     this.itemSelected = item;
     
   }
@@ -800,6 +806,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationMandate = false;
     this.operationDelivery = false;
     this.operationRepayment = false;
+    this.operationCommission = false;
     this.itemSelected = item;
     
   }
@@ -816,6 +823,7 @@ export class DetailDelegateComponent implements OnInit {
     this.depositItem = false;
     this.operationMandate = false;
     this.operationDelivery = false;
+    this.operationCommission = false;
     this.operationRepayment = false;
   }
 
@@ -833,6 +841,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationMandate = false;
     this.operationDelivery = false;
     this.operationRepayment = false;
+    this.operationCommission = false;
     this.itemSelected = item;
   }
 
@@ -850,6 +859,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationMandate = true;
     this.operationDelivery = false;
     this.operationRepayment = false;
+    this.operationCommission = false;
     this.itemSelected = item;
   }
 
@@ -867,6 +877,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationMandate = false;
     this.operationDelivery = true;
     this.operationRepayment = false;
+    this.operationCommission = false;
     this.itemSelected = item;
   }
 
@@ -884,6 +895,25 @@ export class DetailDelegateComponent implements OnInit {
     this.operationMandate = false;
     this.operationDelivery = false;
     this.operationRepayment = true;
+    this.operationCommission = false;
+    this.itemSelected = item;
+  }
+
+  itemOperationCommission(item:any) {
+    this.addItem = false;
+    this.editItem = false;
+    this.itemDetail = false;
+    this.enableItem = false;
+    this.disableItem = false;
+    this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.depositItem = false;
+    this.operationHistoryItem = false;
+    this.operationMandate = false;
+    this.operationDelivery = false;
+    this.operationRepayment = false;
+    this.operationCommission = true;
     this.itemSelected = item;
   }
 
@@ -899,7 +929,6 @@ export class DetailDelegateComponent implements OnInit {
     this.depositItem = true;
     this.operationHistoryItem = false;
     this.itemSelected = item;
-    
   }
 
   itemOperationHistory(item:any) {
@@ -917,6 +946,7 @@ export class DetailDelegateComponent implements OnInit {
     
     this.getOperation();
     this.getEntityStatistics();
+    this.getEntityCommissions();
 
   }
 
@@ -1403,6 +1433,7 @@ export class DetailDelegateComponent implements OnInit {
       this.submitOperationMandate = true;
       
       let requestData = {
+        entity_id: this.entity_id,
         operation_type_id: operation_type_id,
         entity_product_id: this.entity_product_id,
         campaign_id: this.campaign_id,
@@ -1476,32 +1507,17 @@ export class DetailDelegateComponent implements OnInit {
     } else {
       this.submitOperationDelivery = true;
 
-      if(this.commission > 0){
-        this.commission_applied = 1;
-      }
-      
       let requestData = {
+        entity_id: this.entity_id,
         operation_type_id: operation_type_id,
         entity_product_id: this.entity_product_id,
         campaign_id: this.campaign_id,
-        payment_method_id: this.payment_method_id,
-        conceive_number: this.conceive_number,
-        vehicle_immatriculation: this.vehicle_immatriculation,
-        trailer: this.trailer,
-        bags_declared: this.bags_declared,
-        weight_declared: this.weight_declared,
         bags_accepted: this.bags_accepted,
         weight_accepted: this.weight_accepted,
-        refact: this.refact,
         unit_price: this.unit_price,
         commission_applied: this.commission_applied,
         commission: this.commission,
         total_price: this.total_price,
-        tkm: this.tkm,
-        tkm_amount: this.tkm_amount,
-        bags_delivered: this.bags_delivered,
-        bic_value: this.bic_value,
-        value_prod_plus_tkm: this.value_prod_plus_tkm,
       }
 
       this.appService.updateWallet(this.itemSelected.id,requestData).subscribe(res => {
@@ -1571,6 +1587,7 @@ export class DetailDelegateComponent implements OnInit {
       this.submitOperationRepayment = true;
       
       let requestData = {
+        entity_id: this.entity_id,
         operation_type_id: operation_type_id,
         entity_product_id: this.entity_product_id,
         campaign_id: this.campaign_id,
@@ -1629,6 +1646,81 @@ export class DetailDelegateComponent implements OnInit {
           } as GlobalConfig,
         };
         this.submitOperationDelivery = false;
+        this.SpinnerService.hide();
+        this.cs.showToast(this.toast);
+      })
+    }
+  }
+
+  get fOperationCommission() { return this.formGroupOperationCommission.controls; }
+
+  saveOperationCommission(operation_type_id: number){
+    this.submittedOperationCommission = true;
+    if(this.formGroupOperationCommission.invalid){
+      return;
+    } else {
+      this.submitOperationCommission = true;
+      
+      let requestData = {
+        entity_id: this.entity_id,
+        operation_type_id: operation_type_id,
+        entity_product_id: this.entity_product_id,
+        campaign_id: this.campaign_id,
+        payment_method_id: this.payment_method_id,
+        total_price: this.total_price,
+      }
+
+      this.appService.updateWallet(this.itemSelected.id,requestData).subscribe(res => {
+        this.message = res;
+        if(this.message.success == false){
+          this.submitOperationCommission = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
+          this.toast = {
+            message: this.message.message,
+            title: 'Erreur',
+            type: 'error',
+            ic: {
+              timeOut: 5000,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.SpinnerService.hide();
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submitOperationCommission = false;
+          this.operationCommission = !this.operationCommission;
+          this.itemSelected = !this.itemSelected;
+          this.resetAll();
+          this.ngOnInit();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
+        this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submitOperationCommission = false;
+        this.toast = {
+          message: err.error.error,
+          title: 'Erreur',
+          type: 'error',
+          ic: {
+            timeOut: 5000,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submitOperationCommission = false;
         this.SpinnerService.hide();
         this.cs.showToast(this.toast);
       })
