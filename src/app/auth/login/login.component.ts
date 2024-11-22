@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
 
     this.formGroup = new FormGroup({
-      email: new FormControl('', [Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
+      email: new FormControl('', [Validators.required]),
       user_password: new FormControl('', [Validators.required]),
       //recaptcha_token: new FormControl('', [Validators.required]),
     });
@@ -140,7 +140,7 @@ export class LoginComponent implements OnInit {
 
     const formData:any = new FormData();
 
-    formData.append("email",this.email);
+    formData.append("username",this.email);
     formData.append("password",this.user_password);
 
     this.Jarwis.login(formData).subscribe(res => {

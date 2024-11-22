@@ -31,7 +31,7 @@
                                     </form>
                                 </div>
                                 <div>
-                                    <button type="button" routerLink="/add-user" class="btn btn-primary">
+                                    <button type="button" class="btn btn-primary" (click)="itemAdd()">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
                                             <line x1="12" y1="5" x2="12" y2="19"></line>
                                             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -46,7 +46,7 @@
                         <div class="grid grid-cols-1 grid-cols-3 gap-3">
                             <div>
                                 <ng-select id="role" name="role" [(ngModel)]="role" (change)="onChange($event)" placeholder="Profil">
-                                    <ng-option *ngFor="let item of listRole" [value]="item?.name">{{item.label}}</ng-option>
+                                    <ng-option *ngFor="let item of listProfil" [value]="item?.name">{{item.label}}</ng-option>
                                 </ng-select>
                             </div>
                         </div>                                        
@@ -120,10 +120,10 @@
                                             </div>
                                         </div>
                                     </td> -->
-                                    <td>{{item?.role}}</td>
+                                    <td>{{item?.profile?.label}}</td>
                                     <td>{{item?.last_name}} {{item?.first_name}}</td>
                                     <td>{{item?.email}}</td>
-                                    <td>{{item?.contact}}</td>
+                                    <td>{{item?.telephone}}</td>
                                     <td> 
                                         <span class="badge bg-success" *ngIf="!item?.is_disabled">Actif(ve)</span>
                                         <span class="badge bg-danger" *ngIf="item?.is_disabled">Inactif(ve)</span>
@@ -218,62 +218,60 @@
                                 <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
                                     <h5 class="font-bold text-lg p-5">Ajout d'un administrateur à {{itemSelected?.name}}</h5>
                                     <div class="p-5">
-                                        <form class="space-y-5" style="padding-bottom: 100px;">
+                                        <form class="space-y-5" style="padding-bottom: 100px;" (submit)="save()">
                                             <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
                                                 <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
                                             </div>
                                             <div class="grid grid-cols-1 grid-cols-2 gap-2">
-                                                <div class="mb-3" [formGroup]="formGroupEdit">
-                                                    <label>Entité<span style="color:red">*</span></label>
-                                                    <ng-select id="organization_type" name="organization_type" formControlName="organization_type" [(ngModel)]="organization_type">
-                                                        <ng-option *ngFor="let item of listOrganization" [value]="item.id">{{item.name}}</ng-option>
+                                                <div class="mb-3" [formGroup]="formGroupAdd">
+                                                    <label for="gridPassword">Rôle <span style="color:red">*</span></label>
+                                                    <ng-select id="profile_id" name="profile_id" [(ngModel)]="profile_id" (change)="onChange($event)" formControlName="profile_id" [ngClass]="{ 'is-invalid': submitted && f['profile_id'].errors }" placeholder="Profil">
+                                                        <ng-option *ngFor="let item of listProfil" [value]="item.id">{{item.label}}</ng-option>
                                                     </ng-select>
-                                                    <div *ngIf="submitted && f['organization_type'].errors" class="mt-1">
-                                                        <div *ngIf="submitted && f['organization_type'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    <div *ngIf="submitted && f['profile_id'].errors" class="mt-1">
+                                                        <div *ngIf="submitted && f['profile_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3" [formGroup]="formGroup2">
+                                                <div class="mb-3" [formGroup]="formGroupAdd">
                                                     <label>Nom <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" formControlName="lastname" [ngClass]="{ 'is-invalid': submitted2 && f2['lastname'].errors }"
+                                                    <input type="text" class="form-input" formControlName="lastname" [ngClass]="{ 'is-invalid': submitted && f['lastname'].errors }"
                                                         name="lastname" [(ngModel)]="lastname" />
-                                                    <div *ngIf="submitted2 && f2['lastname'].errors" class="mt-1">
-                                                        <div *ngIf="submitted2 && f2['lastname'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    <div *ngIf="submitted && f['lastname'].errors" class="mt-1">
+                                                        <div *ngIf="submitted && f['lastname'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3" [formGroup]="formGroup2">
+                                                <div class="mb-3" [formGroup]="formGroupAdd">
                                                     <label>Prénom(s) <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" formControlName="firstname" [ngClass]="{ 'is-invalid': submitted2 && f2['firstname'].errors }"
+                                                    <input type="text" class="form-input" formControlName="firstname" [ngClass]="{ 'is-invalid': submitted && f['firstname'].errors }"
                                                         name="firstname" [(ngModel)]="firstname" />
-                                                    <div *ngIf="submitted2 && f2['firstname'].errors" class="mt-1">
-                                                        <div *ngIf="submitted2 && f2['firstname'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    <div *ngIf="submitted && f['firstname'].errors" class="mt-1">
+                                                        <div *ngIf="submitted && f['firstname'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3" [formGroup]="formGroup2">
+                                                <div class="mb-3" [formGroup]="formGroupAdd">
                                                     <label>Téléphone <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" formControlName="mobile" [ngClass]="{ 'is-invalid': submitted2 && f2['mobile'].errors }"
-                                                        name="mobile" [(ngModel)]="mobile" />
-                                                    <div *ngIf="submitted2 && f2['mobile'].errors" class="mt-1">
-                                                        <div *ngIf="submitted2 && f2['mobile'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                    <div *ngIf="submitted2 && exist_error" class="mt-1">
-                                                        <div class="text-danger">{{phone_error}}</div>
+                                                    <input type="text" class="form-input" formControlName="telephone" [ngClass]="{ 'is-invalid': submitted && f['telephone'].errors }"
+                                                        name="telephone" [(ngModel)]="telephone" />
+                                                    <div *ngIf="submitted && f['telephone'].errors" class="mt-1">
+                                                        <div *ngIf="submitted && f['telephone'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3" [formGroup]="formGroup2">
+                                                <div class="mb-3" [formGroup]="formGroupAdd">
                                                     <label>Email <span style="color:red">*</span></label>
-                                                    <input type="email" class="form-input" formControlName="email" [ngClass]="{ 'is-invalid': submitted2 && f2['email'].errors }"
+                                                    <input type="email" class="form-input" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
                                                         name="email" [(ngModel)]="email" />
-                                                    <div *ngIf="submitted2 && f2['email'].errors" class="mt-1">
-                                                        <div *ngIf="submitted2 && f2['email'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                        <div *ngIf="submitted2 && f2['email'].errors?.['pattern']" class="text-danger">Ce champ doit être une adresse email !</div>
+                                                    <div *ngIf="submitted && f['email'].errors" class="mt-1">
+                                                        <div *ngIf="submitted && f['email'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                        <div *ngIf="submitted && f['email'].errors?.['pattern']" class="text-danger">Ce champ doit être une adresse email !</div>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3">
-                                                    <label>Photo de profil</label>
-                                                    <div class="user-pro-img">
-                                                        <img id="blah" [src]="avatarSrc || 'assets/images/avatar.png'" class="w-24 h-24 rounded-full object-cover" alt="photo" />
+                                                <div class="mb-3" [formGroup]="formGroupAdd">
+                                                    <label for="password">Mot de passe</label>
+                                                    <input id="password" type="password" class="form-input" type="password" [type]="show ? 'text' : 'password'" [(ngModel)]="password" name="password" formControlName="password"/>
+                                                    <span (click)="showPassword()"><i [class]="show ? 'fa fa-eye-slash' : 'fa fa-eye'"></i> {{show ? 'Cacher le mot de passe' : 'Afficher le mot de passe'}}</span>
+                                                    <div *ngIf="submitted && f['password'].errors" class="mt-1">
+                                                        <div *ngIf="submitted && f['password'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
-                                                    <input type="file" [(ngModel)]="avatar" class="multi file-upload-input with-preview" name="avatar" (change)="onSelectAvatar($event)" id="customFileLang" lang="fr">
                                                 </div>
                                             </div>
                 
@@ -331,10 +329,10 @@
                                                 </div>
                                                 <div class="mb-3" [formGroup]="formGroup2">
                                                     <label>Téléphone <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" formControlName="mobile" [ngClass]="{ 'is-invalid': submitted2 && f2['mobile'].errors }"
-                                                        name="mobile" [(ngModel)]="mobile" />
-                                                    <div *ngIf="submitted2 && f2['mobile'].errors" class="mt-1">
-                                                        <div *ngIf="submitted2 && f2['mobile'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    <input type="text" class="form-input" formControlName="telephone" [ngClass]="{ 'is-invalid': submitted2 && f2['telephone'].errors }"
+                                                        name="telephone" [(ngModel)]="telephone" />
+                                                    <div *ngIf="submitted2 && f2['telephone'].errors" class="mt-1">
+                                                        <div *ngIf="submitted2 && f2['telephone'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
                                                     <div *ngIf="submitted2 && exist_error" class="mt-1">
                                                         <div class="text-danger">{{phone_error}}</div>
@@ -349,6 +347,14 @@
                                                         <div *ngIf="submitted2 && f2['email'].errors?.['pattern']" class="text-danger">Ce champ doit être une adresse email !</div>
                                                     </div>
                                                 </div>
+                                                <!-- <div class="mb-3" [formGroup]="formGroup">
+                                                    <label for="password">Mot de passe</label>
+                                                    <input id="password" type="password" class="form-input" type="password" [type]="show ? 'text' : 'password'" [(ngModel)]="user_password" name="user_password" formControlName="user_password"/>
+                                                    <span (click)="password()"><i [class]="show ? 'fa fa-eye-slash' : 'fa fa-eye'"></i> {{show ? 'Cacher le mot de passe' : 'Afficher le mot de passe'}}</span>
+                                                    <div *ngIf="submitted && f['user_password'].errors" class="mt-1">
+                                                        <div *ngIf="submitted && f['user_password'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div> -->
                                                 <!-- <div class="mb-3">
                                                     <label>Photo de profil</label>
                                                     <div class="user-pro-img" *ngIf="!avatarSrc">
@@ -417,7 +423,7 @@
                                                     </tr>
                                                     <tr>
                                                         <th>Téléphone</th>
-                                                        <td>{{itemSelected?.contact}}</td>
+                                                        <td>{{itemSelected?.telephone}}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Statut</th>
@@ -494,42 +500,6 @@
                                         <div class="flex justify-end items-center mt-8">
                                             <button type="button" (click)="resetAll(); itemSelected = !itemSelected" class="btn btn-outline-danger">Non</button>
                                             <button type="submit" (click)="disable()" [disabled]="submit" *ngIf="!submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Oui</button>
-                                            <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="submit">
-                                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
-                                                    <line x1="12" y1="2" x2="12" y2="6"></line>
-                                                    <line x1="12" y1="18" x2="12" y2="22"></line>
-                                                    <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
-                                                    <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
-                                                    <line x1="2" y1="12" x2="6" y2="12"></line>
-                                                    <line x1="18" y1="12" x2="22" y2="12"></line>
-                                                    <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
-                                                    <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
-                                                </svg>
-                                                Patientez ...
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="pt-5" *ngIf="itemSelected && resetItem">
-                    <div class="row mb-5">
-                        <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
-                            <div class="flex items-start justify-center min-h-screen px-4">
-                                <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
-                                    <h5 class="font-bold text-lg p-5">Renvoi du mail de connexion de {{itemSelected?.name}}</h5>
-                                    <div class="p-5">
-                                        <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
-                                            <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
-                                        </div>
-                                        <div class="flex justify-center items-center mt-8">
-                                            Voulez-vous renvoyer le mail de connexion de l'utilisateur {{itemSelected?.name}} ?
-                                        </div>
-                                        <div class="flex justify-end items-center mt-8">
-                                            <button type="button" (click)="resetAll(); itemSelected = !itemSelected" class="btn btn-outline-danger">Non</button>
-                                            <button type="submit" (click)="sendWelcome()" [disabled]="submit" *ngIf="!submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Oui</button>
                                             <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="submit">
                                                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
                                                     <line x1="12" y1="2" x2="12" y2="6"></line>

@@ -224,6 +224,7 @@ export class DetailSupplierComponent implements OnInit {
   total_price: number = 0;
   bic_value: number = 0;
   value_prod_plus_tkm: number = 0;
+  date!: Date;
 
   listStatistics: any;
 
@@ -285,6 +286,7 @@ export class DetailSupplierComponent implements OnInit {
     this.formGroupOperationMandate = new FormGroup({
       payment_method_id: new FormControl('', [Validators.required]),
       total_price: new FormControl('', [Validators.required]),
+      date: new FormControl('', [Validators.required]),
     });
 
     this.formGroupOperationDelivery = new FormGroup({
@@ -305,22 +307,26 @@ export class DetailSupplierComponent implements OnInit {
       // bags_delivered: new FormControl('', [Validators.required]),
       bic_value: new FormControl('', [Validators.required]),
       value_prod_plus_tkm: new FormControl('', [Validators.required]),
+      date: new FormControl('', [Validators.required]),
     });
 
     this.formGroupOperationPayment = new FormGroup({
       payment_method_id: new FormControl('', [Validators.required]),
       total_price: new FormControl('', [Validators.required]),
+      date: new FormControl('', [Validators.required]),
     });
 
     this.formGroupOperationRepayment = new FormGroup({
       payment_method_id: new FormControl('', [Validators.required]),
       total_price: new FormControl('', [Validators.required]),
+      date: new FormControl('', [Validators.required]),
     });
 
     this.formGroupOperation = new FormGroup({
       entity_product_id: new FormControl('', [Validators.required]),
       weight: new FormControl('', [Validators.required]),
       price_id: new FormControl('', [Validators.required]),
+      date: new FormControl('', [Validators.required]),
     });
 
     this.formGroupWallet = new FormGroup({
@@ -393,6 +399,10 @@ export class DetailSupplierComponent implements OnInit {
     this.total_price = this.weight_accepted * this.unit_price;
     this.bic_value = this.weight_accepted * 2.5;
     this.value_prod_plus_tkm = this.total_price + this.tkm_amount;
+  }
+
+  goBack(){
+    this._location.back();
   }
 
   goToDetail(data: any){
@@ -487,7 +497,7 @@ export class DetailSupplierComponent implements OnInit {
   }
 
   getRoles(){
-    this.appService.getRole().subscribe((data: any) => {
+    this.appService.getProfil().subscribe((data: any) => {
       this.listRole = data.data;
     });
   }
@@ -1445,6 +1455,7 @@ export class DetailSupplierComponent implements OnInit {
         campaign_id: this.campaign_id,
         payment_method_id: this.payment_method_id,
         total_price: this.total_price,
+        date: this.date,
       }
 
       this.appService.updateWallet(this.itemSelected.id,requestData).subscribe(res => {
@@ -1536,6 +1547,7 @@ export class DetailSupplierComponent implements OnInit {
         bags_delivered: this.bags_delivered,
         bic_value: this.weight_accepted * 2.5,
         value_prod_plus_tkm: this.total_price + this.tkm_amount,
+        date: this.date,
       }
 
       this.appService.updateWallet(this.itemSelected.id,requestData).subscribe(res => {
@@ -1610,6 +1622,7 @@ export class DetailSupplierComponent implements OnInit {
         campaign_id: this.campaign_id,
         payment_method_id: this.payment_method_id,
         total_price: this.total_price,
+        date: this.date,
       }
 
       this.appService.updateWallet(this.itemSelected.id,requestData).subscribe(res => {
@@ -1684,6 +1697,7 @@ export class DetailSupplierComponent implements OnInit {
         campaign_id: this.campaign_id,
         payment_method_id: this.payment_method_id,
         total_price: this.total_price,
+        date: this.date,
       }
 
       this.appService.updateWallet(this.itemSelected.id,requestData).subscribe(res => {
@@ -1758,6 +1772,7 @@ export class DetailSupplierComponent implements OnInit {
         price_id: this.price_id,
         purchaseable_type: this.purchaseable_type,
         purchaseable_id: this.itemSelected.id,
+        date: this.date,
       }
 
       this.appService.addPurchase(requestData).subscribe(res => {

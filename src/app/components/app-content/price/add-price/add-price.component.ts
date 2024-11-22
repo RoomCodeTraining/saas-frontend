@@ -260,7 +260,7 @@ export class AddPriceComponent implements OnInit {
   }
 
   getRoles(){
-    this.appService.getRole().subscribe((data: any) => {
+    this.appService.getProfil().subscribe((data: any) => {
       this.listRole = data.data;
 
       this.SpinnerService.hide();

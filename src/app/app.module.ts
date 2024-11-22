@@ -74,6 +74,7 @@ import { DelegateStatisticComponent } from './components/app-content/statistic/d
 import { SpecialSupplierStatisticComponent } from './components/app-content/statistic/special-supplier-statistic/special-supplier-statistic.component';
 import { ListSpecialSupplierComponent } from './components/app-content/entity/list-special-supplier/list-special-supplier.component';
 import { DetailSpecialSupplierComponent } from './components/app-content/entity/detail-special-supplier/detail-special-supplier.component';
+import { ListDelegateForDeliveryComponent } from './components/app-content/entity/delegate/list-delegate-for-delivery/list-delegate-for-delivery.component';
 
 function resourceProviderFactory(JarwisService: JarwisService) {
   return () => {
@@ -143,6 +144,7 @@ function resourceProviderFactory(JarwisService: JarwisService) {
     SpecialSupplierStatisticComponent,
     ListSpecialSupplierComponent,
     DetailSpecialSupplierComponent,
+    ListDelegateForDeliveryComponent,
   ],
   imports: [
     BrowserModule,

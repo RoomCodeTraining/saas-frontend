@@ -107,6 +107,7 @@ export class ListCheckoutComponent implements OnInit {
   cash_register_movement_id: number = 2;
   entity_product_id!: number;
   campaign_id!: number;
+  date!: Date;
 
   constructor(
     public Jarwis: JarwisService,
@@ -137,6 +138,7 @@ export class ListCheckoutComponent implements OnInit {
       campaign_id: new FormControl('', [Validators.required]),
       amount: new FormControl('', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]),
       note: new FormControl('', []),
+      date: new FormControl('', [Validators.required]),
     });
 
     this.formGroupEdit = new FormGroup({
@@ -408,6 +410,7 @@ export class ListCheckoutComponent implements OnInit {
         amount: this.amount,
         label: this.note,
         cash_register_movement_id: this.cash_register_movement_id,
+        date: this.date,
       }
 
       this.appService.addCashRegister(requestData).subscribe(res => {

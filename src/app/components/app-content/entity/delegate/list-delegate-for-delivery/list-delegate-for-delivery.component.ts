@@ -23,11 +23,11 @@ import { EntityFirm } from 'src/app/models/entity-firm.model';
 import { AppService } from 'src/app/services/app-content/app.service';
 
 @Component({
-  selector: 'app-list-client',
-  templateUrl: './list-client.component.html',
-  styleUrls: ['./list-client.component.css']
+  selector: 'app-list-delegate-for-delivery',
+  templateUrl: './list-delegate-for-delivery.component.html',
+  styleUrls: ['./list-delegate-for-delivery.component.css']
 })
-export class ListClientComponent implements OnInit {
+export class ListDelegateForDeliveryComponent implements OnInit {
 
   listItem: any;
   listEntityType: any;
@@ -63,12 +63,12 @@ export class ListClientComponent implements OnInit {
   submitted2 = false;
   submitted3 = false;
 
-  entity_type_id: number = 2;
-  type: string = "client";
+  entity_type_id: number = 4;
+  type: string = "4";
   name: string = "";
   profil_id!:number;
   password: string = "";
-  contact: string = "";
+  telephone: string = "";
   email: string = "";
   address: string = "";
   status_id!: number;
@@ -127,6 +127,91 @@ export class ListClientComponent implements OnInit {
   permissions!: any;
   permitted: boolean = false;
 
+
+
+
+
+
+  listOperation: any;
+  listUserType: any;
+  listOrganization: any;
+
+  listEntityWallet: any;
+  listEntityProduct: any;
+  listEntityCampaign: any;
+
+  walletSelected: any;
+  operationHistorySelected: any;
+
+  formGroupOperation!: FormGroup;
+  formGroupWallet!: FormGroup;
+  formGroupDeposit!: FormGroup;
+  formGroupOperationDelivery!: FormGroup;
+
+  submittedOperation = false;
+  submittedWallet = false;
+  submittedDeposit = false;
+  submittedOperationDelivery = false;
+
+
+  informationOperation!: string;
+  
+  submitOperation: boolean = false;
+  submitWallet: boolean = false;
+  submitDeposit: boolean = false;
+  submitOperationDelivery: boolean = false;
+ 
+  operationItem: boolean = false;  
+
+  walletItem: boolean = false;
+  depositItem: boolean = false;
+  operationHistoryItem: boolean = false;
+  operationDelivery: boolean = false;
+
+  operation_current_page: number=1;
+  operation_first_page_url!: string;
+  operation_from!: number;
+  operation_last_page!: number;
+  operation_last_page_url!: string;
+  operation_links!: any;
+  operation_next_page_url!: string;
+  operation_per_page!: number;
+  operation_prev_page_url!: string;
+  operation_to!: number;
+  operation_total!: number;
+
+  price_id!: number;
+  purchaseable_id!: number;
+  purchaseable_type: string = "user";
+  wallet_id!: number;
+  amount!: number;
+  listSeller: any;
+  listPrice: any;
+
+  balance!: number;
+  user_id!: number;
+
+  conceive_number!: string;
+  vehicle_immatriculation!: string;
+  trailer!: string;
+  bags_declared: number = 0;
+  weight_declared: number = 0;
+  bags_accepted: number = 0;
+  weight_accepted: number = 0;
+  refact: number = 0;
+  unit_price: number = 0;
+  commission: number = 0;
+  commission_applied: number = 0;
+  tkm: number = 7.14;
+  tkm_amount: number = 0;
+  bags_delivered: number = 0;
+  total_price: number = this.weight_accepted * this.unit_price;
+  bic_value: number = this.weight_accepted * 2.5;
+  value_prod_plus_tkm: number = this.total_price + this.tkm_amount;
+  date!: Date;
+
+  campaign_id!: number;
+
   constructor(
     public Jarwis: JarwisService,
     public appService: AppService,
@@ -152,7 +237,6 @@ export class ListClientComponent implements OnInit {
     
     this.getProduct();
     this.getRoles();
-    this.getEntityType();
     this.getItems();
     this.makePassword(12);
     this.getUserLogged();
@@ -161,7 +245,7 @@ export class ListClientComponent implements OnInit {
       // entity_type_id: new FormControl(''),
       name: new FormControl('', [Validators.required]),
       address: new FormControl('', []),
-      contact: new FormControl('', [Validators.pattern("^[0-9]{10}$")]),
+      telephone: new FormControl('', [Validators.pattern("^[0-9]{10}$")]),
       email: new FormControl('', [Validators.email]),
       logo: new FormControl('', []),
     });
@@ -169,7 +253,7 @@ export class ListClientComponent implements OnInit {
     this.formGroupEdit = new FormGroup({
       name: new FormControl('', [Validators.required]),
       address: new FormControl('', []),
-      contact: new FormControl('', [Validators.pattern("^[0-9]{10}$")]),
+      telephone: new FormControl('', [Validators.pattern("^[0-9]{10}$")]),
       email: new FormControl('', [Validators.email]),
     });
 
@@ -177,6 +261,32 @@ export class ListClientComponent implements OnInit {
       entity_product_id: new FormControl('', [Validators.required]),
       weight: new FormControl('', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]),
       price: new FormControl('', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]),
+    });
+
+    this.formGroupOperation = new FormGroup({
+      entity_product_id: new FormControl('', [Validators.required]),
+      weight: new FormControl('', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]),
+      price_id: new FormControl('', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]),
+    });
+
+    this.formGroupWallet = new FormGroup({
+      entity_product_id: new FormControl('', [Validators.required]),
+      balance: new FormControl('', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]),
+    });
+
+    this.formGroupDeposit = new FormGroup({
+      amount: new FormControl('', [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]),
+    });
+
+    this.formGroupOperationDelivery = new FormGroup({
+      wallet_id: new FormControl('', [Validators.required]),
+      campaign_id: new FormControl('', [Validators.required]),
+      bags_accepted: new FormControl('', [Validators.required]),
+      weight_accepted: new FormControl('', [Validators.required]),
+      unit_price: new FormControl('', [Validators.required]),
+      commission: new FormControl('', [Validators.required]),
+      total_price: new FormControl('', [Validators.required]),
+      date: new FormControl('', [Validators.required]),
     });
 
   }
@@ -201,12 +311,14 @@ export class ListClientComponent implements OnInit {
   getUserLogged(){
     this.appService.getUserProfile().subscribe((data: any) => {
       this.user_logged = data.data;
-      this.permissions = this.user_logged.permissions;
-      if(this.permissions.includes("organization.view")){
-        this.permitted = true;
-      } else {
-        //this.notPermission();
-      }
+      this.getEntityProduct();
+      this.getEntityCampaign();
+      // this.permissions = this.user_logged.permissions;
+      // if(this.permissions.includes("organization.view")){
+      //   this.permitted = true;
+      // } else {
+      //   //this.notPermission();
+      // }
     },
     (err: HttpErrorResponse) => {
         //console.log("API indisponible");
@@ -229,20 +341,72 @@ export class ListClientComponent implements OnInit {
     this._location.back();
   }  
 
+  goToDetail(data: any){
+    // @ts-ignore
+    localStorage.setItem("DELEGATE_DATA", JSON.stringify(data));
+    this.router.navigateByUrl("/delegate-detail");
+  }
+
+  amountChange(){
+    if(this.commission_applied == 0){
+      this.total_price = Math.ceil(this.weight_accepted * this.unit_price);
+    } else {
+      this.total_price = Math.ceil(this.weight_accepted * (this.unit_price + this.commission));
+    }
+  }
+
+  commissionApplied(action: number){
+    this.commission_applied = action;
+    this.amountChange();
+  }
+
+  getEntityWallet(){
+    this.appService.getAllWalletByEntityId(this.itemSelected.id).subscribe((data: any) => {
+      this.listEntityWallet = data.data;
+    });
+  }
+
+  getEntityProduct(){
+    this.appService.getAllEntityProduct(this.user_logged.entity.id).subscribe((data: any) => {
+      this.listEntityProduct = data.data;
+    });
+  }
+
+  getEntityCampaign(){
+    this.appService.getAllEntityCampaign(this.user_logged.entity.id).subscribe((data: any) => {
+      this.listEntityCampaign = data.data;
+    });
+  }
+
+  onWalletChange(event:any) {
+    this.wallet_id = event.id;
+    this.entity_product_id = event.entity_product.id;
+  }
+
   resetAll() {
     this.formGroupAdd.reset();
     this.formGroupEdit.reset();
     this.formGroup2.reset();
+    this.formGroupOperationDelivery.reset();
 
     this.name = "";
     this.address = "";
-    this.contact = "";
+    this.telephone = "";
     this.email = "";
 
     this.firstname = "";
     this.lastname = "";
     this.mobile = "";
     this.email = "";
+
+    this.weight = 0;
+    this.amount = 0;
+  }
+
+  onChangeProduct(event:any) {
+    this.appService.getAllPriceByProductId(event).subscribe((data: any) => {
+      this.listPrice = data.data;
+    });
   }
 
   onSelectLogo(event:any) {
@@ -325,7 +489,7 @@ export class ListClientComponent implements OnInit {
   }
 
   getItems(){
-    this.appService.getSeller(this.current_page,this.type).subscribe((data: any) => {
+    this.appService.getDelegate(this.current_page,this.type).subscribe((data: any) => {
       this.listItem = data.data;
 
       this.getPaginate(data);
@@ -337,7 +501,7 @@ export class ListClientComponent implements OnInit {
 
   search(){
     this.SpinnerService.show();
-    this.appService.getSellerSearch(this.current_page,this.type,this.information).subscribe((data: any) => {
+    this.appService.getDelegateSearch(this.current_page,this.type,this.information).subscribe((data: any) => {
       this.listItem = data.data;
       
       this.getPaginate(data);
@@ -352,7 +516,7 @@ export class ListClientComponent implements OnInit {
       this.search()
     } else {
       this.SpinnerService.show();
-      this.appService.getSellerPaginate(this.current_page,this.type).subscribe((data: any) => {
+      this.appService.getDelegatePaginate(this.current_page,this.type).subscribe((data: any) => {
         this.listItem = data.data;
         
         this.getPaginate(data);
@@ -405,6 +569,103 @@ export class ListClientComponent implements OnInit {
     this.paginate();
   }
 
+
+  getPaginateOperation(data:any){
+    this.operation_current_page = data?.meta?.current_page;
+    this.operation_first_page_url = data?.meta?.first_page_url;
+    this.operation_from = data?.meta?.from;
+    this.operation_last_page = data?.meta?.last_page;
+    this.operation_last_page_url = data?.meta?.last_page_url;
+    this.operation_links = data?.meta?.links;
+    this.operation_next_page_url = data?.meta?.next_page_url;
+    this.operation_per_page = data?.meta?.per_page;
+    this.operation_prev_page_url = data?.meta?.prev_page_url;
+    this.operation_to = data?.meta?.to;
+    this.operation_total = data?.meta?.total;
+  }
+
+  getOperation(){
+    this.SpinnerService.show();
+    this.appService.getOperationByEntityId(this.itemSelected.id,this.operation_current_page).subscribe((data: any) => {
+      this.listOperation = data?.data;
+
+      this.getPaginateOperation(data);
+
+      this.SpinnerService.hide();
+
+    });
+  }
+
+  searchOperation(){
+    this.SpinnerService.show();
+    this.appService.getOperationByEntityIdSearch(this.itemSelected.id,this.operation_current_page,this.informationOperation).subscribe((data: any) => {
+      this.listOperation = data?.data;
+      
+      this.getPaginateOperation(data);
+
+      this.SpinnerService.hide();
+
+    })
+  }
+
+  paginateOperation(){
+    if(this.informationOperation){
+      this.searchOperation()
+    } else {
+      this.SpinnerService.show();
+        this.appService.getOperationByEntityIdPaginate(this.itemSelected.id,this.operation_current_page).subscribe((data: any) => {
+          this.listOperation = data?.data;
+          
+          this.getPaginateOperation(data);
+
+          this.SpinnerService.hide();
+
+        })
+    }
+  }
+
+  nextPageOperation() {
+    this.SpinnerService.show();
+    this.operation_current_page = this.current_page + 1;
+    this.paginateOperation();
+  }
+
+  previousPageOperation() {
+    this.SpinnerService.show();
+    this.operation_current_page = this.current_page - 1;
+    this.paginateOperation();
+  }
+
+  otherPageLeft1Operation() {
+    this.operation_current_page = this.current_page - 1;
+    this.paginateOperation();
+  }
+
+  otherPageLeft2Operation() {
+    this.operation_current_page = this.current_page - 2;
+    this.paginateOperation();
+  }
+
+  otherPageRigth1Operation() {
+    this.operation_current_page = this.current_page + 1;
+    this.paginateOperation();
+  }
+
+  otherPageRigth2Operation() {
+    this.operation_current_page = this.current_page + 2;
+    this.paginateOperation();
+  }
+
+  firstPageOperation() {
+    this.operation_current_page = 1;
+    this.paginateOperation();
+  }
+
+  lastPageOperation() {
+    this.operation_current_page = this.last_page;
+    this.paginateOperation();
+  }
+
   itemAdd() {
     this.addItem = true;
     this.editItem = false;
@@ -412,6 +673,9 @@ export class ListClientComponent implements OnInit {
     this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.operationDelivery = false;
     this.resetAll();
   }
 
@@ -422,10 +686,13 @@ export class ListClientComponent implements OnInit {
     this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.operationDelivery = false;
     this.itemSelected = item;
     this.entity_type_id = this.itemSelected.entitytype.id;
     this.name = this.itemSelected.name;
-    this.contact = this.itemSelected.contact;
+    this.telephone = this.itemSelected.telephone;
     this.email = this.itemSelected.email;
     this.password = this.itemSelected.password;
     this.address = this.itemSelected.address;
@@ -440,6 +707,9 @@ export class ListClientComponent implements OnInit {
     this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = true;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.operationDelivery = false;
     this.itemSelected = item;
   }
 
@@ -450,14 +720,12 @@ export class ListClientComponent implements OnInit {
     this.enableItem = false;
     this.disableItem = false;
     this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.operationDelivery = false;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
-    this.name = this.itemSelected.name;
-    this.contact = this.itemSelected.contact;
-    this.email = this.itemSelected.email;
-    this.password = this.itemSelected.password;
-    this.address = this.itemSelected.address;
-    this.logo = this.itemSelected.logo_url;
+    this.getEntityWallet();
+    this.getOperation();
   }
 
   itemAble(item:any) {
@@ -467,10 +735,13 @@ export class ListClientComponent implements OnInit {
     this.enableItem = true;
     this.disableItem = false;
     this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.operationDelivery = false;
     this.itemSelected = item;
     this.entity_type_id = this.itemSelected.entitytype.id;
     this.name = this.itemSelected.name;
-    this.contact = this.itemSelected.contact;
+    this.telephone = this.itemSelected.telephone;
     this.email = this.itemSelected.email;
     this.password = this.itemSelected.password;
     this.address = this.itemSelected.address;
@@ -484,14 +755,100 @@ export class ListClientComponent implements OnInit {
     this.enableItem = false;
     this.disableItem = true;
     this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.operationDelivery = false;
     this.itemSelected = item;
     this.entity_type_id = this.itemSelected.entitytype.id;
     this.name = this.itemSelected.name;
-    this.contact = this.itemSelected.contact;
+    this.telephone = this.itemSelected.telephone;
     this.email = this.itemSelected.email;
     this.password = this.itemSelected.password;
     this.address = this.itemSelected.address;
     this.logo = this.itemSelected.logo_url;
+  }
+
+  itemWallet(item:any) {
+    this.addItem = false;
+    this.editItem = false;
+    this.itemDetail = false;
+    this.enableItem = false;
+    this.disableItem = false;
+    this.addAdminItem = false;
+    this.walletItem = true;
+    this.operationItem = false;
+    this.operationDelivery = false;
+    this.itemSelected = item;
+    this.entity_type_id = this.itemSelected.entitytype.id;
+    this.name = this.itemSelected.name;
+    this.telephone = this.itemSelected.telephone;
+    this.email = this.itemSelected.email;
+    this.password = this.itemSelected.password;
+    this.address = this.itemSelected.address;
+    this.logo = this.itemSelected.logo_url;
+  }
+
+  itemOperation(item:any) {
+    this.addItem = false;
+    this.editItem = false;
+    this.itemDetail = false;
+    this.enableItem = false;
+    this.disableItem = false;
+    this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = true;
+    this.operationDelivery = false;
+    this.itemSelected = item;
+    this.entity_type_id = this.itemSelected.entitytype.id;
+    this.name = this.itemSelected.name;
+    this.telephone = this.itemSelected.telephone;
+    this.email = this.itemSelected.email;
+    this.password = this.itemSelected.password;
+    this.address = this.itemSelected.address;
+    this.logo = this.itemSelected.logo_url;
+  }
+
+  itemOperationDelivery(item:any) {
+    this.addItem = false;
+    this.editItem = false;
+    this.itemDetail = false;
+    this.enableItem = false;
+    this.disableItem = false;
+    this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.operationDelivery = true;
+    this.itemSelected = item;
+  }
+
+  itemOperationHistory(item:any) {
+    this.addItem = false;
+    this.editItem = false;
+    this.itemDetail = false;
+    this.enableItem = false;
+    this.disableItem = false;
+    this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.operationDelivery = true;
+    this.operationHistoryItem = true;
+    this.itemSelected = item;
+    this.getOperation();
+  }
+
+  itemDeposit(item:any) {
+    this.depositItem = true;
+    this.operationHistoryItem = false;
+    this.walletSelected = item;
+  }
+
+  itemCancel(item:any) {
+    this.editItem = false;
+    this.itemDetail = false;
+    this.operationItem = false;
+    this.enableItem = false;
+    this.walletItem = false;
+    this.operationHistorySelected = item;
   }
  
   hide_message() {
@@ -518,7 +875,7 @@ export class ListClientComponent implements OnInit {
     if(this.formGroupAdd.invalid){
       //console.log("Please enter");
       return;
-    } else if(this.contact.length != 10){
+    } else if(this.telephone.length != 10){
       this.exist_phone_error = true;
       this.phone_error = "Le numéro de téléphone doit contenir que 10 chiffres.";
     } else {
@@ -528,7 +885,7 @@ export class ListClientComponent implements OnInit {
       formData.append("entity_type_id",this.entity_type_id);
       formData.append("name",this.name);
       formData.append("address",this.address);
-      formData.append("contact",this.contact);
+      formData.append("telephone",this.telephone);
       formData.append("email",this.email);
       if(this.logofiles){
         formData.append("logo_path",this.logofiles,this.logofiles.name);
@@ -540,7 +897,7 @@ export class ListClientComponent implements OnInit {
       // pushItem.entity_type_id = this.entity_type_id;
       // pushItem.name = this.name;
       // pushItem.address = this.address;
-      // pushItem.contact = this.contact;
+      // pushItem.telephone = this.telephone;
       // pushItem.email = this.email;
       // if(this.logofiles){
       //   pushItem.logo_path = this.logofiles,this.logofiles.name;
@@ -552,7 +909,7 @@ export class ListClientComponent implements OnInit {
         entity_type_id: this.entity_type_id,
         name: this.name,
         address: this.address,
-        contact: this.contact,
+        telephone: this.telephone,
         email: this.email,
       }
 
@@ -594,7 +951,8 @@ export class ListClientComponent implements OnInit {
       },
       (err: HttpErrorResponse) => {
         this.exist_error = true;
-        this.error_message = err.error.errors;
+        // this.error_message = err.error.errors;
+        this.error_message = err.error.message;
         this.toast = {
           message: err.error.error,
           title: 'Erreur',
@@ -605,6 +963,7 @@ export class ListClientComponent implements OnInit {
             progressBar: true,
           } as GlobalConfig,
         };
+        console.log('vcdgvgdsvgd',err);
         this.submit = false;
         this.SpinnerService.hide();
         this.cs.showToast(this.toast);
@@ -619,7 +978,7 @@ export class ListClientComponent implements OnInit {
     if(this.formGroupEdit.invalid){
       //console.log("Errors");
       return;
-    } else if(this.contact.length != 10){
+    } else if(this.telephone.length != 10){
       this.exist_phone_error = true;
       this.phone_error = "Le numéro de téléphone doit contenir que 10 chiffres.";
     } else {
@@ -628,7 +987,7 @@ export class ListClientComponent implements OnInit {
       const formData:any = new FormData();
       formData.append("name",this.name);
       formData.append("address",this.address);
-      formData.append("contact",this.contact);
+      formData.append("telephone",this.telephone);
       formData.append("email",this.email);
       if(this.logofiles){
         formData.append("logo_path",this.logofiles,this.logofiles.name);
@@ -640,7 +999,7 @@ export class ListClientComponent implements OnInit {
         entity_type_id: this.entity_type_id,
         name: this.name,
         address: this.address,
-        contact: this.contact,
+        telephone: this.telephone,
         email: this.email,
       }
 
@@ -895,8 +1254,365 @@ export class ListClientComponent implements OnInit {
     }
   }
 
-  
+  cancel(){
+    this.submit = true;
+    
+    let requestData = {
+      operation_id: this.operationHistorySelected.id,
+    }
 
-  
+    this.appService.cancelOperation(this.operationHistorySelected.id,requestData).subscribe(res => {
+      this.message = res;
+      if(this.message.success == false){
+        this.submit = false;
+        this.error_message = this.message.message;
+        this.exist_error = false;
+        this.toast = {
+          message: this.message.message,
+          title: 'Erreur',
+          type: 'error',
+          ic: {
+            timeOut: 5000,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.SpinnerService.hide();
+      } else {
+        this.toast = {
+          message: this.message.message,
+          title: 'Succès',
+          type: 'success',
+          ic: {
+            timeOut: 2500,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submit = false;
+        this.editItem = !this.editItem;
+        this.itemSelected = !this.itemSelected;
+        this.resetAll();
+        this.ngOnInit();
+      }
+      this.cs.showToast(this.toast);
+    },
+    (err: HttpErrorResponse) => {
+      this.exist_error = true;
+      this.error_message = err.error.errors;
+      this.submit = false;
+      this.toast = {
+        message: err.error.error,
+        title: 'Erreur',
+        type: 'error',
+        ic: {
+          timeOut: 5000,
+          closeButton: true,
+          progressBar: true,
+        } as GlobalConfig,
+      };
+      this.submit = false;
+      this.SpinnerService.hide();
+      this.cs.showToast(this.toast);
+    })
+  }
+
+  get fOperation() { return this.formGroupOperation.controls; }
+
+  saveOperation(){
+    this.submittedOperation = true;
+    if(this.formGroupOperation.invalid){
+      return;
+    } else {
+      this.submitOperation = true;
+      
+      let requestData = {
+        entity_product_id: this.entity_product_id,
+        weight: this.weight,
+        price_id: this.price_id,
+        purchaseable_type: this.purchaseable_type,
+        purchaseable_id: this.itemSelected.id,
+      }
+
+      this.appService.addPurchase(requestData).subscribe(res => {
+        this.message = res;
+        if(this.message.success == false){
+          this.submitOperation = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
+          this.toast = {
+            message: this.message.message,
+            title: 'Erreur',
+            type: 'error',
+            ic: {
+              timeOut: 5000,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.SpinnerService.hide();
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submitOperation = false;
+          this.operationItem = !this.operationItem;
+          this.itemSelected = !this.itemSelected;
+          this.resetAll();
+          this.ngOnInit();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
+        this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submitOperation = false;
+        this.toast = {
+          message: err.error.error,
+          title: 'Erreur',
+          type: 'error',
+          ic: {
+            timeOut: 5000,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submitOperation = false;
+        this.SpinnerService.hide();
+        this.cs.showToast(this.toast);
+      })
+    }
+  }
+
+  get fWallet() { return this.formGroupWallet.controls; }
+
+  saveWallet(){
+    this.submittedWallet = true;
+    if(this.formGroupWallet.invalid){
+      return;
+    } else {
+      this.submitWallet = true;
+      
+      let requestData = {
+        product_id: this.entity_product_id,
+        balance: this.balance,
+        user_id: this.itemSelected.id,
+      }
+
+      this.appService.addWallet(requestData).subscribe(res => {
+        this.message = res;
+        if(this.message.success == false){
+          this.submitWallet = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
+          this.toast = {
+            message: this.message.message,
+            title: 'Erreur',
+            type: 'error',
+            ic: {
+              timeOut: 5000,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.SpinnerService.hide();
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submitWallet = false;
+          this.walletItem = !this.walletItem;
+          this.itemSelected = !this.itemSelected;
+          this.resetAll();
+          this.ngOnInit();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
+        this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submitWallet = false;
+        this.toast = {
+          message: err.error.error,
+          title: 'Erreur',
+          type: 'error',
+          ic: {
+            timeOut: 5000,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submitWallet = false;
+        this.SpinnerService.hide();
+        this.cs.showToast(this.toast);
+      })
+    }
+  }
+
+  get fDeposit() { return this.formGroupDeposit.controls; }
+
+  saveDeposit(){
+    this.submittedDeposit = true;
+    if(this.formGroupDeposit.invalid){
+      return;
+    } else {
+      this.submitDeposit = true;
+      
+      let requestData = {
+        amount: this.amount,
+        wallet_id: this.walletSelected.id,
+      }
+
+      this.appService.addDeposit(requestData).subscribe(res => {
+        this.message = res;
+        if(this.message.success == false){
+          this.submitDeposit = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
+          this.toast = {
+            message: this.message.message,
+            title: 'Erreur',
+            type: 'error',
+            ic: {
+              timeOut: 5000,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.SpinnerService.hide();
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submitDeposit = false;
+          this.depositItem = !this.depositItem;
+          this.itemSelected = !this.itemSelected;
+          this.resetAll();
+          this.ngOnInit();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
+        this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submitDeposit = false;
+        this.toast = {
+          message: err.error.error,
+          title: 'Erreur',
+          type: 'error',
+          ic: {
+            timeOut: 5000,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submitDeposit = false;
+        this.SpinnerService.hide();
+        this.cs.showToast(this.toast);
+      })
+    }
+  }
+
+  get fOperationDelivery() { return this.formGroupOperationDelivery.controls; }
+
+  saveOperationDelivery(operation_type_id: number){
+    this.submittedOperationDelivery = true;
+    if(this.formGroupOperationDelivery.invalid){
+      console.log('sdnbvdhgv',this.formGroupOperationDelivery.value);
+      return;
+    } else {
+      this.submitOperationDelivery = true;
+
+      let requestData = {
+        entity_id: this.itemSelected.id,
+        operation_type_id: operation_type_id,
+        entity_product_id: this.entity_product_id,
+        campaign_id: this.campaign_id,
+        bags_accepted: this.bags_accepted,
+        weight_accepted: this.weight_accepted,
+        unit_price: this.unit_price,
+        commission_applied: this.commission_applied,
+        commission: this.commission,
+        total_price: this.total_price,
+        date: this.date,
+      }
+
+      this.appService.updateWallet(this.wallet_id,requestData).subscribe(res => {
+        this.message = res;
+        if(this.message.success == false){
+          this.submitOperationDelivery = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
+          this.toast = {
+            message: this.message.message,
+            title: 'Erreur',
+            type: 'error',
+            ic: {
+              timeOut: 5000,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.SpinnerService.hide();
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submitOperationDelivery = false;
+          this.operationDelivery = !this.operationDelivery;
+          this.itemSelected = !this.itemSelected;
+          this.resetAll();
+          this.ngOnInit();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
+        this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submitOperationDelivery = false;
+        this.toast = {
+          message: err.error.error,
+          title: 'Erreur',
+          type: 'error',
+          ic: {
+            timeOut: 5000,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submitOperationDelivery = false;
+        this.SpinnerService.hide();
+        this.cs.showToast(this.toast);
+      })
+    }
+  }
 
 }

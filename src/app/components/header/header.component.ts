@@ -77,13 +77,24 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  logout_() {
+  logout() {
     this.Token.remove();
     this.Auth.changeAuthStatus(false);
+    this.toast = {
+      message: "Déconnecté(s) avec succès",
+      title: 'Information',
+      type: 'info',
+      ic: {
+        timeOut: 2500,
+        closeButton: true,
+        progressBar: true,
+      } as GlobalConfig,
+    };
+    this.cs.showToast(this.toast);
     this.router.navigate(['/login']);
   }
 
-  logout() {
+  logout_() {
     this.SpinnerService.show();
     this.Jarwis.logout("").subscribe(res => {
       this.toast = {

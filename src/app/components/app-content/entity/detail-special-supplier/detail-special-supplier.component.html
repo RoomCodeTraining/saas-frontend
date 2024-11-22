@@ -638,13 +638,14 @@
                                 <tr>
                                     <th>N°</th>
                                     <th>Action</th>
+                                    <th>Date</th>
                                     <th>Référence</th>
                                     <th>Montant</th>
                                     <th>Type</th>
                                     <th>Méthode de paiement</th>
                                     <th>Effectué(e) par</th>
+                                    <th>Effectué(e) le</th>
                                     <th>Statut</th>
-                                    <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody *ngIf="listOperation?.length >= 0">
@@ -665,16 +666,17 @@
                                             </li>
                                         </ul>
                                     </td>
+                                    <td>{{item?.date | date: 'dd/MM/YYYY'}}</td>
                                     <td>{{item?.reference}}</td>
                                     <td>{{item?.total_price | number:'':'fr-FR'}} FCFA</td>
                                     <td>{{item?.operation_type?.label}}</td>
                                     <td>{{item?.payment_method?.label}}</td>
                                     <td>{{item?.user?.name}}</td>
+                                    <td>{{item?.created_at | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
                                     <td> 
                                         <span class="badge bg-success" *ngIf="item?.status?.id == 3">{{item?.status?.label}}</span>
                                         <span class="badge bg-danger" *ngIf="item?.status?.id != 3">{{item?.status?.label}}</span>
                                     </td>
-                                    <td>{{item?.created_at | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -877,6 +879,14 @@
                                                 <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
                                             </div>
                                             <div class="grid grid-cols-1 grid-cols-2 gap-2">
+                                                <div class="mb-3" [formGroup]="formGroupOperationMandate">
+                                                    <label>Date <span style="color:red">*</span></label>
+                                                    <input type="date" class="form-input" formControlName="date" [ngClass]="{ 'is-invalid': submittedOperationMandate && fOperationMandate['date'].errors }"
+                                                        name="date" [(ngModel)]="date" />
+                                                    <div *ngIf="submittedOperationMandate && fOperationMandate['date'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationMandate && fOperationMandate['date'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
                                                 <div class="mb-3">
                                                     <label for="gridPassword">Délégué <span style="color:red">*</span></label>
                                                     <input type="text" class="form-input" [value]="entity?.name" readonly disabled/>
@@ -944,6 +954,14 @@
                                                 <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
                                             </div>
                                             <div class="grid grid-cols-1 grid-cols-3 gap-3">
+                                                <div class="mb-3" [formGroup]="formGroupOperationDelivery">
+                                                    <label>Date <span style="color:red">*</span></label>
+                                                    <input type="date" class="form-input" formControlName="date" [ngClass]="{ 'is-invalid': submittedOperationDelivery && fOperationDelivery['date'].errors }"
+                                                        name="date" [(ngModel)]="date" />
+                                                    <div *ngIf="submittedOperationDelivery && fOperationDelivery['date'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationDelivery && fOperationDelivery['date'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
                                                 <div class="mb-3">
                                                     <label for="gridPassword">Délégué <span style="color:red">*</span></label>
                                                     <input type="text" class="form-input" [value]="entity?.name" readonly disabled/>
@@ -1112,6 +1130,14 @@
                                                 <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
                                             </div>
                                             <div class="grid grid-cols-1 grid-cols-2 gap-2">
+                                                <div class="mb-3" [formGroup]="formGroupOperationPayment">
+                                                    <label>Date <span style="color:red">*</span></label>
+                                                    <input type="date" class="form-input" formControlName="date" [ngClass]="{ 'is-invalid': submittedOperationPayment && fOperationPayment['date'].errors }"
+                                                        name="date" [(ngModel)]="date" />
+                                                    <div *ngIf="submittedOperationPayment && fOperationPayment['date'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationPayment && fOperationPayment['date'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
                                                 <div class="mb-3">
                                                     <label for="gridPassword">Délégué <span style="color:red">*</span></label>
                                                     <input type="text" class="form-input" [value]="entity?.name" readonly disabled/>
@@ -1179,6 +1205,14 @@
                                                 <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
                                             </div>
                                             <div class="grid grid-cols-1 grid-cols-2 gap-2">
+                                                <div class="mb-3" [formGroup]="formGroupOperationRepayment">
+                                                    <label>Date <span style="color:red">*</span></label>
+                                                    <input type="date" class="form-input" formControlName="date" [ngClass]="{ 'is-invalid': submittedOperationRepayment && fOperationRepayment['date'].errors }"
+                                                        name="date" [(ngModel)]="date" />
+                                                    <div *ngIf="submittedOperationRepayment && fOperationRepayment['date'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationRepayment && fOperationRepayment['date'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
                                                 <div class="mb-3">
                                                     <label for="gridPassword">Délégué <span style="color:red">*</span></label>
                                                     <input type="text" class="form-input" [value]="entity?.name" readonly disabled/>
@@ -1246,6 +1280,14 @@
                                                 <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
                                             </div>
                                             <div class="grid grid-cols-1 grid-cols-2 gap-2">
+                                                <div class="mb-3" [formGroup]="formGroupOperationPaymentOther">
+                                                    <label>Date <span style="color:red">*</span></label>
+                                                    <input type="date" class="form-input" formControlName="date" [ngClass]="{ 'is-invalid': submittedOperationPaymentOther && fOperationPaymentOther['date'].errors }"
+                                                        name="date" [(ngModel)]="date" />
+                                                    <div *ngIf="submittedOperationPaymentOther && fOperationPaymentOther['date'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationPaymentOther && fOperationPaymentOther['date'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
                                                 <div class="mb-3">
                                                     <label for="gridPassword">Délégué <span style="color:red">*</span></label>
                                                     <input type="text" class="form-input" [value]="entity?.name" readonly disabled/>
@@ -1313,6 +1355,14 @@
                                                 <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
                                             </div>
                                             <div class="grid grid-cols-1 grid-cols-2 gap-2">
+                                                <div class="mb-3" [formGroup]="formGroupOperationRepaymentOther">
+                                                    <label>Date <span style="color:red">*</span></label>
+                                                    <input type="date" class="form-input" formControlName="date" [ngClass]="{ 'is-invalid': submittedOperationRepaymentOther && fOperationRepaymentOther['date'].errors }"
+                                                        name="date" [(ngModel)]="date" />
+                                                    <div *ngIf="submittedOperationRepaymentOther && fOperationRepaymentOther['date'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationRepaymentOther && fOperationRepaymentOther['date'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
                                                 <div class="mb-3">
                                                     <label for="gridPassword">Délégué <span style="color:red">*</span></label>
                                                     <input type="text" class="form-input" [value]="entity?.name" readonly disabled/>

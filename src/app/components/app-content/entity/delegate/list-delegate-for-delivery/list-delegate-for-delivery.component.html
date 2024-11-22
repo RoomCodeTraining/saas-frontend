@@ -6,22 +6,13 @@
             <div x-data="sales">
                 <ul class="flex space-x-2 rtl:space-x-reverse">
                     <li class="before:content-['/'] ltr:before:mr-1 rtl:before:ml-1">
-                        <span>Liste des portefeuilles</span>
+                        <span>Liste des délégués</span>
                     </li>
                 </ul>
     
-                <div class="pt-5" *ngIf="!itemSelected && !addItem && !walletItem">
-                    <div class="flex items-center justify-between flex-wrap gap-4 mb-5">
-                        <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
-                            <div class="flex gap-3">
-                                <div class="relative ">
-                                    <button type="button" (click)="goBack();" class="btn btn-dark">Retour</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="pt-5" *ngIf="!itemSelected && !addItem">
                     <div class="flex items-center justify-between flex-wrap gap-4">
-                        <h2 class="text-xl">Liste des portefeuilles de {{entity?.name}}</h2>
+                        <h2 class="text-xl">Liste des délégués</h2>
                         <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
                             <div class="flex gap-3">
                                 <div class="relative ">
@@ -35,15 +26,6 @@
                                             </svg>
                                         </div>
                                     </form>
-                                </div>
-                                <div>
-                                    <button type="button" class="btn btn-primary" (click)="itemWallet()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                                        </svg>
-                                        Nouveau portefeuille
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -63,35 +45,22 @@
                                 <tr>
                                     <th>N°</th>
                                     <th>Action</th>
-                                    <th>Référence</th>
-                                    <th>Produit</th>
-                                    <th>Délégué</th>
-                                    <th>Solde</th>
-                                    <th>Date du premier du rechargement</th>
-                                    <th>Date du dernier du rechargement</th>
+                                    <th>Type</th>
+                                    <th>Nom</th>
+                                    <th>Adresse</th>
+                                    <th>Email</th>
+                                    <th>Téléphone</th>
                                     <th>Statut</th>
+                                    <th>Date de création</th>
                                 </tr>
                             </thead>
                             <tbody *ngIf="listItem?.length > 0">
-                                <tr *ngFor="let item of listItem; let i = index;">
+                                <tr *ngFor="let item of listItem | filter:information; let i = index;">
                                     <td>{{i+1}}</td>
                                     <td class="text-center">
                                         <ul class="flex gap-2">
                                             <li>
-                                                <a href="javascript:;" x-tooltip="Détails" (click)="itemDetails(item)">
-                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
-                                                        <path
-                                                            opacity="0.5"
-                                                            d="M3.27489 15.2957C2.42496 14.1915 2 13.6394 2 12C2 10.3606 2.42496 9.80853 3.27489 8.70433C4.97196 6.49956 7.81811 4 12 4C16.1819 4 19.028 6.49956 20.7251 8.70433C21.575 9.80853 22 10.3606 22 12C22 13.6394 21.575 14.1915 20.7251 15.2957C19.028 17.5004 16.1819 20 12 20C7.81811 20 4.97196 17.5004 3.27489 15.2957Z"
-                                                            stroke="currentColor"
-                                                            stroke-width="1.5"
-                                                        ></path>
-                                                        <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="currentColor" stroke-width="1.5"></path>
-                                                    </svg>
-                                                </a>
-                                            </li> 
-                                            <li>
-                                                <a href="javascript:;" x-tooltip="Historique des opérations" (click)="itemOperationHistory(item)">
+                                                <a href="javascript:;" x-tooltip="Historique des opérations" (click)="itemDetails(item)">
                                                     <svg class="group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
                                                         fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 text-primary">
                                                         <path opacity="0.5"
@@ -111,16 +80,16 @@
                                             </li> 
                                         </ul>
                                     </td>
-                                    <td>{{item?.reference}}</td>
-                                    <td>{{item?.entity_product?.product?.label}}</td>
-                                    <td>{{item?.entity?.name}}</td>
-                                    <td>{{item?.balance | number:'':'fr-FR'}} FCFA</td>
-                                    <td>{{item?.created_at | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
-                                    <td>{{item?.updated_at | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
+                                    <td>{{item?.entity_type?.label}}</td>
+                                    <td>{{item?.name}}</td>
+                                    <td>{{item?.address}}</td>
+                                    <td>{{item?.email}}</td>
+                                    <td>{{item?.telephone}}</td>
                                     <td> 
                                         <span class="badge bg-success" *ngIf="item?.status.id == 1">{{item?.status.label}}</span>
                                         <span class="badge bg-danger" *ngIf="item?.status.id == 2">{{item?.status.label}}</span>
                                     </td>
+                                    <td>{{item?.created_at | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -208,11 +177,14 @@
                         <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
                             <div class="flex items-start justify-center min-h-screen px-4">
                                 <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
-                                    <h5 class="font-bold text-lg p-5">Ajout d'un nouveau wallet</h5>
+                                    <h5 class="font-bold text-lg p-5">Ajout d'un nouveau délégué</h5>
                                     <div class="p-5">
                                         <form class="space-y-5" style="padding-bottom: 100px;" (submit)="save()">
                                             <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
                                                 <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
+                                            </div>
+                                            <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngIf="error_message">
+                                                <span class="ltr:pr-2 rtl:pl-2">{{error_message}}</span><br>
                                             </div>
                                             <div class="grid grid-cols-1 grid-cols-2 gap-2">
                                                 <div class="mb-3" [formGroup]="formGroupAdd">
@@ -232,8 +204,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-3" [formGroup]="formGroupAdd">
-                                                    <label>Téléphone <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" formControlName="telephone" [ngClass]="{ 'is-invalid': submitted && f['telephone'].errors }"
+                                                    <label>Téléphone (10 chiffres) <span style="color:red">*</span></label>
+                                                    <input type="text" maxlength="10" class="form-input" formControlName="telephone" [ngClass]="{ 'is-invalid': submitted && f['telephone'].errors }"
                                                         name="telephone" [(ngModel)]="telephone" />
                                                     <div *ngIf="submitted && f['telephone'].errors" class="mt-1">
                                                         <div *ngIf="submitted && f['telephone'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
@@ -281,102 +253,6 @@
                                                 </button>
                                             </div>
                                         </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="pt-5" *ngIf="itemSelected && itemDetail">
-                    <div class="row mb-5">
-                        <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
-                            <div class="flex items-start justify-center min-h-screen px-4">
-                                <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
-                                    <h5 class="font-bold text-lg p-5">Détails du portefeuille {{itemSelected?.entity_product?.product?.label}} de {{itemSelected?.entity?.name}}</h5>
-                                    <div class="p-5">
-                                        <div class="flex items-center justify-between flex-wrap gap-4 pb-5">
-                                            <h2></h2>
-                                            <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
-                                                <div class="flex gap-3">
-                                                    <div>
-                                                        <button type="button" (click)="itemOperationMandate(itemSelected)" class="btn btn-primary">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                                                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                            </svg>
-                                                            Nouveau mandat
-                                                        </button>
-                                                    </div>
-                                                    <div>
-                                                        <button type="button" (click)="itemOperationDelivery(itemSelected)" class="btn btn-primary">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                                                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                            </svg>
-                                                            Nouvelle livraison
-                                                        </button>
-                                                    </div>
-                                                    <!-- <div>
-                                                        <button type="button" (click)="itemOperationRepayment(itemSelected)" class="btn btn-primary">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                                                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                            </svg>
-                                                            Remboursement
-                                                        </button>
-                                                    </div> -->
-                                                    <div>
-                                                        <button type="button" (click)="itemOperationCommission(itemSelected)" class="btn btn-primary">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                                                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                            </svg>
-                                                            Paiement de commissions
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="table-responsive">
-                                            <table class="table-hover">
-                                                <tbody>
-                                                    <tr>
-                                                        <th>Référence</th>
-                                                        <td>{{itemSelected?.reference}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Produit</th>
-                                                        <td>{{itemSelected?.entity_product?.product?.label}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Délégué</th>
-                                                        <td>{{itemSelected?.entity?.name}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Solde</th>
-                                                        <td>{{itemSelected?.balance | number:'':'fr-FR'}} FCFA</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Statut</th>
-                                                        <td> 
-                                                            <span class="badge badge-outline-success" *ngIf="itemSelected?.status?.id == 1">{{ itemSelected?.status?.label }}</span>
-                                                            <span class="badge badge-outline-danger" *ngIf="itemSelected?.status?.id == 2">{{ itemSelected?.status?.label }}</span>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Date du premier du rechargement</th>
-                                                        <td>{{itemSelected?.created_at | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Date du dernier du rechargement</th>
-                                                        <td>{{itemSelected?.updated_at | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            <div class="flex justify-end items-center mt-8">
-                                                <button type="button" (click)="itemSelected = !itemSelected" class="btn btn-outline-danger">Fermer</button>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -496,7 +372,7 @@
                                                 <div class="mb-3" [formGroup]="formGroup2">
                                                     <label for="gridPassword">Produit <span style="color:red">*</span></label>
                                                     <ng-select id="entity_product_id" name="entity_product_id" formControlName="entity_product_id" [(ngModel)]="entity_product_id" placeholder="Produit" [ngClass]="{ 'is-invalid': submitted2 && f2['entity_product_id'].errors }">
-                                                        <ng-option *ngFor="let item of listEntityProduct" [value]="item.id">{{item.name}}</ng-option>
+                                                        <ng-option *ngFor="let item of listProduct" [value]="item.id">{{item.name}}</ng-option>
                                                     </ng-select>
                                                     <div *ngIf="submitted2 && f2['entity_product_id'].errors" class="mt-1">
                                                         <div *ngIf="submitted2 && f2['entity_product_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
@@ -544,7 +420,7 @@
                         </div>
                     </div>
                 </div>
-                <div *ngIf="operationHistoryItem">
+                <div *ngIf="itemSelected && itemDetail">
                     <div class="flex items-center justify-between flex-wrap gap-4 mt-5 mb-5">
                         <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
                             <div class="flex gap-3">
@@ -555,7 +431,7 @@
                         </div>
                     </div>
                     <div class="flex items-center justify-between flex-wrap gap-4 mt-5 mb-5">
-                        <h2 class="text-xl">Historique des operations du portefeuille {{itemSelected?.entity_product?.product?.label}} de {{itemSelected?.entity?.name}}</h2>
+                        <h2 class="text-xl">Historique des operations de {{itemSelected?.name}}</h2>
                         <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
                             <div class="flex gap-3">
                                 <div class="relative ">
@@ -570,52 +446,6 @@
                                         </div>
                                     </form>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <form class="space-y-5" style="padding-bottom: 10px; padding-left: 0%; padding-right: 0%;" *ngIf="listStatistics">
-                        <div class="grid grid-cols-1 grid-cols-3 gap-3">
-                            <div class="mb-3">
-                                <label>Mandats</label>
-                                <h3 class="form-input">{{listStatistics.cash_entry | number:'':'fr-FR'}} FCFA</h3>
-                            </div>
-                            <div class="mb-3">
-                                <label>Livraison</label>
-                                <h3 class="form-input">{{listStatistics.cashout | number:'':'fr-FR'}} FCFA</h3>
-                            </div>
-                            <div class="mb-3">
-                                <label>Solde</label>
-                                <h3 class="form-input">{{listStatistics.balance | number:'':'fr-FR'}} FCFA</h3>
-                            </div>
-                        </div>   
-                        <div class="grid grid-cols-1 grid-cols-3 gap-3">
-                            <div class="mb-3">
-                                <label>Commissions impayées</label>
-                                <h3 class="form-input">{{total_commission | number:'':'fr-FR'}} FCFA</h3>
-                            </div>
-                            <div class="mb-3">
-                                <label>Total de sacs livrés </label>
-                                <h3 class="form-input">{{listStatistics.nb_bags_accepted | number:'':'fr-FR'}}</h3>
-                            </div>
-                            <div class="mb-3">
-                                <label>Total de poids livrés</label>
-                                <h3 class="form-input">{{listStatistics.nb_weight_accepted | number:'':'fr-FR'}}</h3>
-                            </div>
-                        </div>                                        
-                    </form>
-                    <div class="flex items-center justify-between flex-wrap gap-4 pb-5">
-                        <h2></h2>
-                        <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
-                            <div class="flex gap-3">
-                                <div>
-                                    <button type="button" (click)="itemOperationMandate(itemSelected)" class="btn btn-primary">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                                        </svg>
-                                        Nouveau mandat
-                                    </button>
-                                </div>
                                 <div>
                                     <button type="button" (click)="itemOperationDelivery(itemSelected)" class="btn btn-primary">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
@@ -623,24 +453,6 @@
                                             <line x1="5" y1="12" x2="19" y2="12"></line>
                                         </svg>
                                         Nouvelle livraison
-                                    </button>
-                                </div>
-                                <!-- <div>
-                                    <button type="button" (click)="itemOperationRepayment(itemSelected)" class="btn btn-primary">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                                        </svg>
-                                        Remboursement
-                                    </button>
-                                </div> -->
-                                <div>
-                                    <button type="button" (click)="itemOperationCommission(itemSelected)" class="btn btn-primary">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                                        </svg>
-                                        Paiement de commissions
                                     </button>
                                 </div>
                             </div>
@@ -651,7 +463,6 @@
                             <thead>
                                 <tr>
                                     <th>N°</th>
-                                    <th>Action</th>
                                     <th>Date</th>
                                     <th>Référence</th>
                                     <th>Montant</th>
@@ -665,21 +476,6 @@
                             <tbody *ngIf="listOperation?.length >= 0">
                                 <tr *ngFor="let item of listOperation | filter:informationOperation; let i = index;">
                                     <td>{{i+1}}</td>
-                                    <td class="text-center">
-                                        <ul class="flex gap-2">
-                                            <li *ngIf="item?.status?.id == 3">
-                                                <a href="javascript:;" x-tooltip="Annuler l'opération" (click)="itemCancel(item)">
-                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 m-auto text-danger">
-                                                        <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
-                                                        <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                                    </svg>
-                                                </a>
-                                            </li>
-                                            <li *ngIf="item?.status?.id != 3">
-                                                ---
-                                            </li>
-                                        </ul>
-                                    </td>
                                     <td>{{item?.date | date: 'dd/MM/YYYY'}}</td>
                                     <td>{{item?.reference}}</td>
                                     <td>{{item?.total_price | number:'':'fr-FR'}} FCFA</td>
@@ -845,123 +641,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="pt-5" *ngIf="itemSelected && operationHistorySelected">
-                    <div class="row mb-5">
-                        <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
-                            <div class="flex items-start justify-center min-h-screen px-4">
-                                <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
-                                    <h5 class="font-bold text-lg p-5">Annulation du mandat de {{itemSelected?.name}}</h5>
-                                    <div class="p-5">
-                                        <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
-                                            <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
-                                        </div>
-                                        <div class="flex justify-center items-center mt-8">
-                                            Voulez-vous annuler le rechargement de {{operationHistorySelected?.amount| number:'':'fr-FR'}} FCFA  pour le portefeuille {{itemSelected?.product_concerned?.name}} du pisteur {{itemSelected?.name}} ?
-                                        </div>
-                                        <div class="flex justify-end items-center mt-8">
-                                            <button type="button" (click)="resetAll(); itemSelected = !itemSelected" class="btn btn-outline-danger">Non</button>
-                                            <button type="submit" (click)="cancel()" [disabled]="submit" *ngIf="!submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Oui</button>
-                                            <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="submit">
-                                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
-                                                    <line x1="12" y1="2" x2="12" y2="6"></line>
-                                                    <line x1="12" y1="18" x2="12" y2="22"></line>
-                                                    <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
-                                                    <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
-                                                    <line x1="2" y1="12" x2="6" y2="12"></line>
-                                                    <line x1="18" y1="12" x2="22" y2="12"></line>
-                                                    <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
-                                                    <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
-                                                </svg>
-                                                Patientez ...
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="pt-5" *ngIf="itemSelected && operationMandate">
-                    <div class="row mb-5">
-                        <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
-                            <div class="flex items-start justify-center min-h-screen px-4">
-                                <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
-                                    <h5 class="font-bold text-lg p-5">Ajout de mandat au portefeuille {{itemSelected?.entity_product?.product?.label}} de {{entity?.name}}</h5>
-                                    <div class="p-5">
-                                        <form class="space-y-5" style="padding-bottom: 100px;" (submit)="saveOperationMandate(2)">
-                                            <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
-                                                <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
-                                            </div>
-                                            <div class="grid grid-cols-1 grid-cols-2 gap-2">
-                                                <div class="mb-3" [formGroup]="formGroupOperationMandate">
-                                                    <label>Date <span style="color:red">*</span></label>
-                                                    <input type="date" class="form-input" formControlName="date" [ngClass]="{ 'is-invalid': submittedOperationMandate && fOperationMandate['date'].errors }"
-                                                        name="date" [(ngModel)]="date" />
-                                                    <div *ngIf="submittedOperationMandate && fOperationMandate['date'].errors" class="mt-1">
-                                                        <div *ngIf="submittedOperationMandate && fOperationMandate['date'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="gridPassword">Délégué <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="entity?.name" readonly disabled/>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="gridPassword">Produit <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="itemSelected?.entity_product?.product?.label" readonly disabled/>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="gridPassword">Campagne <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="itemSelected?.campaign?.label" readonly disabled/>
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroupOperationMandate">
-                                                    <label for="gridPassword">Méthode de paiement <span style="color:red">*</span></label>
-                                                    <ng-select id="payment_method_id" name="payment_method_id" formControlName="payment_method_id" [(ngModel)]="payment_method_id" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submittedOperationMandate && fOperationMandate['payment_method_id'].errors }">
-                                                        <ng-option *ngFor="let item of listPaymentMethod" [value]="item.id">{{item.label}}</ng-option>
-                                                    </ng-select>
-                                                    <div *ngIf="submittedOperationMandate && fOperationMandate['payment_method_id'].errors" class="mt-1">
-                                                        <div *ngIf="submittedOperationMandate && fOperationMandate['payment_method_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroupOperationMandate">
-                                                    <label>Montant <span style="color:red">*</span></label>
-                                                    <input type="number" class="form-input" formControlName="total_price" [ngClass]="{ 'is-invalid': submittedOperationMandate && fOperationMandate['total_price'].errors }"
-                                                        name="total_price" [(ngModel)]="total_price" min="0" />
-                                                    <div *ngIf="submittedOperationMandate && fOperationMandate['total_price'].errors" class="mt-1">
-                                                        <div *ngIf="submittedOperationMandate && fOperationMandate['total_price'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                
-                                            <div class="flex justify-end items-center mt-8">
-                                                <button type="button" (click)="resetAll(); itemDetail = !itemDetail; operationMandate = !operationMandate" class="btn btn-outline-danger">Annuler</button>
-                                                <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationMandate" *ngIf="!submitOperationMandate">Enregistrer</button>
-                                                <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationMandate" *ngIf="submitOperationMandate">
-                                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
-                                                        <line x1="12" y1="2" x2="12" y2="6"></line>
-                                                        <line x1="12" y1="18" x2="12" y2="22"></line>
-                                                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
-                                                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
-                                                        <line x1="2" y1="12" x2="6" y2="12"></line>
-                                                        <line x1="18" y1="12" x2="22" y2="12"></line>
-                                                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
-                                                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
-                                                    </svg>
-                                                    Patientez ...
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="pt-5" *ngIf="itemSelected && operationDelivery">
                     <div class="row mb-5">
                         <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
                             <div class="flex items-start justify-center min-h-screen px-4">
                                 <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
-                                    <h5 class="font-bold text-lg p-5">Livraison dans le portefeuille de {{entity?.name}}</h5>
+                                    <h5 class="font-bold text-lg p-5">Livraison dans le portefeuille de {{itemSelected?.name}}</h5>
                                     <div class="p-5">
                                         <form class="space-y-5" style="padding-bottom: 100px;" (submit)="saveOperationDelivery(4)">
                                             <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
@@ -978,15 +663,25 @@
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="gridPassword">Délégué <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="entity?.name" readonly disabled/>
+                                                    <input type="text" class="form-input" [value]="itemSelected?.name" readonly disabled/>
                                                 </div>
-                                                <div class="mb-3">
+                                                <div class="mb-3" [formGroup]="formGroupOperationDelivery">
                                                     <label for="gridPassword">Produit <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="itemSelected?.entity_product?.product?.label" readonly disabled/>
+                                                    <ng-select id="wallet_id" name="wallet_id" formControlName="wallet_id" (change)="onWalletChange($event)" [(ngModel)]="wallet_id" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submittedOperationDelivery && fOperationDelivery['wallet_id'].errors }">
+                                                        <ng-option *ngFor="let item of listEntityWallet" [value]="item">{{item.entity_product.product.label}}</ng-option>
+                                                    </ng-select>
+                                                    <div *ngIf="submittedOperationDelivery && fOperationDelivery['wallet_id'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationDelivery && fOperationDelivery['wallet_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
                                                 </div>
-                                                <div class="mb-3">
+                                                <div class="mb-3" [formGroup]="formGroupOperationDelivery">
                                                     <label for="gridPassword">Campagne <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="itemSelected?.campaign?.label" readonly disabled/>
+                                                    <ng-select id="campaign_id" name="campaign_id" formControlName="campaign_id" [(ngModel)]="campaign_id" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submittedOperationDelivery && fOperationDelivery['campaign_id'].errors }">
+                                                        <ng-option *ngFor="let item of listEntityCampaign" [value]="item.id">{{item.label}}</ng-option>
+                                                    </ng-select>
+                                                    <div *ngIf="submittedOperationDelivery && fOperationDelivery['campaign_id'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationDelivery && fOperationDelivery['campaign_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
                                                 </div>
                                                 <div class="mb-3" [formGroup]="formGroupOperationDelivery">
                                                     <label>Nombre de sacs <span style="color:red">*</span></label>
@@ -1070,256 +765,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="pt-5" *ngIf="itemSelected && operationRepayment">
-                    <div class="row mb-5">
-                        <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
-                            <div class="flex items-start justify-center min-h-screen px-4">
-                                <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
-                                    <h5 class="font-bold text-lg p-5">Remboursement au portefeuille de {{entity?.name}}</h5>
-                                    <div class="p-5">
-                                        <form class="space-y-5" style="padding-bottom: 100px;" (submit)="saveOperationRepayment(6)">
-                                            <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
-                                                <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
-                                            </div>
-                                            <div class="grid grid-cols-1 grid-cols-2 gap-2">
-                                                <div class="mb-3" [formGroup]="formGroupOperationRepayment">
-                                                    <label>Date <span style="color:red">*</span></label>
-                                                    <input type="date" class="form-input" formControlName="date" [ngClass]="{ 'is-invalid': submittedOperationRepayment && fOperationRepayment['date'].errors }"
-                                                        name="date" [(ngModel)]="date" />
-                                                    <div *ngIf="submittedOperationRepayment && fOperationRepayment['date'].errors" class="mt-1">
-                                                        <div *ngIf="submittedOperationRepayment && fOperationRepayment['date'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="gridPassword">Délégué <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="entity?.name" readonly disabled/>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="gridPassword">Produit <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="itemSelected?.entity_product?.product?.label" readonly disabled/>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="gridPassword">Campagne <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="itemSelected?.campaign?.label" readonly disabled/>
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroupOperationRepayment">
-                                                    <label for="gridPassword">Méthode de paiement <span style="color:red">*</span></label>
-                                                    <ng-select id="payment_method_id" name="payment_method_id" formControlName="payment_method_id" [(ngModel)]="payment_method_id" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submittedOperationRepayment && fOperationRepayment['payment_method_id'].errors }">
-                                                        <ng-option *ngFor="let item of listPaymentMethod" [value]="item.id">{{item.label}}</ng-option>
-                                                    </ng-select>
-                                                    <div *ngIf="submittedOperationRepayment && fOperationRepayment['payment_method_id'].errors" class="mt-1">
-                                                        <div *ngIf="submittedOperationRepayment && fOperationRepayment['payment_method_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroupOperationRepayment">
-                                                    <label>Montant <span style="color:red">*</span></label>
-                                                    <input type="number" class="form-input" formControlName="total_price" [ngClass]="{ 'is-invalid': submittedOperationRepayment && fOperationRepayment['total_price'].errors }"
-                                                        name="total_price" [(ngModel)]="total_price" min="0" />
-                                                    <div *ngIf="submittedOperationRepayment && fOperationRepayment['total_price'].errors" class="mt-1">
-                                                        <div *ngIf="submittedOperationRepayment && fOperationRepayment['total_price'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                
-                                            <div class="flex justify-end items-center mt-8">
-                                                <button type="button" (click)="resetAll(); itemDetail = !itemDetail; operationRepayment = !operationRepayment" class="btn btn-outline-danger">Annuler</button>
-                                                <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationRepayment" *ngIf="!submitOperationRepayment">Enregistrer</button>
-                                                <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationRepayment" *ngIf="submitOperationRepayment">
-                                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
-                                                        <line x1="12" y1="2" x2="12" y2="6"></line>
-                                                        <line x1="12" y1="18" x2="12" y2="22"></line>
-                                                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
-                                                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
-                                                        <line x1="2" y1="12" x2="6" y2="12"></line>
-                                                        <line x1="18" y1="12" x2="22" y2="12"></line>
-                                                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
-                                                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
-                                                    </svg>
-                                                    Patientez ...
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="pt-5" *ngIf="itemSelected && operationCommission">
-                    <div class="row mb-5">
-                        <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
-                            <div class="flex items-start justify-center min-h-screen px-4">
-                                <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
-                                    <h5 class="font-bold text-lg p-5">Paiement des commissions au portefeuille {{itemSelected?.entity_product?.product?.label}} de {{entity?.name}}</h5>
-                                    <div class="p-5">
-                                        <form class="space-y-5" style="padding-bottom: 100px;" (submit)="saveOperationCommission(7)">
-                                            <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
-                                                <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
-                                            </div>
-                                            <div class="grid grid-cols-1 grid-cols-2 gap-2">
-                                                <div class="mb-3" [formGroup]="formGroupOperationCommission">
-                                                    <label>Date <span style="color:red">*</span></label>
-                                                    <input type="date" class="form-input" formControlName="date" [ngClass]="{ 'is-invalid': submittedOperationCommission && fOperationCommission['date'].errors }"
-                                                        name="date" [(ngModel)]="date" />
-                                                    <div *ngIf="submittedOperationCommission && fOperationCommission['date'].errors" class="mt-1">
-                                                        <div *ngIf="submittedOperationCommission && fOperationCommission['date'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="gridPassword">Délégué <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="entity?.name" readonly disabled/>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="gridPassword">Produit <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="itemSelected?.entity_product?.product?.label" readonly disabled/>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="gridPassword">Campagne <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="itemSelected?.campaign?.label" readonly disabled/>
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroupOperationCommission">
-                                                    <label for="gridPassword">Méthode de paiement <span style="color:red">*</span></label>
-                                                    <ng-select id="payment_method_id" name="payment_method_id" formControlName="payment_method_id" [(ngModel)]="payment_method_id" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submittedOperationCommission && fOperationCommission['payment_method_id'].errors }">
-                                                        <ng-option *ngFor="let item of listPaymentMethod" [value]="item.id">{{item.label}}</ng-option>
-                                                    </ng-select>
-                                                    <div *ngIf="submittedOperationCommission && fOperationCommission['payment_method_id'].errors" class="mt-1">
-                                                        <div *ngIf="submittedOperationCommission && fOperationCommission['payment_method_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroupOperationCommission">
-                                                    <label>Montant <span style="color:red">*</span></label>
-                                                    <input type="number" class="form-input" formControlName="total_price" [ngClass]="{ 'is-invalid': submittedOperationCommission && fOperationCommission['total_price'].errors }"
-                                                        name="total_price" [(ngModel)]="total_price" min="0" />
-                                                    <div *ngIf="submittedOperationCommission && fOperationCommission['total_price'].errors" class="mt-1">
-                                                        <div *ngIf="submittedOperationCommission && fOperationCommission['total_price'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                
-                                            <div class="flex justify-end items-center mt-8">
-                                                <button type="button" (click)="resetAll(); itemDetail = !itemDetail; operationCommission = !operationCommission" class="btn btn-outline-danger">Annuler</button>
-                                                <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationCommission" *ngIf="!submitOperationCommission">Enregistrer</button>
-                                                <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationCommission" *ngIf="submitOperationCommission">
-                                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
-                                                        <line x1="12" y1="2" x2="12" y2="6"></line>
-                                                        <line x1="12" y1="18" x2="12" y2="22"></line>
-                                                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
-                                                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
-                                                        <line x1="2" y1="12" x2="6" y2="12"></line>
-                                                        <line x1="18" y1="12" x2="22" y2="12"></line>
-                                                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
-                                                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
-                                                    </svg>
-                                                    Patientez ...
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="pt-5" *ngIf="walletItem">
-                    <div class="row mb-5">
-                        <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
-                            <div class="flex items-start justify-center min-h-screen px-4">
-                                <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
-                                    <h5 class="font-bold text-lg p-5">Ajout de nouveau portefeuille pour {{entity?.name}}</h5>
-                                    <div class="p-5">
-                                        <form class="space-y-5" style="padding-bottom: 100px;" (submit)="saveWallet()">
-                                            <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
-                                                <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
-                                            </div>
-                                            <div class="grid grid-cols-1 grid-cols-1 gap-1">
-                                                <div class="mb-3" [formGroup]="formGroupWallet">
-                                                    <label for="gridPassword">Délégué <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="entity?.name" readonly disabled/>
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroupWallet">
-                                                    <label for="gridPassword">Produit <span style="color:red">*</span></label>
-                                                    <ng-select id="entity_product_id" name="entity_product_id" formControlName="entity_product_id" [(ngModel)]="entity_product_id" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submittedWallet && fWallet['entity_product_id'].errors }">
-                                                        <ng-option *ngFor="let item of listEntityProduct" [value]="item.id">{{item.product.label}}</ng-option>
-                                                    </ng-select>
-                                                    <div *ngIf="submittedWallet && fWallet['entity_product_id'].errors" class="mt-1">
-                                                        <div *ngIf="submittedWallet && fWallet['entity_product_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroupWallet">
-                                                    <label for="gridPassword">Campagne <span style="color:red">*</span></label>
-                                                    <ng-select id="campaign_id" name="campaign_id" formControlName="campaign_id" [(ngModel)]="campaign_id" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submittedWallet && fWallet['campaign_id'].errors }">
-                                                        <ng-option *ngFor="let item of listEntityCampaign" [value]="item.id">{{item.label}}</ng-option>
-                                                    </ng-select>
-                                                    <div *ngIf="submittedWallet && fWallet['campaign_id'].errors" class="mt-1">
-                                                        <div *ngIf="submittedWallet && fWallet['campaign_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                
-                                            <div class="flex justify-end items-center mt-8">
-                                                <button type="button" (click)="resetAll(); itemDetail = !itemDetail; walletItem = !walletItem" class="btn btn-outline-danger">Annuler</button>
-                                                <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitWallet" *ngIf="!submitWallet">Enregistrer</button>
-                                                <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitWallet" *ngIf="submitWallet">
-                                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
-                                                        <line x1="12" y1="2" x2="12" y2="6"></line>
-                                                        <line x1="12" y1="18" x2="12" y2="22"></line>
-                                                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
-                                                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
-                                                        <line x1="2" y1="12" x2="6" y2="12"></line>
-                                                        <line x1="18" y1="12" x2="22" y2="12"></line>
-                                                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
-                                                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
-                                                    </svg>
-                                                    Patientez ...
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div *ngIf="depositItem">
-                    <h6 class="font-bold text-lg flex justify-center items-center">Rechargement du portefeuille de {{walletSelected?.product_concerned?.name}}</h6>
-                    <form class="space-y-5" style="padding-bottom: 100px; padding-right: 25%; padding-left: 25%;" (submit)="saveDeposit()">
-                        <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
-                            <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
-                        </div>
-                        <div class="grid grid-cols-1 grid-cols-1 gap-1">
-                            <div class="mb-3" [formGroup]="formGroupDeposit">
-                                <label for="gridPassword">Produit <span style="color:red">*</span></label>
-                                <input type="text" class="form-input" [value]="walletSelected?.product_concerned?.name" readonly disabled/>
-                            </div>
-                            <div class="mb-3" [formGroup]="formGroupDeposit">
-                                <label>Montant <span style="color:red">*</span></label>
-                                <input type="number" class="form-input" formControlName="amount" [ngClass]="{ 'is-invalid': submittedDeposit && fDeposit['amount'].errors }"
-                                    name="amount" [(ngModel)]="amount" min="0" />
-                                <div *ngIf="submittedDeposit && fDeposit['amount'].errors" class="mt-1">
-                                    <div *ngIf="submittedDeposit && fDeposit['amount'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-end items-center mt-8">
-                            <button type="button" (click)="resetAll(); depositItem = !depositItem" class="btn btn-outline-danger">Annuler</button>
-                            <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitDeposit" *ngIf="!submitDeposit">Enregistrer</button>
-                            <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitDeposit" *ngIf="submitDeposit">
-                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
-                                    <line x1="12" y1="2" x2="12" y2="6"></line>
-                                    <line x1="12" y1="18" x2="12" y2="22"></line>
-                                    <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
-                                    <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
-                                    <line x1="2" y1="12" x2="6" y2="12"></line>
-                                    <line x1="18" y1="12" x2="22" y2="12"></line>
-                                    <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
-                                    <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
-                                </svg>
-                                Patientez ...
-                            </button>
-                        </div>
-                    </form>
                 </div>
                 <app-preloader></app-preloader>
             </div>    

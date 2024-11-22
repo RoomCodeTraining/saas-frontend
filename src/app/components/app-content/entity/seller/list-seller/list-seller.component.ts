@@ -293,7 +293,7 @@ export class ListSellerComponent implements OnInit {
   }
 
   getRoles(){
-    this.appService.getRole().subscribe((data: any) => {
+    this.appService.getProfil().subscribe((data: any) => {
       this.listRole = data.data;
     });
   }

@@ -33,7 +33,7 @@ export class ListUserComponent implements OnInit {
 
   listItem: any;
   listUserType: any;
-  listRole: any;
+  listProfil: any;
   listOrganization: any;
   listEntityFirm: any;
 
@@ -63,7 +63,7 @@ export class ListUserComponent implements OnInit {
 
   organization_type!: string;
   name: string = "";
-  profil_id!:number;
+  profile_id!:number;
   password: string = "";
   telephone: string = "";
   email: string = "";
@@ -120,6 +120,8 @@ export class ListUserComponent implements OnInit {
   permissions!: any;
   permitted: boolean = false;
 
+  show: boolean = false;
+
   constructor(
     public Jarwis: JarwisService,
     public appService: AppService,
@@ -144,24 +146,23 @@ export class ListUserComponent implements OnInit {
     this.SpinnerService.show();
     
     this.getUserLogged();
+    this.getProfil();
     this.getItems();
     this.makePassword(12);
 
     this.formGroupAdd = new FormGroup({
-      organization_type: new FormControl('', [Validators.required]),
-      code: new FormControl('', [Validators.required]),
-      name: new FormControl('', [Validators.required]),
-      address: new FormControl('', [Validators.required]),
+      profile_id: new FormControl('', [Validators.required]),
+      firstname: new FormControl('', [Validators.required]),
+      lastname: new FormControl('', [Validators.required]),
       telephone: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
-      logo: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required]),
     });
 
     this.formGroupEdit = new FormGroup({
-      organization_type: new FormControl('', [Validators.required]),
-      code: new FormControl('', [Validators.required]),
-      name: new FormControl('', [Validators.required]),
-      address: new FormControl('', [Validators.required]),
+      profile_id: new FormControl('', [Validators.required]),
+      firstname: new FormControl('', [Validators.required]),
+      lastname: new FormControl('', [Validators.required]),
       telephone: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
     });
@@ -225,6 +226,10 @@ export class ListUserComponent implements OnInit {
     this._location.back();
   }
 
+  showPassword() {
+    this.show = !this.show;
+  }
+
   resetAll() {
     this.formGroupAdd.reset();
     this.formGroupEdit.reset();
@@ -239,6 +244,14 @@ export class ListUserComponent implements OnInit {
     this.lastname = "";
     this.mobile = "";
     this.email = "";
+  }
+
+  getProfil(){
+    this.appService.getProfil().subscribe((data: any) => {
+      this.listProfil = data.data;
+
+      this.SpinnerService.hide();
+    });
   }
 
   onSelectLogo(event:any) {
@@ -521,71 +534,29 @@ export class ListUserComponent implements OnInit {
   save(){
     this.submitted = true;
     if(this.formGroupAdd.invalid){
-      //console.log("Please enter");
       return;
     } else {
-      if(this.telephone.slice(0, 2) != "27" && this.telephone.slice(0, 2) != "01" && this.telephone.slice(0, 2) != "05" && this.telephone.slice(0, 2) != "07"){
-        this.exist_error = true;
-        this.phone_error = "Le numéro de téléphone doit commencer par 27 ou 01 ou 05 ou 07.";
-      } else if(this.telephone.length != 10){
-        this.exist_error = true;
-        this.phone_error = "Le numéro de téléphone doit contenir que 10 chiffres.";
-      } else {
-        this.submit = true;
-        const formData:any = new FormData();
-        formData.append("organization_type_id",this.organization_type);
-        formData.append("code",this.code);
-        formData.append("name",this.name);
-        formData.append("address",this.address);
-        formData.append("contact",this.telephone);
-        formData.append("email",this.email);
-        if(this.logofiles){
-          formData.append("logo_path",this.logofiles,this.logofiles.name);
-        } else {
-          formData.append("logo_path",null);
-        }
+      this.submit = true;
+      let requestData = {
+        entity_id: this.user_logged.entity.id,
+        email: this.email,
+        telephone: this.telephone,
+        first_name: this.firstname,
+        last_name: this.lastname,
+        profile_id: this.profile_id,
+        password: this.password,
+      }
 
-        this.appService.addUser(formData).subscribe(res => {
-          this.message = res;
-          if(this.message.success == false){
-            this.submit = false;
-            this.error_message = this.message.message;
-            this.exist_error = false;
-            this.toast = {
-              message: this.message.message,
-              title: 'Erreur',
-              type: 'error',
-              ic: {
-                timeOut: 5000,
-                closeButton: true,
-                progressBar: true,
-              } as GlobalConfig,
-            };
-            this.SpinnerService.hide();
-          } else {
-            this.toast = {
-              message: this.message.message,
-              title: 'Succès',
-              type: 'success',
-              ic: {
-                timeOut: 2500,
-                closeButton: true,
-                progressBar: true,
-              } as GlobalConfig,
-            };
-            //this.registerMail();
-            this.submit = false;
-            this.addItem = !this.addItem
-            this.resetAll();
-            this.ngOnInit();
-          }
-          this.cs.showToast(this.toast);
-        },
-        (err: HttpErrorResponse) => {
-          this.exist_error = true;
-          this.error_message = err.error.errors;
+    console.log('this.formGroupAd',requestData);
+
+      this.appService.addUser(requestData).subscribe(res => {
+        this.message = res;
+        if(this.message.success == false){
+          this.submit = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
           this.toast = {
-            message: err.error.error,
+            message: this.message.message,
             title: 'Erreur',
             type: 'error',
             ic: {
@@ -594,30 +565,31 @@ export class ListUserComponent implements OnInit {
               progressBar: true,
             } as GlobalConfig,
           };
-          this.submit = false;
           this.SpinnerService.hide();
-          this.cs.showToast(this.toast);
-        })
-      }      
-    }
-  }
-
-  get f3() { return this.formGroupEdit.controls; }
-
-  sendWelcome(){
-    this.submit = true;
-
-    const formData:any = new FormData();
-    formData.append("email",this.itemSelected.email);
-
-    this.appService.sendWelcome(formData).subscribe(res => {
-      this.message = res;
-      if(this.message.success == false){
-        this.error_message = this.message.message;
-        this.submit = !this.submit;
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submit = false;
+          this.addItem = !this.addItem;
+          this.resetAll();
+          this.ngOnInit();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
         this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submit = false;
         this.toast = {
-          message: this.message.message,
+          message: err.error.error,
           title: 'Erreur',
           type: 'error',
           ic: {
@@ -626,43 +598,14 @@ export class ListUserComponent implements OnInit {
             progressBar: true,
           } as GlobalConfig,
         };
+        this.submit = false;
         this.SpinnerService.hide();
-      } else {
-        this.toast = {
-          message: this.message.message,
-          title: 'Succès',
-          type: 'success',
-          ic: {
-            timeOut: 2500,
-            closeButton: true,
-            progressBar: true,
-          } as GlobalConfig,
-        };
-        this.submit = !this.submit;
-        this.itemSelected = !this.itemSelected;
-        this.ngOnInit();
-      }
-      this.cs.showToast(this.toast);
-    },
-    (err: HttpErrorResponse) => {
-      this.exist_error = true;
-      this.error_message = err.error.errors;
-      this.submit = false;
-      this.toast = {
-        message: err.error.message,
-        title: 'Erreur',
-        type: 'error',
-        ic: {
-          timeOut: 5000,
-          closeButton: true,
-          progressBar: true,
-        } as GlobalConfig,
-      };
-      this.submit = false;
-      this.SpinnerService.hide();
-      this.cs.showToast(this.toast);
-    })
+        this.cs.showToast(this.toast);
+      })
+    }
   }
+
+  get f3() { return this.formGroupEdit.controls; }
 
   enable(){
     this.submit = true;
@@ -787,23 +730,12 @@ export class ListUserComponent implements OnInit {
 
   update(){
     this.submit = true;
-    const formData:any = new FormData();
-    formData.append("email",this.email);
-    formData.append("contact",this.mobile);
-    formData.append("first_name",this.firstname);
-    formData.append("last_name",this.lastname);
-    if(this.avatarfiles){
-      formData.append("avatar",this.avatarfiles,this.avatarfiles.name);
-    } else {
-      formData.append("avatar",null);
-    }
-
     let requestData = {
       email: this.email,
       contact: this.mobile,
       first_name: this.firstname,
       last_name: this.lastname,
-      role: this.role,
+      profile_id: this.profile_id,
     }
 
     this.appService.updateUser(requestData,this.itemSelected.id).subscribe(res => {
