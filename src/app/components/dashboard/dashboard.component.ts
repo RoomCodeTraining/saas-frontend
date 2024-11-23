@@ -267,8 +267,6 @@ export class DashboardComponent implements OnInit {
 
     registerLocaleData( fr,'fr-FR' );
 
-    this.date_from = new Date();
-
     /** spinner starts on init */
     this.SpinnerService.show();
 
