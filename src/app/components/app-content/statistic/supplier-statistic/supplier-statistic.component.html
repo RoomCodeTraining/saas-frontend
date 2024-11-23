@@ -31,7 +31,7 @@
                             </div>
                         </div>
                         <div class="mb-3" [formGroup]="formGroup">
-                            <label>Date de début {{date_from}} <span style="color:red">*</span></label>
+                            <label>Date de début <span style="color:red">*</span></label>
                             <input type="date" class="form-input" formControlName="date_from" [ngClass]="{ 'is-invalid': submitted && f['date_from'].errors }"
                                 name="date_from" [(ngModel)]="date_from" min="1" />
                             <div *ngIf="submitted && f['date_from'].errors" class="mt-1">
