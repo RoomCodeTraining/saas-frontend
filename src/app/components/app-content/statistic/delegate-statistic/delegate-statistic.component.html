@@ -12,7 +12,7 @@
     
                 <div class="pt-5" *ngIf="!itemSelected && !addItem">
                     <form class="space-y-5" style="padding-bottom: 10px; padding-left: 0%; padding-right: 0%;" (submit)="save()">
-                        <div class="grid grid-cols-1 grid-cols-3 gap-3">
+                        <div class="grid grid-cols-1 grid-cols-2 gap-2">
                             <div class="mb-3" [formGroup]="formGroup">
                                 <label for="gridPassword">Produit <span style="color:red">*</span></label>
                                 <ng-select id="entity_product_id" name="entity_product_id" formControlName="entity_product_id" [(ngModel)]="entity_product_id" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submitted && f['entity_product_id'].errors }">
@@ -31,23 +31,39 @@
                                     <div *ngIf="submitted && f['campaign_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                 </div>
                             </div>
-                            <div class="mt-6">
-                                <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="!submit">Filtrer</button>
-                                <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="submit">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
-                                        <line x1="12" y1="2" x2="12" y2="6"></line>
-                                        <line x1="12" y1="18" x2="12" y2="22"></line>
-                                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
-                                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
-                                        <line x1="2" y1="12" x2="6" y2="12"></line>
-                                        <line x1="18" y1="12" x2="22" y2="12"></line>
-                                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
-                                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
-                                    </svg>
-                                    Patientez ...
-                                </button>
-                            </div> 
+                            <div class="mb-3" [formGroup]="formGroup">
+                                <label>Date de début {{date_from}} <span style="color:red">*</span></label>
+                                <input type="date" class="form-input" formControlName="date_from" [ngClass]="{ 'is-invalid': submitted && f['date_from'].errors }"
+                                    name="date_from" [(ngModel)]="date_from" min="1" />
+                                <div *ngIf="submitted && f['date_from'].errors" class="mt-1">
+                                    <div *ngIf="submitted && f['date_from'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                </div>
+                            </div>
+                            <div class="mb-3" [formGroup]="formGroup">
+                                <label>Date de fin <span style="color:red">*</span></label>
+                                <input type="date" class="form-input" formControlName="date_to" [ngClass]="{ 'is-invalid': submitted && f['date_to'].errors }"
+                                    name="date_to" [(ngModel)]="date_to" min="1" />
+                                <div *ngIf="submitted && f['date_to'].errors" class="mt-1">
+                                    <div *ngIf="submitted && f['date_to'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                </div>
+                            </div>
                         </div> 
+                        <div class="flex justify-end items-center mt-8">
+                            <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="!submit">Filtrer</button>
+                            <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="submit">
+                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
+                                    <line x1="12" y1="2" x2="12" y2="6"></line>
+                                    <line x1="12" y1="18" x2="12" y2="22"></line>
+                                    <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                                    <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                                    <line x1="2" y1="12" x2="6" y2="12"></line>
+                                    <line x1="18" y1="12" x2="22" y2="12"></line>
+                                    <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                                    <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                                </svg>
+                                Patientez ...
+                            </button>
+                        </div>                                       
                     </form>
                     <div class="flex items-center justify-between flex-wrap gap-4">
                         <h2 class="text-xl">Suivi des délégués</h2>

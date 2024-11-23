@@ -244,8 +244,8 @@ export class DashboardComponent implements OnInit {
 
   item: any;
 
-  date_from: any;
-  date_to: any;
+  date_from!: Date;
+  date_to!: Date;
   entity_product_id!: number;
   campaign_id!: number;
 
@@ -266,6 +266,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
 
     registerLocaleData( fr,'fr-FR' );
+
+    this.date_from = new Date();
 
     /** spinner starts on init */
     this.SpinnerService.show();
@@ -339,12 +341,6 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  getEntityStatistics(){
-    this.appService.getEntityStatistics(2,1).subscribe((data: any) => {
-      this.item = data.data;
-    });
-  }
-
   getEntityProduct(){
     this.appService.getAllEntityProduct(this.user_logged.entity.id).subscribe((data: any) => {
       this.listEntityProduct = data.data;
@@ -374,7 +370,7 @@ export class DashboardComponent implements OnInit {
     } else {
       this.submit = true;
 
-      this.appService.getEntityStatistics(this.entity_product_id,this.campaign_id).subscribe((data: any) => {
+      this.appService.getEntityStatistics(this.entity_product_id,this.campaign_id,this.date_from,this.date_to).subscribe((data: any) => {
         this.message = data;
         if(this.message.success == false){
           this.submit = false;

@@ -634,24 +634,24 @@ export class AppService {
     return this.http.delete<any>(`${this.baseUrl}/entities/`+ user_id +`/disable`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getEntityStatistics(entity_product_id:number,campaign_id:number): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/entities/statistics/`+entity_product_id+`/`+campaign_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getEntityStatistics(entity_product_id:number,campaign_id:number,from:Date,to:Date): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/entities/statistics/`+entity_product_id+`/`+campaign_id+`/`+from+`/`+to,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getEntitiesStatistics(entity_type_id:number,entity_product_id:number,campaign_id:number): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/entities/entities-statistics/`+ entity_type_id+`/`+entity_product_id+`/`+campaign_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getEntitiesStatistics(entity_type_id:number,entity_product_id:number,campaign_id:number,from:Date,to:Date): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/entities/entities-statistics/`+ entity_type_id+`/`+entity_product_id+`/`+campaign_id+`/`+from+`/`+to,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getSupplierStatistics(entity_id:number,entity_product_id:number,campaign_id:number): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/entities/supplier-statistics/`+ entity_id+`/`+entity_product_id+`/`+campaign_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getSupplierStatistics(entity_id:number,entity_product_id:number,campaign_id:number,from:Date,to:Date): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/entities/supplier-statistics/`+ entity_id+`/`+entity_product_id+`/`+campaign_id+`/`+from+`/`+to,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getSpecialSupplierStatistics(entity_id:number,entity_product_id:number,campaign_id:number): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/entities/special-supplier-statistics/`+ entity_id+`/`+entity_product_id+`/`+campaign_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getSpecialSupplierStatistics(entity_id:number,entity_product_id:number,campaign_id:number,from:Date,to:Date): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/entities/special-supplier-statistics/`+ entity_id+`/`+entity_product_id+`/`+campaign_id+`/`+from+`/`+to,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getDelegateStatistics(entity_id:number,entity_product_id:number,campaign_id:number): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/entities/delegate-statistics/`+ entity_id+`/`+entity_product_id+`/`+campaign_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getDelegateStatistics(entity_id:number,entity_product_id:number,campaign_id:number,from:Date,to:Date): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/entities/delegate-statistics/`+ entity_id+`/`+entity_product_id+`/`+campaign_id+`/`+from+`/`+to,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
   getDelegateCommissions(entity_id:number,entity_product_id:number,campaign_id:number): Observable<any> {

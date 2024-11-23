@@ -235,6 +235,8 @@ export class DetailSpecialSupplierComponent implements OnInit {
   date!: Date;
 
   listStatistics: any;
+  date_from: any;
+  date_to: any;
 
   constructor(
     public Jarwis: JarwisService,
@@ -357,6 +359,13 @@ export class DetailSpecialSupplierComponent implements OnInit {
 
     this.formGroupDeposit = new FormGroup({
       amount: new FormControl('', [Validators.required]),
+    });
+
+    this.formGroup = new FormGroup({
+      date_from: new FormControl('', [Validators.required]),
+      date_to: new FormControl('', [Validators.required]),
+      entity_product_id: new FormControl('', [Validators.required]),
+      campaign_id: new FormControl('', [Validators.required]),
     });
 
   }
@@ -537,7 +546,7 @@ export class DetailSpecialSupplierComponent implements OnInit {
   }
 
   getEntityStatistics(){
-    this.appService.getSpecialSupplierStatistics(this.entity.id,this.itemSelected.entity_product.id,this.itemSelected.campaign.id).subscribe((data: any) => {
+    this.appService.getSpecialSupplierStatistics(this.entity.id,this.itemSelected.entity_product.id,this.itemSelected.campaign.id,this.date_from,this.date_to).subscribe((data: any) => {
       this.listStatistics = data.data;
     });
   }

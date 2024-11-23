@@ -129,6 +129,8 @@ export class SpecialSupplierStatisticComponent implements OnInit {
   entity_type_id: number = 5;
 
   listStatistics: any;
+  date_from: any;
+  date_to: any;
 
   constructor(
     public Jarwis: JarwisService,
@@ -158,6 +160,8 @@ export class SpecialSupplierStatisticComponent implements OnInit {
     this.getUserLogged();
     
     this.formGroup = new FormGroup({
+      date_from: new FormControl('', [Validators.required]),
+      date_to: new FormControl('', [Validators.required]),
       entity_product_id: new FormControl('', [Validators.required]),
       campaign_id: new FormControl('', [Validators.required]),
     });
@@ -267,7 +271,7 @@ export class SpecialSupplierStatisticComponent implements OnInit {
 
   getEntityStatistics(item:any){
     this.SpinnerService.show();
-    this.appService.getSpecialSupplierStatistics(item.entity_id,this.entity_product_id,this.campaign_id).subscribe((data: any) => {
+    this.appService.getSpecialSupplierStatistics(item.entity_id,this.entity_product_id,this.campaign_id,this.date_from,this.date_to).subscribe((data: any) => {
       this.listStatistics = data.data;
       this.itemSelected = item;
       this.itemDetail = true;
@@ -290,7 +294,7 @@ export class SpecialSupplierStatisticComponent implements OnInit {
   }
 
   getItems(){
-    this.appService.getEntitiesStatistics(this.entity_type_id,this.entity_product_id,this.campaign_id).subscribe((data: any) => {
+    this.appService.getEntitiesStatistics(this.entity_type_id,this.entity_product_id,this.campaign_id,this.date_from,this.date_to).subscribe((data: any) => {
       this.listItem = data.data;
 
       this.getPaginate(data);
@@ -487,7 +491,7 @@ export class SpecialSupplierStatisticComponent implements OnInit {
     } else {
       this.submit = true;
 
-      this.appService.getEntitiesStatistics(this.entity_type_id,this.entity_product_id,this.campaign_id).subscribe((data: any) => {
+      this.appService.getEntitiesStatistics(this.entity_type_id,this.entity_product_id,this.campaign_id,this.date_from,this.date_to).subscribe((data: any) => {
         this.message = data;
         if(this.message.success == false){
           this.submit = false;
