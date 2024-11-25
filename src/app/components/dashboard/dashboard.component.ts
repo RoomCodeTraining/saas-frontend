@@ -6,7 +6,6 @@ import { GlobalConfig } from 'ngx-toastr';
 import { CommonService, toastPayload } from 'src/app/services/common.service';
 import { NgxSpinnerService } from "ngx-spinner"; 
 import {Location} from '@angular/common';
-import { environment } from '../../../environments/environment';
 import { registerLocaleData } from '@angular/common';
 import fr from '@angular/common/locales/fr';
 import { TokenService } from 'src/app/services/token.service';
@@ -14,6 +13,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { AccessService } from 'src/app/services/access.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import jwt_decode from "jwt-decode";
+import { DatePipe } from '@angular/common';
+import { environment } from 'src/environments/environment';
 
 import {
 	ChartComponent,
@@ -244,8 +245,8 @@ export class DashboardComponent implements OnInit {
 
   item: any;
 
-  date_from!: Date;
-  date_to!: Date;
+  date_from: any = environment.statistic_default_date_from;
+  date_to!: any;
   entity_product_id!: number;
   campaign_id!: number;
 
@@ -260,10 +261,13 @@ export class DashboardComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private cs: CommonService,
     private _location: Location,
+    private datePipe: DatePipe,
     private SpinnerService: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
+
+    this.date_to = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
 
     registerLocaleData( fr,'fr-FR' );
 

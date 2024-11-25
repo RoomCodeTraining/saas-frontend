@@ -33,7 +33,8 @@ export class ListUserComponent implements OnInit {
 
   listItem: any;
   listUserType: any;
-  listProfil: any;
+  listEntity: any;
+  listProfile: any;
   listOrganization: any;
   listEntityFirm: any;
 
@@ -62,6 +63,7 @@ export class ListUserComponent implements OnInit {
   submitted3 = false;
 
   organization_type!: string;
+  entity_id!: number;
   name: string = "";
   profile_id!:number;
   password: string = "";
@@ -146,7 +148,8 @@ export class ListUserComponent implements OnInit {
     this.SpinnerService.show();
     
     this.getUserLogged();
-    this.getProfil();
+    this.getEntity();
+    this.getProfile();
     this.getItems();
     this.makePassword(12);
 
@@ -198,12 +201,15 @@ export class ListUserComponent implements OnInit {
   getUserLogged(){
     this.appService.getUserProfile().subscribe((data: any) => {
       this.user_logged = data.data;
-      this.permissions = this.user_logged.permissions;
-      if(this.permissions.includes("user.view")){
-        this.permitted = true;
-      } else {
-        this.notPermission();
+      if(this.user_logged == 2){
+        this.entity_id = this.user_logged.entity.id;
       }
+      // this.permissions = this.user_logged.permissions;
+      // if(this.permissions.includes("user.view")){
+      //   this.permitted = true;
+      // } else {
+      //   this.notPermission();
+      // }
     },
     (err: HttpErrorResponse) => {
         //console.log("API indisponible");
@@ -246,9 +252,17 @@ export class ListUserComponent implements OnInit {
     this.email = "";
   }
 
-  getProfil(){
-    this.appService.getProfil().subscribe((data: any) => {
-      this.listProfil = data.data;
+  getEntity(){
+    this.appService.getAllEntity().subscribe((data: any) => {
+      this.listEntity = data.data;
+
+      this.SpinnerService.hide();
+    });
+  }
+
+  getProfile(){
+    this.appService.getProfile().subscribe((data: any) => {
+      this.listProfile = data.data;
 
       this.SpinnerService.hide();
     });
@@ -538,7 +552,7 @@ export class ListUserComponent implements OnInit {
     } else {
       this.submit = true;
       let requestData = {
-        entity_id: this.user_logged.entity.id,
+        entity_id: this.entity_id,
         email: this.email,
         telephone: this.telephone,
         first_name: this.firstname,

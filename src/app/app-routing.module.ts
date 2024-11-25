@@ -44,6 +44,7 @@ import { SpecialSupplierStatisticComponent } from './components/app-content/stat
 import { ListSpecialSupplierComponent } from './components/app-content/entity/list-special-supplier/list-special-supplier.component';
 import { DetailSpecialSupplierComponent } from './components/app-content/entity/detail-special-supplier/detail-special-supplier.component';
 import { ListDelegateForDeliveryComponent } from './components/app-content/entity/delegate/list-delegate-for-delivery/list-delegate-for-delivery.component';
+import { ListCooperativeComponent } from './components/app-content/entity/cooperative/list-cooperative/list-cooperative.component';
 
 const routes: Routes = [
   {
@@ -259,6 +260,12 @@ const routes: Routes = [
   {
     path:'delegate-for-delivery-list',
     component: ListDelegateForDeliveryComponent,
+    canActivate: [AfterLoginService]
+  },
+
+  {
+    path:'cooperative-list',
+    component: ListCooperativeComponent,
     canActivate: [AfterLoginService]
   },
 

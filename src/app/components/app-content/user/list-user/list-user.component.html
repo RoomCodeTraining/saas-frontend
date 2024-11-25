@@ -46,7 +46,7 @@
                         <div class="grid grid-cols-1 grid-cols-3 gap-3">
                             <div>
                                 <ng-select id="role" name="role" [(ngModel)]="role" (change)="onChange($event)" placeholder="Profil">
-                                    <ng-option *ngFor="let item of listProfil" [value]="item?.name">{{item.label}}</ng-option>
+                                    <ng-option *ngFor="let item of listProfile" [value]="item?.name">{{item.label}}</ng-option>
                                 </ng-select>
                             </div>
                         </div>                                        
@@ -223,10 +223,16 @@
                                                 <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
                                             </div>
                                             <div class="grid grid-cols-1 grid-cols-2 gap-2">
+                                                <div class="mb-3" *ngIf="user_logged?.profile?.id == 1">
+                                                    <label for="gridPassword">Coopérative <span style="color:red">*</span></label>
+                                                    <ng-select id="entity_id" name="entity_id" [(ngModel)]="entity_id">
+                                                        <ng-option *ngFor="let item of listEntity" [value]="item.id">{{item.name}}</ng-option>
+                                                    </ng-select>
+                                                </div>
                                                 <div class="mb-3" [formGroup]="formGroupAdd">
                                                     <label for="gridPassword">Rôle <span style="color:red">*</span></label>
                                                     <ng-select id="profile_id" name="profile_id" [(ngModel)]="profile_id" (change)="onChange($event)" formControlName="profile_id" [ngClass]="{ 'is-invalid': submitted && f['profile_id'].errors }" placeholder="Profil">
-                                                        <ng-option *ngFor="let item of listProfil" [value]="item.id">{{item.label}}</ng-option>
+                                                        <ng-option *ngFor="let item of listProfile" [value]="item.id">{{item.label}}</ng-option>
                                                     </ng-select>
                                                     <div *ngIf="submitted && f['profile_id'].errors" class="mt-1">
                                                         <div *ngIf="submitted && f['profile_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>

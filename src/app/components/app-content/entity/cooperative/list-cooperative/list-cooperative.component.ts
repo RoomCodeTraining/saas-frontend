@@ -23,11 +23,11 @@ import { EntityFirm } from 'src/app/models/entity-firm.model';
 import { AppService } from 'src/app/services/app-content/app.service';
 
 @Component({
-  selector: 'app-list-special-supplier',
-  templateUrl: './list-special-supplier.component.html',
-  styleUrls: ['./list-special-supplier.component.css']
+  selector: 'app-list-cooperative',
+  templateUrl: './list-cooperative.component.html',
+  styleUrls: ['./list-cooperative.component.css']
 })
-export class ListSpecialSupplierComponent implements OnInit {
+export class ListCooperativeComponent implements OnInit {
 
   listItem: any;
   listEntityType: any;
@@ -63,8 +63,8 @@ export class ListSpecialSupplierComponent implements OnInit {
   submitted2 = false;
   submitted3 = false;
 
-  entity_type_id: number = 5;
-  type: string = "5";
+  entity_type_id: number = 2;
+  type: string = "2";
   name: string = "";
   profil_id!:number;
   password: string = "";
@@ -302,8 +302,8 @@ export class ListSpecialSupplierComponent implements OnInit {
 
   goToDetail(data: any){
     // @ts-ignore
-    localStorage.setItem("SPECIAL_SUPPLIER_DATA", JSON.stringify(data));
-    this.router.navigateByUrl("/special-supplier-detail");
+    localStorage.setItem("DELEGATE_DATA", JSON.stringify(data));
+    this.router.navigateByUrl("/cooperative-detail");
   }
 
   resetAll() {
@@ -411,7 +411,7 @@ export class ListSpecialSupplierComponent implements OnInit {
   }
 
   getItems(){
-    this.appService.getSpecialSupplier(this.current_page,this.type).subscribe((data: any) => {
+    this.appService.getCooperative(this.current_page,this.type).subscribe((data: any) => {
       this.listItem = data.data;
 
       this.getPaginate(data);
@@ -423,7 +423,7 @@ export class ListSpecialSupplierComponent implements OnInit {
 
   search(){
     this.SpinnerService.show();
-    this.appService.getSpecialSupplierSearch(this.current_page,this.type,this.information).subscribe((data: any) => {
+    this.appService.getCooperativeSearch(this.current_page,this.type,this.information).subscribe((data: any) => {
       this.listItem = data.data;
       
       this.getPaginate(data);
@@ -438,7 +438,7 @@ export class ListSpecialSupplierComponent implements OnInit {
       this.search()
     } else {
       this.SpinnerService.show();
-      this.appService.getSpecialSupplierPaginate(this.current_page,this.type).subscribe((data: any) => {
+      this.appService.getCooperativePaginate(this.current_page,this.type).subscribe((data: any) => {
         this.listItem = data.data;
         
         this.getPaginate(data);

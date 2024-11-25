@@ -15,6 +15,7 @@ import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from "ng-recaptcha";
 import { CookieModule } from 'ngx-cookie';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { DatePipe } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -75,6 +76,7 @@ import { SpecialSupplierStatisticComponent } from './components/app-content/stat
 import { ListSpecialSupplierComponent } from './components/app-content/entity/list-special-supplier/list-special-supplier.component';
 import { DetailSpecialSupplierComponent } from './components/app-content/entity/detail-special-supplier/detail-special-supplier.component';
 import { ListDelegateForDeliveryComponent } from './components/app-content/entity/delegate/list-delegate-for-delivery/list-delegate-for-delivery.component';
+import { ListCooperativeComponent } from './components/app-content/entity/cooperative/list-cooperative/list-cooperative.component';
 
 function resourceProviderFactory(JarwisService: JarwisService) {
   return () => {
@@ -145,6 +147,7 @@ function resourceProviderFactory(JarwisService: JarwisService) {
     ListSpecialSupplierComponent,
     DetailSpecialSupplierComponent,
     ListDelegateForDeliveryComponent,
+    ListCooperativeComponent,
   ],
   imports: [
     BrowserModule,
@@ -175,6 +178,7 @@ function resourceProviderFactory(JarwisService: JarwisService) {
     AuthService,
     AfterLoginService,
     BeforeLoginService,
+    DatePipe,
     {provide: ToastrService, useClass: ToastrService},
     CookieService,
     {

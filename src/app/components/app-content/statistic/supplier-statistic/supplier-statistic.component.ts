@@ -23,6 +23,7 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification.model';
 import { EmailVariable } from 'src/app/models/email-variable.model';
 import { AppService } from 'src/app/services/app-content/app.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-supplier-statistic',
@@ -129,7 +130,7 @@ export class SupplierStatisticComponent implements OnInit {
   entity_type_id: number = 3;
 
   listStatistics: any;
-  date_from: any;
+  date_from: any = environment.statistic_default_date_from;
   date_to: any;
 
   constructor(
@@ -143,13 +144,14 @@ export class SupplierStatisticComponent implements OnInit {
     private Token: TokenService,
     private _formBuilder: FormBuilder,
     private cs: CommonService,
+    private datePipe: DatePipe,
     private _location: Location,
     private SpinnerService: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
 
-    this.current_page = 1;
+    this.date_to = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
 
     registerLocaleData( fr,'fr-FR' );
     //this.submit = false;

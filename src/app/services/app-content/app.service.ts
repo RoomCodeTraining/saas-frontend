@@ -35,8 +35,8 @@ export class AppService {
     return this.http.get<any[]>(`${this.baseUrl}/types`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getAllEntity(page:number): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/entities?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getAllEntity(): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
   getEntity(page:number): Observable<any> {
@@ -223,7 +223,7 @@ export class AppService {
     return this.http.delete<any>(`${this.baseUrl}/products/`+ user_id +`/disable`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getProfil(): Observable<any> {
+  getProfile(): Observable<any> {
     return this.http.get<any[]>(`${this.baseUrl}/profils`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
@@ -523,7 +523,6 @@ export class AppService {
 
 
 
-
   getAllSupplier(type:string): Observable<any> {
     return this.http.get<any[]>(`${this.baseUrl}/entities?type=`+type,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
@@ -631,6 +630,43 @@ export class AppService {
   }
 
   disableDelegate(user_id:string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/entities/`+ user_id +`/disable`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+
+  getAllCooperative(type:string): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities?type=`+type,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getCooperative(page:number,type:string): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities?page=${page}&type=`+type,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getCooperativePaginate(page:number,type:string): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities?page=${page}&type=`+type,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getCooperativeSearch(page:number,type:string,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities?page=${page}` +`&type=`+type+`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getCooperativePaginateSearch(page:number,type:string,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/entities?page=${page}` +`&type=`+type+`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  addCooperative(data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/entities`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  updateCooperative(data:any,user_id:string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/entities/`+ user_id, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  enableCooperative(user_id:string,data:any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/entities/`+ user_id +`/enable`, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  disableCooperative(user_id:string): Observable<any> {
     return this.http.delete<any>(`${this.baseUrl}/entities/`+ user_id +`/disable`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 

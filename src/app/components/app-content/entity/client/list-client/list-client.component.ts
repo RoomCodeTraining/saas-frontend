@@ -293,7 +293,7 @@ export class ListClientComponent implements OnInit {
   }
 
   getRoles(){
-    this.appService.getProfil().subscribe((data: any) => {
+    this.appService.getProfile().subscribe((data: any) => {
       this.listRole = data.data;
     });
   }
