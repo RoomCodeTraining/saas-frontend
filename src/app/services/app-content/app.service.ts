@@ -243,20 +243,20 @@ export class AppService {
     return this.http.get<any[]>(`${this.baseUrl}/users?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getUser(page:number,role:string): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/users?page=${page}&role=`+ role,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getUser(page:number,profile:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/users?page=${page}&profile_id=`+ profile,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getUserPaginate(page:number,role:string): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/users?page=${page}&role=`+ role,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getUserPaginate(page:number,profile:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/users?page=${page}&profile_id=`+ profile,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getUserSearch(page:number,role:string,information:any): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/users?page=${page}&role=`+ role +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getUserSearch(page:number,profile:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/users?page=${page}&profile_id=`+ profile +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getUserPaginateSearch(page:number,role:string,information:any): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/users?page=${page}&role=`+ role +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getUserPaginateSearch(page:number,profile:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/users?page=${page}&profile_id=`+ profile +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
   addUser(data:any): Observable<any> {

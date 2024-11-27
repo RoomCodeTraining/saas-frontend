@@ -77,11 +77,10 @@ export class ListUserComponent implements OnInit {
   entity_type_id!: number;
   entityfirm_id!: any;
   username: string = "";
-  role: string = "";
+  profile!: number;
   firstname: string = "";
   lastname: string = "";
   code: string = "";
-  mobile: string = "";
   avatar: any;
 
   user_logged!: any;
@@ -175,7 +174,7 @@ export class ListUserComponent implements OnInit {
       //entityfirm_id: new FormControl('', [Validators.required]),
       firstname: new FormControl('', [Validators.required]),
       lastname: new FormControl('', [Validators.required]),
-      mobile: new FormControl('', [Validators.required]),
+      telephone: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
     });
 
@@ -248,7 +247,7 @@ export class ListUserComponent implements OnInit {
 
     this.firstname = "";
     this.lastname = "";
-    this.mobile = "";
+    this.telephone = "";
     this.email = "";
   }
 
@@ -312,8 +311,8 @@ export class ListUserComponent implements OnInit {
   }
 
   getItems(){
-    if(this.role){
-      this.appService.getUser(this.current_page,this.role).subscribe((data: any) => {
+    if(this.profile){
+      this.appService.getUser(this.current_page,this.profile).subscribe((data: any) => {
         this.listItem = data.data;
   
         this.getPaginate(data);
@@ -335,9 +334,9 @@ export class ListUserComponent implements OnInit {
   }
 
   search(){
-    if(this.role){
+    if(this.profile){
       this.SpinnerService.show();
-      this.appService.getUserSearch(this.current_page,this.role,this.information).subscribe((data: any) => {
+      this.appService.getUserSearch(this.current_page,this.profile,this.information).subscribe((data: any) => {
         this.listItem = data.data;
         
         this.getPaginate(data);
@@ -362,9 +361,9 @@ export class ListUserComponent implements OnInit {
     if(this.information){
       this.search()
     } else {
-      if(this.role){
+      if(this.profile){
         this.SpinnerService.show();
-        this.appService.getUserPaginate(this.current_page,this.role).subscribe((data: any) => {
+        this.appService.getUserPaginate(this.current_page,this.profile).subscribe((data: any) => {
           this.listItem = data.data;
           
           this.getPaginate(data);
@@ -444,7 +443,7 @@ export class ListUserComponent implements OnInit {
     this.disableItem = false;
     this.itemSelected = item;
     this.email = this.itemSelected.email;
-    this.mobile = this.itemSelected.contact;
+    this.telephone = this.itemSelected.telephone;
     this.firstname = this.itemSelected.first_name;
     this.lastname = this.itemSelected.last_name;
     this.password = this.itemSelected.password;
@@ -462,7 +461,7 @@ export class ListUserComponent implements OnInit {
     this.disableItem = false;
     this.itemSelected = item;
     this.email = this.itemSelected.email;
-    this.mobile = this.itemSelected.contact;
+    this.telephone = this.itemSelected.telephone;
     this.firstname = this.itemSelected.firstname;
     this.lastname = this.itemSelected.lastname;
     this.password = this.itemSelected.password;
@@ -480,7 +479,7 @@ export class ListUserComponent implements OnInit {
     this.disableItem = false;
     this.itemSelected = item;
     this.email = this.itemSelected.email;
-    this.mobile = this.itemSelected.contact;
+    this.telephone = this.itemSelected.telephone;
     this.firstname = this.itemSelected.firstname;
     this.lastname = this.itemSelected.lastname;
     this.password = this.itemSelected.password;
@@ -497,11 +496,11 @@ export class ListUserComponent implements OnInit {
     this.enableItem = false;
     this.disableItem = true;
     this.itemSelected = item;
-    this.email = this.itemSelected.id.email;
-    this.mobile = this.itemSelected.id.contact;
-    this.firstname = this.itemSelected.id.firstname;
-    this.lastname = this.itemSelected.id.lastname;
-    this.password = this.itemSelected.id.password;
+    this.email = this.itemSelected.email;
+    this.telephone = this.itemSelected.telephone;
+    this.firstname = this.itemSelected.firstname;
+    this.lastname = this.itemSelected.lastname;
+    this.password = this.itemSelected.password;
     this.userprofile_id = this.itemSelected.userprofile_id.id;
     this.entityfirm_id = this.itemSelected.entityfirm_id.id;
     this.avatar = this.itemSelected.avatar;
@@ -515,11 +514,11 @@ export class ListUserComponent implements OnInit {
     this.enableItem = false;
     this.disableItem = false;
     this.itemSelected = item;
-    this.email = this.itemSelected.id.email;
-    this.mobile = this.itemSelected.id.contact;
-    this.firstname = this.itemSelected.id.firstname;
-    this.lastname = this.itemSelected.id.lastname;
-    //this.password = this.itemSelected.id.password;
+    this.email = this.itemSelected.email;
+    this.telephone = this.itemSelected.telephone;
+    this.firstname = this.itemSelected.firstname;
+    this.lastname = this.itemSelected.lastname;
+    //this.password = this.itemSelected.password;
     this.userprofile_id = this.itemSelected.userprofile_id.id;
     this.entityfirm_id = this.itemSelected.entityfirm_id.id;
     this.avatar = this.itemSelected.avatar;
@@ -746,7 +745,7 @@ export class ListUserComponent implements OnInit {
     this.submit = true;
     let requestData = {
       email: this.email,
-      contact: this.mobile,
+      telephone: this.telephone,
       first_name: this.firstname,
       last_name: this.lastname,
       profile_id: this.profile_id,

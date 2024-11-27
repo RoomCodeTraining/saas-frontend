@@ -45,8 +45,8 @@
                     <form class="space-y-5" style="padding-bottom: 10px; padding-left: 0%; padding-right: 0%;">
                         <div class="grid grid-cols-1 grid-cols-3 gap-3">
                             <div>
-                                <ng-select id="role" name="role" [(ngModel)]="role" (change)="onChange($event)" placeholder="Profil">
-                                    <ng-option *ngFor="let item of listProfile" [value]="item?.name">{{item.label}}</ng-option>
+                                <ng-select id="profile" name="profile" [(ngModel)]="profile" (change)="onChange($event)" placeholder="Filter par rôle">
+                                    <ng-option *ngFor="let item of listProfile" [value]="item?.id">{{item.label}}</ng-option>
                                 </ng-select>
                             </div>
                         </div>                                        
@@ -95,7 +95,7 @@
                                                     </svg>
                                                 </a>
                                             </li>
-                                            <li *ngIf="item?.is_disabled">
+                                            <li *ngIf="item?.status?.id == 2">
                                                 <a href="javascript:;" x-tooltip="Activer" (click)="itemAble(item)">
                                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-success">
                                                         <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
@@ -103,7 +103,7 @@
                                                     </svg>
                                                 </a>
                                             </li>
-                                            <li *ngIf="!item?.is_disabled">
+                                            <li *ngIf="item?.status?.id == 1">
                                                 <a href="javascript:;" x-tooltip="Désactiver" (click)="itemDisable(item)">
                                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 m-auto text-danger">
                                                         <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
@@ -408,16 +408,12 @@
                                             <table class="table-hover">
                                                 <tbody>
                                                     <tr>
-                                                        <th>Code</th>
-                                                        <td>{{itemSelected?.username}}</td>
-                                                    </tr>
-                                                    <tr>
                                                         <th>Nom et Prénom(s)</th>
                                                         <td>{{itemSelected?.first_name}} {{itemSelected?.last_name}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <th>Profil</th>
-                                                        <td>{{itemSelected?.role.name}}</td>
+                                                        <th>Rôle</th>
+                                                        <td>{{itemSelected?.profile.label}}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Entité</th>
@@ -434,13 +430,13 @@
                                                     <tr>
                                                         <th>Statut</th>
                                                         <td> 
-                                                            <span class="badge badge-outline-success" *ngIf="!itemSelected?.is_disabled">Actif(ve)</span>
-                                                            <span class="badge badge-outline-danger" *ngIf="itemSelected?.is_disabled">Inactif(ve)</span>
+                                                            <span class="badge badge-outline-success" *ngIf="itemSelected?.status?.id == 1">{{itemSelected?.status?.label}}</span>
+                                                            <span class="badge badge-outline-danger" *ngIf="itemSelected?.status?.id == 2">{{itemSelected?.status?.label}}</span>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <th>Date</th>
-                                                        <td>{{itemSelected?.created_at}}</td>
+                                                        <th>Date d'ajout</th>
+                                                        <td>{{itemSelected?.created_at | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>

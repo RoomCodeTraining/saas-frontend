@@ -610,7 +610,7 @@ export class ListCooperativeComponent implements OnInit {
     this.walletItem = false;
     this.operationItem = false;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
+    this.entity_type_id = this.itemSelected.entity_type.id;
     this.name = this.itemSelected.name;
     this.telephone = this.itemSelected.telephone;
     this.email = this.itemSelected.email;
@@ -642,7 +642,7 @@ export class ListCooperativeComponent implements OnInit {
     this.walletItem = false;
     this.operationItem = false;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
+    this.entity_type_id = this.itemSelected.entity_type.id;
     this.name = this.itemSelected.name;
     this.telephone = this.itemSelected.telephone;
     this.email = this.itemSelected.email;
@@ -661,7 +661,7 @@ export class ListCooperativeComponent implements OnInit {
     this.walletItem = false;
     this.operationItem = false;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
+    this.entity_type_id = this.itemSelected.entity_type.id;
     this.name = this.itemSelected.name;
     this.telephone = this.itemSelected.telephone;
     this.email = this.itemSelected.email;
@@ -680,7 +680,7 @@ export class ListCooperativeComponent implements OnInit {
     this.walletItem = false;
     this.operationItem = false;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
+    this.entity_type_id = this.itemSelected.entity_type.id;
     this.name = this.itemSelected.name;
     this.telephone = this.itemSelected.telephone;
     this.email = this.itemSelected.email;
@@ -699,7 +699,7 @@ export class ListCooperativeComponent implements OnInit {
     this.walletItem = true;
     this.operationItem = false;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
+    this.entity_type_id = this.itemSelected.entity_type.id;
     this.name = this.itemSelected.name;
     this.telephone = this.itemSelected.telephone;
     this.email = this.itemSelected.email;
@@ -718,7 +718,7 @@ export class ListCooperativeComponent implements OnInit {
     this.walletItem = false;
     this.operationItem = true;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
+    this.entity_type_id = this.itemSelected.entity_type.id;
     this.name = this.itemSelected.name;
     this.telephone = this.itemSelected.telephone;
     this.email = this.itemSelected.email;

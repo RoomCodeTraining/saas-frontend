@@ -690,7 +690,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     this.operationItem = false;
     this.operationDelivery = false;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
+    this.entity_type_id = this.itemSelected.entity_type.id;
     this.name = this.itemSelected.name;
     this.telephone = this.itemSelected.telephone;
     this.email = this.itemSelected.email;
@@ -739,7 +739,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     this.operationItem = false;
     this.operationDelivery = false;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
+    this.entity_type_id = this.itemSelected.entity_type.id;
     this.name = this.itemSelected.name;
     this.telephone = this.itemSelected.telephone;
     this.email = this.itemSelected.email;
@@ -759,7 +759,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     this.operationItem = false;
     this.operationDelivery = false;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
+    this.entity_type_id = this.itemSelected.entity_type.id;
     this.name = this.itemSelected.name;
     this.telephone = this.itemSelected.telephone;
     this.email = this.itemSelected.email;
@@ -779,7 +779,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     this.operationItem = false;
     this.operationDelivery = false;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
+    this.entity_type_id = this.itemSelected.entity_type.id;
     this.name = this.itemSelected.name;
     this.telephone = this.itemSelected.telephone;
     this.email = this.itemSelected.email;
@@ -799,7 +799,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     this.operationItem = true;
     this.operationDelivery = false;
     this.itemSelected = item;
-    this.entity_type_id = this.itemSelected.entitytype.id;
+    this.entity_type_id = this.itemSelected.entity_type.id;
     this.name = this.itemSelected.name;
     this.telephone = this.itemSelected.telephone;
     this.email = this.itemSelected.email;
