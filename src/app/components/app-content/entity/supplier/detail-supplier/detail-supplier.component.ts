@@ -404,10 +404,10 @@ export class DetailSupplierComponent implements OnInit {
   amountChange(){
     this.unit_price_value = 1900;
     this.tkm = 7.14;
-    this.unit_price = this.unit_price_value + (this.tkm - 2.5),
-    this.total_price = this.weight_accepted * this.unit_price;
-    this.bic_value = this.weight_accepted * 2.5;
-    this.value_prod_plus_tkm = this.total_price + this.tkm_amount;
+    this.unit_price = Math.round(this.unit_price_value + (this.tkm - 2.5)),
+    this.total_price = Math.round(this.weight_accepted * this.unit_price);
+    this.bic_value = Math.round(this.weight_accepted * 2.5);
+    this.value_prod_plus_tkm = Math.round(this.total_price + this.tkm_amount);
   }
 
   goBack(){
@@ -1549,12 +1549,12 @@ export class DetailSupplierComponent implements OnInit {
         bags_accepted: this.bags_accepted,
         weight_accepted: this.weight_accepted,
         refact: this.refact,
-        unit_price: Math.round(this.unit_price_value + (this.tkm - this.bic_value)),
+        unit_price: this.unit_price_value + (this.tkm - this.bic_value),
         total_price: Math.round(this.weight_accepted * this.unit_price),
         tkm: this.tkm,
         tkm_amount: this.tkm_amount,
         bags_delivered: this.bags_delivered,
-        bic_value: Math.round(this.weight_accepted * 2.5),
+        bic_value: this.weight_accepted * 2.5,
         value_prod_plus_tkm: Math.round(this.total_price + this.tkm_amount),
         date: this.date,
       }
