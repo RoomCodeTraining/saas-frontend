@@ -504,7 +504,7 @@ export class ListPurchaseComponent implements OnInit {
       if(this.telephone.slice(0, 2) != "27" && this.telephone.slice(0, 2) != "01" && this.telephone.slice(0, 2) != "05" && this.telephone.slice(0, 2) != "07"){
         this.exist_error = true;
         this.phone_error = "Le numéro de téléphone doit commencer par 27 ou 01 ou 05 ou 07.";
-      } else if(this.telephone.length != 10){
+      } else if(this.telephone.length && this.telephone.length != 10){
         this.exist_error = true;
         this.phone_error = "Le numéro de téléphone doit contenir que 10 chiffres.";
       } else {

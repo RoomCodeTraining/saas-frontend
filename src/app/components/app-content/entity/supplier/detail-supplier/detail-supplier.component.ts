@@ -1009,7 +1009,7 @@ export class DetailSupplierComponent implements OnInit {
     if(this.formGroupAdd.invalid){
       //console.log("Please enter");
       return;
-    } else if(this.telephone.length != 10){
+    } else if(this.telephone.length && this.telephone.length != 10){
       this.exist_phone_error = true;
       this.phone_error = "Le numéro de téléphone doit contenir que 10 chiffres.";
     } else {
@@ -1110,7 +1110,7 @@ export class DetailSupplierComponent implements OnInit {
     if(this.formGroupEdit.invalid){
       //console.log("Errors");
       return;
-    } else if(this.telephone.length != 10){
+    } else if(this.telephone.length && this.telephone.length != 10){
       this.exist_phone_error = true;
       this.phone_error = "Le numéro de téléphone doit contenir que 10 chiffres.";
     } else {
@@ -1549,13 +1549,13 @@ export class DetailSupplierComponent implements OnInit {
         bags_accepted: this.bags_accepted,
         weight_accepted: this.weight_accepted,
         refact: this.refact,
-        unit_price: this.unit_price_value + (this.tkm - this.bic_value),
-        total_price: this.weight_accepted * this.unit_price,
+        unit_price: Math.round(this.unit_price_value + (this.tkm - this.bic_value)),
+        total_price: Math.round(this.weight_accepted * this.unit_price),
         tkm: this.tkm,
         tkm_amount: this.tkm_amount,
         bags_delivered: this.bags_delivered,
-        bic_value: this.weight_accepted * 2.5,
-        value_prod_plus_tkm: this.total_price + this.tkm_amount,
+        bic_value: Math.round(this.weight_accepted * 2.5),
+        value_prod_plus_tkm: Math.round(this.total_price + this.tkm_amount),
         date: this.date,
       }
 

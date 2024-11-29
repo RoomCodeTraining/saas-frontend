@@ -1002,7 +1002,7 @@ export class DetailDelegateComponent implements OnInit {
     if(this.formGroupAdd.invalid){
       //console.log("Please enter");
       return;
-    } else if(this.telephone.length != 10){
+    } else if(this.telephone.length && this.telephone.length != 10){
       this.exist_phone_error = true;
       this.phone_error = "Le numéro de téléphone doit contenir que 10 chiffres.";
     } else {
@@ -1103,7 +1103,7 @@ export class DetailDelegateComponent implements OnInit {
     if(this.formGroupEdit.invalid){
       //console.log("Errors");
       return;
-    } else if(this.telephone.length != 10){
+    } else if(this.telephone.length && this.telephone.length != 10){
       this.exist_phone_error = true;
       this.phone_error = "Le numéro de téléphone doit contenir que 10 chiffres.";
     } else {
