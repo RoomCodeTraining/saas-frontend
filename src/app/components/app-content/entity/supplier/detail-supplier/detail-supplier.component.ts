@@ -248,6 +248,8 @@ export class DetailSupplierComponent implements OnInit {
     registerLocaleData( fr,'fr-FR' );
 
     this.exist_phone_error = false;
+
+    this.amountChange();
     
     /** spinner starts on init */
     this.SpinnerService.show();
@@ -404,9 +406,9 @@ export class DetailSupplierComponent implements OnInit {
   amountChange(){
     this.unit_price_value = 1900;
     this.tkm = 7.14;
-    this.unit_price = Math.round(this.unit_price_value + (this.tkm - 2.5)),
+    this.unit_price = this.unit_price_value + (this.tkm - 2.5),
     this.total_price = Math.round(this.weight_accepted * this.unit_price);
-    this.bic_value = Math.round(this.weight_accepted * 2.5);
+    this.bic_value = this.weight_accepted * 2.5;
     this.value_prod_plus_tkm = Math.round(this.total_price + this.tkm_amount);
   }
 

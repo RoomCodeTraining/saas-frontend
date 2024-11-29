@@ -1104,7 +1104,7 @@
                                                 <div class="mb-3" [formGroup]="formGroupOperationDelivery">
                                                     <label>Prix unitaire <span style="color:red">*</span></label>
                                                     <input type="number" class="form-input" formControlName="unit_price" [ngClass]="{ 'is-invalid': submittedOperationDelivery && fOperationDelivery['unit_price'].errors }"
-                                                        name="unit_price" [(ngModel)]="unit_price" min="0" [value]="unit_price_value + (tkm - 2.5)" (ngModelChange)="amountChange()" />
+                                                        name="unit_price" [(ngModel)]="unit_price" min="0" [value]="unit_price_value" (ngModelChange)="amountChange()" />
                                                     <div *ngIf="submittedOperationDelivery && fOperationDelivery['unit_price'].errors" class="mt-1">
                                                         <div *ngIf="submittedOperationDelivery && fOperationDelivery['unit_price'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
@@ -1112,7 +1112,7 @@
                                                 <div class="mb-3" [formGroup]="formGroupOperationDelivery">
                                                     <label>Montant payé par l'exportateur <span style="color:red">*</span></label>
                                                     <input type="number" class="form-input" formControlName="total_price" [ngClass]="{ 'is-invalid': submittedOperationDelivery && fOperationDelivery['total_price'].errors }"
-                                                        name="total_price" [(ngModel)]="total_price" min="0" [value]="weight_accepted * unit_price" (ngModelChange)="amountChange()" />
+                                                        name="total_price" [(ngModel)]="total_price" min="0" [value]="total_price" (ngModelChange)="amountChange()" />
                                                     <div *ngIf="submittedOperationDelivery && fOperationDelivery['total_price'].errors" class="mt-1">
                                                         <div *ngIf="submittedOperationDelivery && fOperationDelivery['total_price'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
@@ -1120,7 +1120,7 @@
                                                 <div class="mb-3" [formGroup]="formGroupOperationDelivery">
                                                     <label>Valeur de production + TKM <span style="color:red">*</span></label>
                                                     <input type="number" class="form-input" formControlName="value_prod_plus_tkm" [ngClass]="{ 'is-invalid': submittedOperationDelivery && fOperationDelivery['value_prod_plus_tkm'].errors }"
-                                                        name="value_prod_plus_tkm" [(ngModel)]="value_prod_plus_tkm" min="0" [value]="(weight_accepted * unit_price) + tkm_amount" (ngModelChange)="amountChange()" />
+                                                        name="value_prod_plus_tkm" [(ngModel)]="value_prod_plus_tkm" min="0" [value]="value_prod_plus_tkm" (ngModelChange)="amountChange()" />
                                                     <div *ngIf="submittedOperationDelivery && fOperationDelivery['value_prod_plus_tkm'].errors" class="mt-1">
                                                         <div *ngIf="submittedOperationDelivery && fOperationDelivery['value_prod_plus_tkm'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
