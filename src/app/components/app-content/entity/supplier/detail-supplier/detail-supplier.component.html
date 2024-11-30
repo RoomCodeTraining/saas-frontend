@@ -1118,7 +1118,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-3" [formGroup]="formGroupOperationDelivery">
-                                                    <label>Valeur de production + TKM {{value_prod_plus_tkm}} <span style="color:red">*</span></label>
+                                                    <label>Valeur de production + TKM <span style="color:red">*</span></label>
                                                     <input type="number" class="form-input" formControlName="value_prod_plus_tkm" [ngClass]="{ 'is-invalid': submittedOperationDelivery && fOperationDelivery['value_prod_plus_tkm'].errors }"
                                                         name="value_prod_plus_tkm" [(ngModel)]="value_prod_plus_tkm" min="0" [value]="value_prod_plus_tkm" (ngModelChange)="amountChange()" />
                                                     <div *ngIf="submittedOperationDelivery && fOperationDelivery['value_prod_plus_tkm'].errors" class="mt-1">
