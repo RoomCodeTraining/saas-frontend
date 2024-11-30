@@ -442,6 +442,7 @@ export class DetailDelegateComponent implements OnInit {
     this.unit_price = 0;
     this.commission = 0;
     this.total_price = 0;
+    this.commission_applied = 0;
   }
 
   onSelectLogo(event:any) {
