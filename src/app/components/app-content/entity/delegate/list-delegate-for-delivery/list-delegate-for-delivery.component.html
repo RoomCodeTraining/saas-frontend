@@ -463,8 +463,8 @@
                             <thead>
                                 <tr>
                                     <th>N°</th>
-                                    <th>Date</th>
                                     <th *ngIf="user_logged.profile?.id == 2">Action</th>
+                                    <th>Date</th>
                                     <th>Délégué</th>
                                     <th>Produit</th>
                                     <th>Campagne</th>
@@ -494,6 +494,9 @@
                                                     </svg>
                                                 </a>
                                             </li>    
+                                            <li>
+                                                ---
+                                            </li>
                                         </ul>
                                     </td>
                                     <td>{{item?.date | date: 'dd/MM/YYYY'}}</td>
