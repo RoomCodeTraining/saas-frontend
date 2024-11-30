@@ -869,21 +869,20 @@ export class AppService {
   }
 
 
-  getWarehouseDelivery(entity_id:number, page:number): Observable<any> {
-    console.log('entity_id',entity_id);
-    return this.http.get<any[]>(`${this.baseUrl}/warehouse-deliveries?entity_id=` +entity_id+`&page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getWarehouseDelivery(page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/warehouse-deliveries?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getWarehouseDeliveryPaginate(entity_id:number, page:number): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/warehouse-deliveries?entity_id=` +entity_id+`&page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getWarehouseDeliveryPaginate(page:number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/warehouse-deliveries?page=${page}`,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getWarehouseDeliverySearch(entity_id:number, page:number,information:any): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/warehouse-deliveries?entity_id=` +entity_id+`&page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getWarehouseDeliverySearch(page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/warehouse-deliveries?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
-  getWarehouseDeliveryPaginateSearch(entity_id:number, page:number,information:any): Observable<any> {
-    return this.http.get<any[]>(`${this.baseUrl}/warehouse-deliveries?entity_id=` +entity_id+`&page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  getWarehouseDeliveryPaginateSearch(page:number,information:any): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/warehouse-deliveries?page=${page}` +`&search=` + information,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
   addWarehouseDelivery(data:any): Observable<any> {
