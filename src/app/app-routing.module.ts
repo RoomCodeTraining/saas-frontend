@@ -45,6 +45,8 @@ import { ListSpecialSupplierComponent } from './components/app-content/entity/li
 import { DetailSpecialSupplierComponent } from './components/app-content/entity/detail-special-supplier/detail-special-supplier.component';
 import { ListDelegateForDeliveryComponent } from './components/app-content/entity/delegate/list-delegate-for-delivery/list-delegate-for-delivery.component';
 import { ListCooperativeComponent } from './components/app-content/entity/cooperative/list-cooperative/list-cooperative.component';
+import { ListWeightLoadingComponent } from './components/app-content/weight-loading/list-weight-loading/list-weight-loading.component';
+import { ListWarehouseDeliveryComponent } from './components/app-content/warehouse-delivery/list-warehouse-delivery/list-warehouse-delivery.component';
 
 const routes: Routes = [
   {
@@ -290,6 +292,18 @@ const routes: Routes = [
   {
     path:'delegate-statistic',
     component: DelegateStatisticComponent,
+    canActivate: [AfterLoginService]
+  },
+
+  {
+    path:'weight-loading-list',
+    component: ListWeightLoadingComponent,
+    canActivate: [AfterLoginService]
+  },
+
+  {
+    path:'warehouse-delivery-list',
+    component: ListWarehouseDeliveryComponent,
     canActivate: [AfterLoginService]
   },
   

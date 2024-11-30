@@ -147,12 +147,13 @@ export class ListDelegateForDeliveryComponent implements OnInit {
   formGroupWallet!: FormGroup;
   formGroupDeposit!: FormGroup;
   formGroupOperationDelivery!: FormGroup;
+  formGroupOperationValidation!: FormGroup;
 
   submittedOperation = false;
   submittedWallet = false;
   submittedDeposit = false;
   submittedOperationDelivery = false;
-
+  submittedOperationValidation = false;
 
   informationOperation!: string;
   
@@ -160,6 +161,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
   submitWallet: boolean = false;
   submitDeposit: boolean = false;
   submitOperationDelivery: boolean = false;
+  submitOperationValidation: boolean = false;
  
   operationItem: boolean = false;  
 
@@ -167,6 +169,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
   depositItem: boolean = false;
   operationHistoryItem: boolean = false;
   operationDelivery: boolean = false;
+  operationValidation: boolean = false;
 
   operation_current_page: number=1;
   operation_first_page_url!: string;
@@ -211,6 +214,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
   date!: Date;
 
   campaign_id!: number;
+  operationSelected: any;
 
   constructor(
     public Jarwis: JarwisService,
@@ -279,14 +283,21 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     });
 
     this.formGroupOperationDelivery = new FormGroup({
-      wallet_id: new FormControl('', [Validators.required]),
+      entity_product_id: new FormControl('', [Validators.required]),
       campaign_id: new FormControl('', [Validators.required]),
       bags_accepted: new FormControl('', [Validators.required]),
       weight_accepted: new FormControl('', [Validators.required]),
+      refact: new FormControl('', [Validators.required]),
+      // unit_price: new FormControl('', [Validators.required]),
+      // commission: new FormControl('', [Validators.required]),
+      // total_price: new FormControl('', [Validators.required]),
+      date: new FormControl('', [Validators.required]),
+    });
+
+    this.formGroupOperationValidation = new FormGroup({
       unit_price: new FormControl('', [Validators.required]),
       commission: new FormControl('', [Validators.required]),
       total_price: new FormControl('', [Validators.required]),
-      date: new FormControl('', [Validators.required]),
     });
 
   }
@@ -349,10 +360,11 @@ export class ListDelegateForDeliveryComponent implements OnInit {
 
   amountChange(){
     if(this.commission_applied == 0){
-      this.total_price = Math.ceil(this.weight_accepted * this.unit_price);
+      this.total_price = Math.ceil(this.operationSelected.weight * this.unit_price);
     } else {
-      this.total_price = Math.ceil(this.weight_accepted * (this.unit_price + this.commission));
+      this.total_price = Math.ceil(this.operationSelected.weight * (this.unit_price + this.commission));
     }
+
   }
 
   commissionApplied(action: number){
@@ -586,7 +598,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
 
   getOperation(){
     this.SpinnerService.show();
-    this.appService.getOperationByEntityId(this.itemSelected.id,this.operation_current_page).subscribe((data: any) => {
+    this.appService.getWarehouseDeliveryByEntityId(this.itemSelected.id,this.operation_current_page).subscribe((data: any) => {
       this.listOperation = data?.data;
 
       this.getPaginateOperation(data);
@@ -598,7 +610,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
 
   searchOperation(){
     this.SpinnerService.show();
-    this.appService.getOperationByEntityIdSearch(this.itemSelected.id,this.operation_current_page,this.informationOperation).subscribe((data: any) => {
+    this.appService.getWarehouseDeliveryByEntityIdSearch(this.itemSelected.id,this.operation_current_page,this.informationOperation).subscribe((data: any) => {
       this.listOperation = data?.data;
       
       this.getPaginateOperation(data);
@@ -613,7 +625,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
       this.searchOperation()
     } else {
       this.SpinnerService.show();
-        this.appService.getOperationByEntityIdPaginate(this.itemSelected.id,this.operation_current_page).subscribe((data: any) => {
+        this.appService.getWarehouseDeliveryByEntityIdPaginate(this.itemSelected.id,this.operation_current_page).subscribe((data: any) => {
           this.listOperation = data?.data;
           
           this.getPaginateOperation(data);
@@ -676,6 +688,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     this.walletItem = false;
     this.operationItem = false;
     this.operationDelivery = false;
+    this.operationValidation = false;
     this.resetAll();
   }
 
@@ -689,6 +702,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     this.walletItem = false;
     this.operationItem = false;
     this.operationDelivery = false;
+    this.operationValidation = false;
     this.itemSelected = item;
     this.entity_type_id = this.itemSelected.entity_type.id;
     this.name = this.itemSelected.name;
@@ -710,6 +724,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     this.walletItem = false;
     this.operationItem = false;
     this.operationDelivery = false;
+    this.operationValidation = false;
     this.itemSelected = item;
   }
 
@@ -723,6 +738,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     this.walletItem = false;
     this.operationItem = false;
     this.operationDelivery = false;
+    this.operationValidation = false;
     this.itemSelected = item;
     this.getEntityWallet();
     this.getOperation();
@@ -738,6 +754,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     this.walletItem = false;
     this.operationItem = false;
     this.operationDelivery = false;
+    this.operationValidation = false;
     this.itemSelected = item;
     this.entity_type_id = this.itemSelected.entity_type.id;
     this.name = this.itemSelected.name;
@@ -758,6 +775,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     this.walletItem = false;
     this.operationItem = false;
     this.operationDelivery = false;
+    this.operationValidation = false;
     this.itemSelected = item;
     this.entity_type_id = this.itemSelected.entity_type.id;
     this.name = this.itemSelected.name;
@@ -778,6 +796,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     this.walletItem = true;
     this.operationItem = false;
     this.operationDelivery = false;
+    this.operationValidation = false;
     this.itemSelected = item;
     this.entity_type_id = this.itemSelected.entity_type.id;
     this.name = this.itemSelected.name;
@@ -798,6 +817,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     this.walletItem = false;
     this.operationItem = true;
     this.operationDelivery = false;
+    this.operationValidation = false;
     this.itemSelected = item;
     this.entity_type_id = this.itemSelected.entity_type.id;
     this.name = this.itemSelected.name;
@@ -818,7 +838,22 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     this.walletItem = false;
     this.operationItem = false;
     this.operationDelivery = true;
+    this.operationValidation = false;
     this.itemSelected = item;
+  }
+
+  itemOperationValidation(item:any) {
+    this.addItem = false;
+    this.editItem = false;
+    this.itemDetail = false;
+    this.enableItem = false;
+    this.disableItem = false;
+    this.addAdminItem = false;
+    this.walletItem = false;
+    this.operationItem = false;
+    this.operationDelivery = false;
+    this.operationValidation = true;
+    this.operationSelected = item;
   }
 
   itemOperationHistory(item:any) {
@@ -832,6 +867,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     this.operationItem = false;
     this.operationDelivery = true;
     this.operationHistoryItem = true;
+    this.operationValidation = false;
     this.itemSelected = item;
     this.getOperation();
   }
@@ -875,7 +911,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     if(this.formGroupAdd.invalid){
       //console.log("Please enter");
       return;
-    } else if(this.telephone.length && this.telephone.length != 10){
+    } else if(this.telephone.length != 10){
       this.exist_phone_error = true;
       this.phone_error = "Le numéro de téléphone doit contenir que 10 chiffres.";
     } else {
@@ -978,7 +1014,7 @@ export class ListDelegateForDeliveryComponent implements OnInit {
     if(this.formGroupEdit.invalid){
       //console.log("Errors");
       return;
-    } else if(this.telephone.length && this.telephone.length != 10){
+    } else if(this.telephone.length != 10){
       this.exist_phone_error = true;
       this.phone_error = "Le numéro de téléphone doit contenir que 10 chiffres.";
     } else {
@@ -1536,29 +1572,24 @@ export class ListDelegateForDeliveryComponent implements OnInit {
 
   get fOperationDelivery() { return this.formGroupOperationDelivery.controls; }
 
-  saveOperationDelivery(operation_type_id: number){
+  saveOperationDelivery(){
     this.submittedOperationDelivery = true;
     if(this.formGroupOperationDelivery.invalid){
-      console.log('sdnbvdhgv',this.formGroupOperationDelivery.value);
       return;
     } else {
       this.submitOperationDelivery = true;
 
       let requestData = {
         entity_id: this.itemSelected.id,
-        operation_type_id: operation_type_id,
         entity_product_id: this.entity_product_id,
         campaign_id: this.campaign_id,
-        bags_accepted: this.bags_accepted,
-        weight_accepted: this.weight_accepted,
-        unit_price: this.unit_price,
-        commission_applied: this.commission_applied,
-        commission: this.commission,
-        total_price: this.total_price,
+        bags: this.bags_accepted,
+        weight: this.weight_accepted,
+        refact: this.refact,
         date: this.date,
       }
 
-      this.appService.updateWallet(this.wallet_id,requestData).subscribe(res => {
+      this.appService.addWarehouseDelivery(requestData).subscribe(res => {
         this.message = res;
         if(this.message.success == false){
           this.submitOperationDelivery = false;
@@ -1609,6 +1640,86 @@ export class ListDelegateForDeliveryComponent implements OnInit {
           } as GlobalConfig,
         };
         this.submitOperationDelivery = false;
+        this.SpinnerService.hide();
+        this.cs.showToast(this.toast);
+      })
+    }
+  }
+
+  get fOperationValidation() { return this.formGroupOperationValidation.controls; }
+
+  saveOperationValidation(operation_type_id: number){
+    this.submittedOperationValidation = true;
+    if(this.formGroupOperationValidation.invalid){
+      return;
+    } else {
+      this.submitOperationValidation = true;
+
+      let requestData = {
+        entity_id: this.itemSelected.id,
+        operation_type_id: operation_type_id,
+        entity_product_id: this.operationSelected.entity_product.product.id,
+        campaign_id: this.operationSelected.campaign.id,
+        bags_accepted: this.bags_accepted,
+        weight_accepted: this.weight_accepted,
+        unit_price: this.unit_price,
+        commission_applied: this.commission_applied,
+        commission: this.commission,
+        total_price: this.total_price,
+        date: this.operationSelected.date,
+      }
+
+      this.appService.updateWarehouseDelivery(this.operationSelected.id,requestData).subscribe(res => {
+        this.message = res;
+        if(this.message.success == false){
+          this.submitOperationValidation = false;
+          this.error_message = this.message.message;
+          this.exist_error = false;
+          this.toast = {
+            message: this.message.message,
+            title: 'Erreur',
+            type: 'error',
+            ic: {
+              timeOut: 5000,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.SpinnerService.hide();
+        } else {
+          this.toast = {
+            message: this.message.message,
+            title: 'Succès',
+            type: 'success',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+              progressBar: true,
+            } as GlobalConfig,
+          };
+          this.submitOperationValidation = false;
+          this.operationValidation = !this.operationValidation;
+          this.itemSelected = !this.itemSelected;
+          this.resetAll();
+          this.ngOnInit();
+        }
+        this.cs.showToast(this.toast);
+      },
+      (err: HttpErrorResponse) => {
+        this.exist_error = true;
+        this.error_message = err.error.errors;
+        this.submitOperationValidation = false;
+        this.toast = {
+          message: err.error.error,
+          title: 'Erreur',
+          type: 'error',
+          ic: {
+            timeOut: 5000,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submitOperationValidation = false;
         this.SpinnerService.hide();
         this.cs.showToast(this.toast);
       })

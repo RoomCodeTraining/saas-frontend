@@ -464,10 +464,13 @@
                                 <tr>
                                     <th>N°</th>
                                     <th>Date</th>
-                                    <th>Référence</th>
-                                    <th>Montant</th>
-                                    <th>Type</th>
-                                    <th>Méthode de paiement</th>
+                                    <th *ngIf="user_logged.profile?.id == 2">Action</th>
+                                    <th>Délégué</th>
+                                    <th>Produit</th>
+                                    <th>Campagne</th>
+                                    <th>Nombre de sacs</th>
+                                    <th>Réfraction</th>
+                                    <th>Poids total</th>
                                     <th>Effectué(e) par</th>
                                     <th>Effectué(e) le</th>
                                     <th>Statut</th>
@@ -476,11 +479,30 @@
                             <tbody *ngIf="listOperation?.length >= 0">
                                 <tr *ngFor="let item of listOperation | filter:informationOperation; let i = index;">
                                     <td>{{i+1}}</td>
+                                    <td class="text-center" *ngIf="user_logged.profile?.id == 2">
+                                        <ul class="flex gap-2">
+                                            <li *ngIf="item.status?.id == 5">
+                                                <a href="javascript:;" x-tooltip="Détails" (click)="itemOperationValidation(item)">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+                                                        <path
+                                                            opacity="0.5"
+                                                            d="M3.27489 15.2957C2.42496 14.1915 2 13.6394 2 12C2 10.3606 2.42496 9.80853 3.27489 8.70433C4.97196 6.49956 7.81811 4 12 4C16.1819 4 19.028 6.49956 20.7251 8.70433C21.575 9.80853 22 10.3606 22 12C22 13.6394 21.575 14.1915 20.7251 15.2957C19.028 17.5004 16.1819 20 12 20C7.81811 20 4.97196 17.5004 3.27489 15.2957Z"
+                                                            stroke="currentColor"
+                                                            stroke-width="1.5"
+                                                        ></path>
+                                                        <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="currentColor" stroke-width="1.5"></path>
+                                                    </svg>
+                                                </a>
+                                            </li>    
+                                        </ul>
+                                    </td>
                                     <td>{{item?.date | date: 'dd/MM/YYYY'}}</td>
-                                    <td>{{item?.reference}}</td>
-                                    <td>{{item?.total_price | number:'':'fr-FR'}} FCFA</td>
-                                    <td>{{item?.operation_type?.label}}</td>
-                                    <td>{{item?.payment_method?.label}}</td>
+                                    <td>{{item?.entity?.name}}</td>
+                                    <td>{{item?.entity_product?.product?.label}}</td>
+                                    <td>{{item?.campaign?.label}}</td>
+                                    <td>{{item?.bags | number:'':'fr-FR'}}</td>
+                                    <td>{{item?.refact | number:'':'fr-FR'}}</td>
+                                    <td>{{item?.weight | number:'':'fr-FR'}}</td>
                                     <td>{{item?.user?.name}}</td>
                                     <td>{{item?.created_at | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
                                     <td> 
@@ -648,7 +670,7 @@
                                 <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
                                     <h5 class="font-bold text-lg p-5">Livraison dans le portefeuille de {{itemSelected?.name}}</h5>
                                     <div class="p-5">
-                                        <form class="space-y-5" style="padding-bottom: 100px;" (submit)="saveOperationDelivery(4)">
+                                        <form class="space-y-5" style="padding-bottom: 100px;" (submit)="saveOperationDelivery()">
                                             <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
                                                 <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
                                             </div>
@@ -667,11 +689,11 @@
                                                 </div>
                                                 <div class="mb-3" [formGroup]="formGroupOperationDelivery">
                                                     <label for="gridPassword">Produit <span style="color:red">*</span></label>
-                                                    <ng-select id="wallet_id" name="wallet_id" formControlName="wallet_id" (change)="onWalletChange($event)" [(ngModel)]="wallet_id" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submittedOperationDelivery && fOperationDelivery['wallet_id'].errors }">
-                                                        <ng-option *ngFor="let item of listEntityWallet" [value]="item">{{item.entity_product.product.label}}</ng-option>
+                                                    <ng-select id="entity_product_id" name="entity_product_id" formControlName="entity_product_id" [(ngModel)]="entity_product_id" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submittedOperationDelivery && fOperationDelivery['entity_product_id'].errors }">
+                                                        <ng-option *ngFor="let item of listEntityWallet" [value]="item.entity_product.product.id">{{item.entity_product.product.label}}</ng-option>
                                                     </ng-select>
-                                                    <div *ngIf="submittedOperationDelivery && fOperationDelivery['wallet_id'].errors" class="mt-1">
-                                                        <div *ngIf="submittedOperationDelivery && fOperationDelivery['wallet_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    <div *ngIf="submittedOperationDelivery && fOperationDelivery['entity_product_id'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationDelivery && fOperationDelivery['entity_product_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3" [formGroup]="formGroupOperationDelivery">
@@ -694,15 +716,23 @@
                                                 <div class="mb-3" [formGroup]="formGroupOperationDelivery">
                                                     <label>Poids <span style="color:red">*</span></label>
                                                     <input type="number" class="form-input" formControlName="weight_accepted" [ngClass]="{ 'is-invalid': submittedOperationDelivery && fOperationDelivery['weight_accepted'].errors }"
-                                                        name="weight_accepted" [(ngModel)]="weight_accepted" min="0" (ngModelChange)="amountChange()" />
+                                                        name="weight_accepted" [(ngModel)]="weight_accepted" min="0" />
                                                     <div *ngIf="submittedOperationDelivery && fOperationDelivery['weight_accepted'].errors" class="mt-1">
                                                         <div *ngIf="submittedOperationDelivery && fOperationDelivery['weight_accepted'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3" [formGroup]="formGroupOperationDelivery">
+                                                    <label>Réfraction <span style="color:red">*</span></label>
+                                                    <input type="number" class="form-input" formControlName="refact" [ngClass]="{ 'is-invalid': submittedOperationDelivery && fOperationDelivery['refact'].errors }"
+                                                        name="refact" [(ngModel)]="refact" min="0" />
+                                                    <div *ngIf="submittedOperationDelivery && fOperationDelivery['refact'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationDelivery && fOperationDelivery['refact'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="mb-3" [formGroup]="formGroupOperationDelivery">
                                                     <label>Prix unitaire <span style="color:red">*</span></label>
                                                     <input type="number" class="form-input" formControlName="unit_price" [ngClass]="{ 'is-invalid': submittedOperationDelivery && fOperationDelivery['unit_price'].errors }"
-                                                        name="unit_price" [(ngModel)]="unit_price" min="0" (ngModelChange)="amountChange()" />
+                                                        name="unit_price" [(ngModel)]="unit_price" min="0" />
                                                     <div *ngIf="submittedOperationDelivery && fOperationDelivery['unit_price'].errors" class="mt-1">
                                                         <div *ngIf="submittedOperationDelivery && fOperationDelivery['unit_price'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
@@ -727,7 +757,7 @@
                                                 <div class="mb-3" [formGroup]="formGroupOperationDelivery">
                                                     <label>Commission <span style="color:red">*</span></label>
                                                     <input type="number" class="form-input" formControlName="commission" [ngClass]="{ 'is-invalid': submittedOperationDelivery && fOperationDelivery['commission'].errors }"
-                                                        name="commission" [(ngModel)]="commission" min="0" (ngModelChange)="amountChange()" />
+                                                        name="commission" [(ngModel)]="commission" min="0" />
                                                     <div *ngIf="submittedOperationDelivery && fOperationDelivery['commission'].errors" class="mt-1">
                                                         <div *ngIf="submittedOperationDelivery && fOperationDelivery['commission'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
@@ -739,13 +769,144 @@
                                                     <div *ngIf="submittedOperationDelivery && fOperationDelivery['total_price'].errors" class="mt-1">
                                                         <div *ngIf="submittedOperationDelivery && fOperationDelivery['total_price'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                             </div>
                 
                                             <div class="flex justify-end items-center mt-8">
                                                 <button type="button" (click)="resetAll(); itemDetail = !itemDetail; operationDelivery = !operationDelivery" class="btn btn-outline-danger">Annuler</button>
                                                 <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationDelivery" *ngIf="!submitOperationDelivery">Enregistrer</button>
                                                 <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationDelivery" *ngIf="submitOperationDelivery">
+                                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
+                                                        <line x1="12" y1="2" x2="12" y2="6"></line>
+                                                        <line x1="12" y1="18" x2="12" y2="22"></line>
+                                                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                                                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                                                        <line x1="2" y1="12" x2="6" y2="12"></line>
+                                                        <line x1="18" y1="12" x2="22" y2="12"></line>
+                                                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                                                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                                                    </svg>
+                                                    Patientez ...
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-5" *ngIf="itemSelected && operationValidation && operationSelected">
+                    <div class="row mb-5">
+                        <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
+                            <div class="flex items-start justify-center min-h-screen px-4">
+                                <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
+                                    <h5 class="font-bold text-lg p-5">Validation Livraison dans le portefeuille {{operationSelected?.entity_product.product.label}} de {{itemSelected?.name}}</h5>
+                                    <div class="p-5">
+                                        <form class="space-y-5" style="padding-bottom: 100px;" (submit)="saveOperationValidation(4)">
+                                            <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
+                                                <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
+                                            </div>
+                                            <div class="grid grid-cols-1 grid-cols-3 gap-3">
+                                                <div class="mb-3">
+                                                    <label for="gridPassword">Date <span style="color:red">*</span></label>
+                                                    <input type="date" class="form-input" [value]="operationSelected?.date" readonly disabled/>
+                                                </div>
+                                                <!-- <div class="mb-3" [formGroup]="formGroupOperationValidation">
+                                                    <label>Date <span style="color:red">*</span></label>
+                                                    <input type="date" class="form-input" formControlName="date" [ngClass]="{ 'is-invalid': submittedOperationValidation && fOperationValidation['date'].errors }"
+                                                        name="date" [(ngModel)]="date" />
+                                                    <div *ngIf="submittedOperationValidation && fOperationValidation['date'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationValidation && fOperationValidation['date'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div> -->
+                                                <div class="mb-3">
+                                                    <label for="gridPassword">Délégué <span style="color:red">*</span></label>
+                                                    <input type="text" class="form-input" [value]="itemSelected?.name" readonly disabled/>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="gridPassword">Produit <span style="color:red">*</span></label>
+                                                    <input type="text" class="form-input" [value]="operationSelected?.entity_product.product.label" readonly disabled/>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="gridPassword">Campagne <span style="color:red">*</span></label>
+                                                    <input type="text" class="form-input" [value]="operationSelected?.campaign.label" readonly disabled/>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="gridPassword">Nombre de sacs <span style="color:red">*</span></label>
+                                                    <input type="number" class="form-input" [value]="operationSelected?.bags" readonly disabled/>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="gridPassword">Réfraction <span style="color:red">*</span></label>
+                                                    <input type="number" class="form-input" [value]="operationSelected?.refact" readonly disabled/>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="gridPassword">Poids <span style="color:red">*</span></label>
+                                                    <input type="number" class="form-input" [value]="operationSelected?.weight" readonly disabled/>
+                                                </div>
+                                                <!-- <div class="mb-3" [formGroup]="formGroupOperationValidation">
+                                                    <label>Nombre de sacs <span style="color:red">*</span></label>
+                                                    <input type="number" class="form-input" formControlName="bags_accepted" [ngClass]="{ 'is-invalid': submittedOperationValidation && fOperationValidation['bags_accepted'].errors }"
+                                                        name="bags_accepted" [(ngModel)]="bags_accepted" min="0" />
+                                                    <div *ngIf="submittedOperationValidation && fOperationValidation['bags_accepted'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationValidation && fOperationValidation['bags_accepted'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3" [formGroup]="formGroupOperationValidation">
+                                                    <label>Poids <span style="color:red">*</span></label>
+                                                    <input type="number" class="form-input" formControlName="weight_accepted" [ngClass]="{ 'is-invalid': submittedOperationValidation && fOperationValidation['weight_accepted'].errors }"
+                                                        name="weight_accepted" [(ngModel)]="weight_accepted" min="0" (ngModelChange)="amountChange()" />
+                                                    <div *ngIf="submittedOperationValidation && fOperationValidation['weight_accepted'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationValidation && fOperationValidation['weight_accepted'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div> -->
+                                                <div class="mb-3" [formGroup]="formGroupOperationValidation">
+                                                    <label>Prix unitaire <span style="color:red">*</span></label>
+                                                    <input type="number" class="form-input" formControlName="unit_price" [ngClass]="{ 'is-invalid': submittedOperationValidation && fOperationValidation['unit_price'].errors }"
+                                                        name="unit_price" [(ngModel)]="unit_price" min="0" (ngModelChange)="amountChange()" />
+                                                    <div *ngIf="submittedOperationValidation && fOperationValidation['unit_price'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationValidation && fOperationValidation['unit_price'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label>Voulez-vous appliquer la commission ?</label>
+                                                    <div class="grid grid-cols-1 grid-cols-3 gap-3">
+                                                        <div>
+                                                            <label class="inline-flex">
+                                                                <input type="radio" name="commission_applied" class="form-radio" (change)="commissionApplied(0)"  checked />
+                                                                <span>Non</span>
+                                                            </label>
+                                                        </div>
+                                                        <div>
+                                                            <label class="inline-flex">
+                                                                <input type="radio" name="commission_applied" class="form-radio" (change)="commissionApplied(1)" />
+                                                                <span>Oui</span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3" [formGroup]="formGroupOperationValidation">
+                                                    <label>Commission <span style="color:red">*</span></label>
+                                                    <input type="number" class="form-input" formControlName="commission" [ngClass]="{ 'is-invalid': submittedOperationValidation && fOperationValidation['commission'].errors }"
+                                                        name="commission" [(ngModel)]="commission" min="0" (ngModelChange)="amountChange()" />
+                                                    <div *ngIf="submittedOperationValidation && fOperationValidation['commission'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationValidation && fOperationValidation['commission'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3" [formGroup]="formGroupOperationValidation">
+                                                    <label>Montant payé <span style="color:red">*</span></label>
+                                                    <input type="number" class="form-input" formControlName="total_price" [ngClass]="{ 'is-invalid': submittedOperationValidation && fOperationValidation['total_price'].errors }"
+                                                        name="total_price" [(ngModel)]="total_price" min="0" [value]="total_price" />
+                                                    <div *ngIf="submittedOperationValidation && fOperationValidation['total_price'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationValidation && fOperationValidation['total_price'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                            <div class="flex justify-end items-center mt-8">
+                                                <button type="button" (click)="resetAll(); itemDetail = !itemDetail; operationValidation = !operationValidation" class="btn btn-outline-danger">Annuler</button>
+                                                <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationValidation" *ngIf="!submitOperationValidation">Enregistrer</button>
+                                                <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationValidation" *ngIf="submitOperationValidation">
                                                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
                                                         <line x1="12" y1="2" x2="12" y2="6"></line>
                                                         <line x1="12" y1="18" x2="12" y2="22"></line>

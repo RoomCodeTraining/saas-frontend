@@ -77,6 +77,8 @@ import { ListSpecialSupplierComponent } from './components/app-content/entity/li
 import { DetailSpecialSupplierComponent } from './components/app-content/entity/detail-special-supplier/detail-special-supplier.component';
 import { ListDelegateForDeliveryComponent } from './components/app-content/entity/delegate/list-delegate-for-delivery/list-delegate-for-delivery.component';
 import { ListCooperativeComponent } from './components/app-content/entity/cooperative/list-cooperative/list-cooperative.component';
+import { ListWeightLoadingComponent } from './components/app-content/weight-loading/list-weight-loading/list-weight-loading.component';
+import { ListWarehouseDeliveryComponent } from './components/app-content/warehouse-delivery/list-warehouse-delivery/list-warehouse-delivery.component';
 
 function resourceProviderFactory(JarwisService: JarwisService) {
   return () => {
@@ -148,6 +150,8 @@ function resourceProviderFactory(JarwisService: JarwisService) {
     DetailSpecialSupplierComponent,
     ListDelegateForDeliveryComponent,
     ListCooperativeComponent,
+    ListWeightLoadingComponent,
+    ListWarehouseDeliveryComponent,
   ],
   imports: [
     BrowserModule,
