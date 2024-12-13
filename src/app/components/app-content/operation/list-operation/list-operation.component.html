@@ -302,13 +302,13 @@
                         <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
                             <div class="flex items-start justify-center min-h-screen px-4">
                                 <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
-                                    <h5 class="font-bold text-lg p-5">Désactivation de {{itemSelected?.name}}</h5>
+                                    <h5 class="font-bold text-lg p-5">Annulation de {{itemSelected?.wallet?.entity?.name}}</h5>
                                     <div class="p-5">
                                         <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
                                             <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
                                         </div>
                                         <div class="flex justify-center items-center mt-8">
-                                            Voulez-vous annuler l'opération de {{itemSelected?.amount| number:'':'fr-FR'}} FCFA au bénéficiaire {{itemSelected?.purchaser?.first_name}} {{itemSelected?.purchaser?.last_name}} ?
+                                            Voulez-vous annuler l'opération de {{itemSelected?.total_price| number:'':'fr-FR'}} FCFA au bénéficiaire {{itemSelected?.wallet?.entity?.name}} {{itemSelected?.purchaser?.last_name}} ?
                                         </div>
                                         <div class="flex justify-end items-center mt-8">
                                             <button type="button" (click)="resetAll(); itemSelected = !itemSelected" class="btn btn-outline-danger">Non</button>

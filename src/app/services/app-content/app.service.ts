@@ -424,7 +424,7 @@ export class AppService {
   }
 
   cancelOperation(operation_id:number,data:any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/operations/state/update/`+operation_id, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+    return this.http.put<any>(`${this.baseUrl}/operations/cancel/`+operation_id, data,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
   getStatistic(): Observable<any> {
