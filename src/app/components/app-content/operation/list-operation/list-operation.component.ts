@@ -802,6 +802,7 @@ export class ListOperationComponent implements OnInit {
         this.submit = false;
         this.editItem = !this.editItem;
         this.itemSelected = !this.itemSelected;
+        this.information = "";
         this.ngOnInit();
       }
       this.cs.showToast(this.toast);
