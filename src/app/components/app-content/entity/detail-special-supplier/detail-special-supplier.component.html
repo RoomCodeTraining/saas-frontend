@@ -640,6 +640,8 @@
                                     <th>Action</th>
                                     <th>Date</th>
                                     <th>Référence</th>
+                                    <th>Nombre de sacs</th>
+                                    <th>Poids</th>
                                     <th>Montant</th>
                                     <th>Type</th>
                                     <th>Méthode de paiement</th>
@@ -669,6 +671,8 @@
                                     <td>{{item?.date | date: 'dd/MM/YYYY'}}</td>
                                     <td>{{item?.reference}}</td>
                                     <td>{{item?.total_price | number:'':'fr-FR'}} FCFA</td>
+                                    <td>{{item?.bags_accepted | number:'':'fr-FR'}}</td>
+                                    <td>{{item?.weight_accepted | number:'':'fr-FR'}}</td>
                                     <td>{{item?.operation_type?.label}}</td>
                                     <td>{{item?.payment_method?.label}}</td>
                                     <td>{{item?.user?.name}}</td>
