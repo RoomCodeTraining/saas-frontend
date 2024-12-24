@@ -239,8 +239,8 @@ export class ListWarehouseDeliveryComponent implements OnInit {
     /** spinner starts on init */
     this.SpinnerService.show();
     
-    this.getProduct();
-    this.getRoles();
+    // this.getProduct();
+    // this.getRoles();
     this.getItems();
     this.makePassword(12);
     this.getUserLogged();
@@ -288,16 +288,20 @@ export class ListWarehouseDeliveryComponent implements OnInit {
       bags_accepted: new FormControl('', [Validators.required]),
       weight_accepted: new FormControl('', [Validators.required]),
       refact: new FormControl('', [Validators.required]),
-      // unit_price: new FormControl('', [Validators.required]),
-      // commission: new FormControl('', [Validators.required]),
-      // total_price: new FormControl('', [Validators.required]),
+      unit_price: new FormControl('', [Validators.required]),
+      commission: new FormControl('', [Validators.required]),
+      total_price: new FormControl('', [Validators.required]),
       date: new FormControl('', [Validators.required]),
     });
 
     this.formGroupOperationValidation = new FormGroup({
+      bags_accepted: new FormControl('', [Validators.required]),
+      weight_accepted: new FormControl('', [Validators.required]),
+      refact: new FormControl('', [Validators.required]),
       unit_price: new FormControl('', [Validators.required]),
       commission: new FormControl('', [Validators.required]),
       total_price: new FormControl('', [Validators.required]),
+      date: new FormControl('', [Validators.required]),
     });
 
   }
@@ -360,9 +364,9 @@ export class ListWarehouseDeliveryComponent implements OnInit {
 
   amountChange(){
     if(this.commission_applied == 0){
-      this.total_price = Math.ceil(this.operationSelected.weight * this.unit_price);
+      this.total_price = Math.ceil(this.weight_accepted * this.unit_price);
     } else {
-      this.total_price = Math.ceil(this.operationSelected.weight * (this.unit_price + this.commission));
+      this.total_price = Math.ceil(this.weight_accepted * (this.unit_price + this.commission));
     }
 
   }
@@ -854,6 +858,13 @@ export class ListWarehouseDeliveryComponent implements OnInit {
     this.operationDelivery = false;
     this.operationValidation = true;
     this.operationSelected = item;
+    this.date = this.operationSelected.date;
+    this.bags_accepted = this.operationSelected.bags;
+    this.weight_accepted = this.operationSelected.weight;
+    this.refact = this.operationSelected.refact;
+    this.amountChange();
+    console.log('this.operationSelected',this.operationSelected);
+
   }
 
   itemOperationHistory(item:any) {
@@ -1651,22 +1662,24 @@ export class ListWarehouseDeliveryComponent implements OnInit {
   saveOperationValidation(operation_type_id: number){
     this.submittedOperationValidation = true;
     if(this.formGroupOperationValidation.invalid){
+      console.log('dfdvfdgfvdfd',this.formGroupOperationValidation);
       return;
     } else {
       this.submitOperationValidation = true;
 
       let requestData = {
-        entity_id: this.itemSelected.id,
+        entity_id: this.operationSelected?.entity?.id,
         operation_type_id: operation_type_id,
         entity_product_id: this.operationSelected.entity_product.product.id,
         campaign_id: this.operationSelected.campaign.id,
         bags_accepted: this.bags_accepted,
+        refact: this.refact,
         weight_accepted: this.weight_accepted,
         unit_price: this.unit_price,
         commission_applied: this.commission_applied,
         commission: this.commission,
         total_price: this.total_price,
-        date: this.operationSelected.date,
+        date: this.date,
       }
 
       this.appService.updateWarehouseDelivery(this.operationSelected.id,requestData).subscribe(res => {
@@ -1699,7 +1712,6 @@ export class ListWarehouseDeliveryComponent implements OnInit {
           };
           this.submitOperationValidation = false;
           this.operationValidation = !this.operationValidation;
-          this.itemSelected = !this.itemSelected;
           this.resetAll();
           this.ngOnInit();
         }

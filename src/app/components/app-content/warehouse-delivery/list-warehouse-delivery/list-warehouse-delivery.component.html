@@ -10,7 +10,7 @@
                     </li>
                 </ul>
     
-                <div class="pt-5" *ngIf="!itemSelected && !addItem">
+                <div class="pt-5" *ngIf="!itemSelected && !addItem && !operationValidation">
                     <div class="flex items-center justify-between flex-wrap gap-4">
                         <h2 class="text-xl">Liste des opérations des magasiniers</h2>
                         <div class="flex sm:flex-row flex-col sm:items-center sm:gap-3 gap-4 w-full sm:w-auto">
@@ -57,12 +57,20 @@
                                     <th>Statut</th>
                                 </tr>
                             </thead>
-                            <tbody *ngIf="listOperation?.length >= 0">
-                                <tr *ngFor="let item of listOperation | filter:informationOperation; let i = index;">
+                            <tbody *ngIf="listItem?.length >= 0">
+                                <tr *ngFor="let item of listItem | filter:informationOperation; let i = index;">
                                     <td>{{i+1}}</td>
-                                    <td class="text-center" *ngIf="user_logged.profile?.id == 2">
+                                    <td class="text-center" *ngIf="user_logged?.profile?.id == 2">
                                         <ul class="flex gap-2">
                                             <li *ngIf="item.status?.id == 5">
+                                                <a href="javascript:;" x-tooltip="Activer" (click)="itemOperationValidation(item)">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-success">
+                                                        <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
+                                                        <path d="M8.5 12.5L10.5 14.5L15.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                </a>
+                                            </li>
+                                            <li>
                                                 <a href="javascript:;" x-tooltip="Détails" (click)="itemOperationValidation(item)">
                                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                                         <path
@@ -87,13 +95,14 @@
                                     <td>{{item?.user?.name}}</td>
                                     <td>{{item?.created_at | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
                                     <td> 
-                                        <span class="badge bg-success" *ngIf="item?.status?.id == 3">{{item?.status?.label}}</span>
-                                        <span class="badge bg-danger" *ngIf="item?.status?.id != 3">{{item?.status?.label}}</span>
+                                        <span class="badge bg-success" *ngIf="item?.status?.id == 6">{{item?.status?.label}}</span>
+                                        <span class="badge bg-warning" *ngIf="item?.status?.id == 5">{{item?.status?.label}}</span>
+                                        <span class="badge bg-danger" *ngIf="item?.status?.id == 4">{{item?.status?.label}}</span>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <h1 *ngIf="listOperation?.length <= 0" class="text-center items-center p-2">Aucune donnée à afficher</h1>
+                        <h1 *ngIf="listItem?.length <= 0" class="text-center items-center p-2">Aucune donnée à afficher</h1>
                     </div>
                     <div class="flex justify-center flex-col w-full mt-2">
                         <div class="grid grid-cols-1 grid-cols-2 gap-2">
@@ -796,7 +805,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="pt-5" *ngIf="itemSelected && operationValidation && operationSelected">
+                <div class="pt-5" *ngIf="operationValidation">
                     <div class="row mb-5">
                         <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
                             <div class="flex items-start justify-center min-h-screen px-4">
@@ -808,48 +817,40 @@
                                                 <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
                                             </div>
                                             <div class="grid grid-cols-1 grid-cols-3 gap-3">
-                                                <div class="mb-3">
-                                                    <label for="gridPassword">Date <span style="color:red">*</span></label>
-                                                    <input type="date" class="form-input" [value]="operationSelected?.date" readonly disabled/>
-                                                </div>
-                                                <!-- <div class="mb-3" [formGroup]="formGroupOperationValidation">
+                                                <div class="mb-3" [formGroup]="formGroupOperationValidation">
                                                     <label>Date <span style="color:red">*</span></label>
                                                     <input type="date" class="form-input" formControlName="date" [ngClass]="{ 'is-invalid': submittedOperationValidation && fOperationValidation['date'].errors }"
                                                         name="date" [(ngModel)]="date" />
                                                     <div *ngIf="submittedOperationValidation && fOperationValidation['date'].errors" class="mt-1">
                                                         <div *ngIf="submittedOperationValidation && fOperationValidation['date'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
-                                                </div> -->
+                                                </div>
                                                 <div class="mb-3">
                                                     <label for="gridPassword">Délégué <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="itemSelected?.name" readonly disabled/>
+                                                    <input type="text" class="form-input" [value]="operationSelected?.entity?.name" readonly disabled/>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="gridPassword">Produit <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="operationSelected?.entity_product.product.label" readonly disabled/>
+                                                    <input type="text" class="form-input" [value]="operationSelected?.entity_product?.product?.label" readonly disabled/>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="gridPassword">Campagne <span style="color:red">*</span></label>
-                                                    <input type="text" class="form-input" [value]="operationSelected?.campaign.label" readonly disabled/>
+                                                    <input type="text" class="form-input" [value]="operationSelected?.campaign?.label" readonly disabled/>
                                                 </div>
-                                                <div class="mb-3">
-                                                    <label for="gridPassword">Nombre de sacs <span style="color:red">*</span></label>
-                                                    <input type="number" class="form-input" [value]="operationSelected?.bags" readonly disabled/>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="gridPassword">Réfraction <span style="color:red">*</span></label>
-                                                    <input type="number" class="form-input" [value]="operationSelected?.refact" readonly disabled/>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="gridPassword">Poids <span style="color:red">*</span></label>
-                                                    <input type="number" class="form-input" [value]="operationSelected?.weight" readonly disabled/>
-                                                </div>
-                                                <!-- <div class="mb-3" [formGroup]="formGroupOperationValidation">
+                                                <div class="mb-3" [formGroup]="formGroupOperationValidation">
                                                     <label>Nombre de sacs <span style="color:red">*</span></label>
                                                     <input type="number" class="form-input" formControlName="bags_accepted" [ngClass]="{ 'is-invalid': submittedOperationValidation && fOperationValidation['bags_accepted'].errors }"
                                                         name="bags_accepted" [(ngModel)]="bags_accepted" min="0" />
                                                     <div *ngIf="submittedOperationValidation && fOperationValidation['bags_accepted'].errors" class="mt-1">
                                                         <div *ngIf="submittedOperationValidation && fOperationValidation['bags_accepted'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3" [formGroup]="formGroupOperationValidation">
+                                                    <label>Réfraction <span style="color:red">*</span></label>
+                                                    <input type="number" class="form-input" formControlName="refact" [ngClass]="{ 'is-invalid': submittedOperationValidation && fOperationValidation['refact'].errors }"
+                                                        name="refact" [(ngModel)]="refact" min="0" />
+                                                    <div *ngIf="submittedOperationValidation && fOperationValidation['refact'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationValidation && fOperationValidation['refact'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3" [formGroup]="formGroupOperationValidation">
@@ -859,13 +860,21 @@
                                                     <div *ngIf="submittedOperationValidation && fOperationValidation['weight_accepted'].errors" class="mt-1">
                                                         <div *ngIf="submittedOperationValidation && fOperationValidation['weight_accepted'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
-                                                </div> -->
+                                                </div>
                                                 <div class="mb-3" [formGroup]="formGroupOperationValidation">
                                                     <label>Prix unitaire <span style="color:red">*</span></label>
                                                     <input type="number" class="form-input" formControlName="unit_price" [ngClass]="{ 'is-invalid': submittedOperationValidation && fOperationValidation['unit_price'].errors }"
                                                         name="unit_price" [(ngModel)]="unit_price" min="0" (ngModelChange)="amountChange()" />
                                                     <div *ngIf="submittedOperationValidation && fOperationValidation['unit_price'].errors" class="mt-1">
                                                         <div *ngIf="submittedOperationValidation && fOperationValidation['unit_price'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3" [formGroup]="formGroupOperationValidation">
+                                                    <label>Commission <span style="color:red">*</span></label>
+                                                    <input type="number" class="form-input" formControlName="commission" [ngClass]="{ 'is-invalid': submittedOperationValidation && fOperationValidation['commission'].errors }"
+                                                        name="commission" [(ngModel)]="commission" min="0" (ngModelChange)="amountChange()" />
+                                                    <div *ngIf="submittedOperationValidation && fOperationValidation['commission'].errors" class="mt-1">
+                                                        <div *ngIf="submittedOperationValidation && fOperationValidation['commission'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3">
@@ -886,14 +895,6 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-3" [formGroup]="formGroupOperationValidation">
-                                                    <label>Commission <span style="color:red">*</span></label>
-                                                    <input type="number" class="form-input" formControlName="commission" [ngClass]="{ 'is-invalid': submittedOperationValidation && fOperationValidation['commission'].errors }"
-                                                        name="commission" [(ngModel)]="commission" min="0" (ngModelChange)="amountChange()" />
-                                                    <div *ngIf="submittedOperationValidation && fOperationValidation['commission'].errors" class="mt-1">
-                                                        <div *ngIf="submittedOperationValidation && fOperationValidation['commission'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3" [formGroup]="formGroupOperationValidation">
                                                     <label>Montant payé <span style="color:red">*</span></label>
                                                     <input type="number" class="form-input" formControlName="total_price" [ngClass]="{ 'is-invalid': submittedOperationValidation && fOperationValidation['total_price'].errors }"
                                                         name="total_price" [(ngModel)]="total_price" min="0" [value]="total_price" />
@@ -904,7 +905,7 @@
                                             </div>
                 
                                             <div class="flex justify-end items-center mt-8">
-                                                <button type="button" (click)="resetAll(); itemDetail = !itemDetail; operationValidation = !operationValidation" class="btn btn-outline-danger">Annuler</button>
+                                                <button type="button" (click)="resetAll(); operationValidation = !operationValidation" class="btn btn-outline-danger">Annuler</button>
                                                 <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationValidation" *ngIf="!submitOperationValidation">Enregistrer</button>
                                                 <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submitOperationValidation" *ngIf="submitOperationValidation">
                                                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
