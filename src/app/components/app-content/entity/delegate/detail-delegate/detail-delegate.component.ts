@@ -110,6 +110,7 @@ export class DetailDelegateComponent implements OnInit {
   editItem: boolean = false;
   enableItem: boolean = false;  
   disableItem: boolean = false;
+  cancelItem = false;
 
   activeDropdown!: any;  
   open: boolean = false;  
@@ -735,6 +736,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationDelivery = false;
     this.operationRepayment = false;
     this.operationCommission = false;
+    this.cancelItem = false;
     this.resetAll();
   }
 
@@ -753,6 +755,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationDelivery = false;
     this.operationRepayment = false;
     this.operationCommission = false;
+    this.cancelItem = false;
     this.itemSelected = item;
   }
 
@@ -771,6 +774,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationDelivery = false;
     this.operationRepayment = false;
     this.operationCommission = false;
+    this.cancelItem = false;
     this.itemSelected = item;
   }
 
@@ -789,6 +793,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationDelivery = false;
     this.operationRepayment = false;
     this.operationCommission = false;
+    this.cancelItem = false;
     this.itemSelected = item;
     
   }
@@ -808,6 +813,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationDelivery = false;
     this.operationRepayment = false;
     this.operationCommission = false;
+    this.cancelItem = false;
     this.itemSelected = item;
     
   }
@@ -827,6 +833,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationDelivery = false;
     this.operationRepayment = false;
     this.operationCommission = false;
+    this.cancelItem = false;
     this.itemSelected = item;
     
   }
@@ -845,6 +852,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationDelivery = false;
     this.operationCommission = false;
     this.operationRepayment = false;
+    this.cancelItem = false;
   }
 
   itemOperation(item:any) {
@@ -862,6 +870,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationDelivery = false;
     this.operationRepayment = false;
     this.operationCommission = false;
+    this.cancelItem = false;
     this.itemSelected = item;
   }
 
@@ -880,6 +889,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationDelivery = false;
     this.operationRepayment = false;
     this.operationCommission = false;
+    this.cancelItem = false;
     this.itemSelected = item;
   }
 
@@ -898,6 +908,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationDelivery = true;
     this.operationRepayment = false;
     this.operationCommission = false;
+    this.cancelItem = false;
     this.itemSelected = item;
   }
 
@@ -916,6 +927,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationDelivery = false;
     this.operationRepayment = true;
     this.operationCommission = false;
+    this.cancelItem = false;
     this.itemSelected = item;
   }
 
@@ -934,6 +946,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationDelivery = false;
     this.operationRepayment = false;
     this.operationCommission = true;
+    this.cancelItem = false;
     this.itemSelected = item;
   }
 
@@ -948,6 +961,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationItem = false;
     this.depositItem = true;
     this.operationHistoryItem = false;
+    this.cancelItem = false;
     this.itemSelected = item;
   }
 
@@ -962,6 +976,7 @@ export class DetailDelegateComponent implements OnInit {
     this.operationItem = false;
     this.depositItem = false;
     this.operationHistoryItem = true;
+    this.cancelItem = false;
     this.itemSelected = item;
     
     this.getOperation();
@@ -976,6 +991,8 @@ export class DetailDelegateComponent implements OnInit {
     this.operationItem = false;
     this.enableItem = false;
     this.walletItem = false;
+    this.operationHistoryItem = false;
+    this.cancelItem = true;
     this.operationHistorySelected = item;
   }
  
@@ -1382,7 +1399,7 @@ export class DetailDelegateComponent implements OnInit {
 
   cancel(){
     this.submit = true;
-    
+   
     let requestData = {
       operation_id: this.operationHistorySelected.id,
     }
@@ -1416,9 +1433,9 @@ export class DetailDelegateComponent implements OnInit {
           } as GlobalConfig,
         };
         this.submit = false;
-        this.editItem = !this.editItem;
         this.itemSelected = !this.itemSelected;
-        this.resetAll();
+        this.cancelItem = !this.cancelItem;
+        this.information = "";
         this.ngOnInit();
       }
       this.cs.showToast(this.toast);

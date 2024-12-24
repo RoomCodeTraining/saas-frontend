@@ -110,6 +110,7 @@ export class DetailSupplierComponent implements OnInit {
   editItem: boolean = false;
   enableItem: boolean = false;  
   disableItem: boolean = false;
+  cancelItem: boolean = false;
 
   activeDropdown!: any;  
   open: boolean = false;  
@@ -407,6 +408,7 @@ export class DetailSupplierComponent implements OnInit {
     this.unit_price_value = 1900;
     this.tkm = 7.14;
     this.unit_price = this.unit_price_value + (this.tkm - 2.5),
+    this.refact = this.weight_declared - this.weight_accepted,
     this.total_price = Math.round(this.weight_accepted * this.unit_price);
     this.bic_value = this.weight_accepted * 2.5;
     this.value_prod_plus_tkm = Math.round(this.total_price + this.tkm_amount);
@@ -744,6 +746,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationDelivery = false;
     this.operationPayment = false;
     this.operationRepayment = false;
+    this.cancelItem = false;
     this.resetAll();
   }
 
@@ -762,6 +765,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationDelivery = false;
     this.operationPayment = false;
     this.operationRepayment = false;
+    this.cancelItem = false;
     this.itemSelected = item;
   }
 
@@ -780,6 +784,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationDelivery = false;
     this.operationPayment = false;
     this.operationRepayment = false;
+    this.cancelItem = false;
     this.itemSelected = item;
   }
 
@@ -798,6 +803,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationDelivery = false;
     this.operationPayment = false;
     this.operationRepayment = false;
+    this.cancelItem = false;
     this.itemSelected = item;
     
   }
@@ -817,6 +823,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationDelivery = false;
     this.operationPayment = false;
     this.operationRepayment = false;
+    this.cancelItem = false;
     this.itemSelected = item;
     
   }
@@ -836,6 +843,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationDelivery = false;
     this.operationPayment = false;
     this.operationRepayment = false;
+    this.cancelItem = false;
     this.itemSelected = item;
     
   }
@@ -854,6 +862,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationDelivery = false;
     this.operationPayment = false;
     this.operationRepayment = false;
+    this.cancelItem = false;
   }
 
   itemOperation(item:any) {
@@ -871,6 +880,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationDelivery = false;
     this.operationPayment = false;
     this.operationRepayment = false;
+    this.cancelItem = false;
     this.itemSelected = item;
   }
 
@@ -889,6 +899,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationDelivery = false;
     this.operationPayment = false;
     this.operationRepayment = false;
+    this.cancelItem = false;
     this.itemSelected = item;
   }
 
@@ -907,6 +918,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationDelivery = true;
     this.operationPayment = false;
     this.operationRepayment = false;
+    this.cancelItem = false;
     this.itemSelected = item;
   }
 
@@ -925,6 +937,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationDelivery = false;
     this.operationPayment = true;
     this.operationRepayment = false;
+    this.cancelItem = false;
     this.itemSelected = item;
   }
 
@@ -943,6 +956,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationDelivery = false;
     this.operationPayment = false;
     this.operationRepayment = true;
+    this.cancelItem = false;
     this.itemSelected = item;
   }
 
@@ -957,6 +971,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationItem = false;
     this.depositItem = true;
     this.operationHistoryItem = false;
+    this.cancelItem = false;
     this.itemSelected = item;
     
   }
@@ -972,6 +987,7 @@ export class DetailSupplierComponent implements OnInit {
     this.operationItem = false;
     this.depositItem = false;
     this.operationHistoryItem = true;
+    this.cancelItem = false;
     this.itemSelected = item;
     
     this.getOperation();
@@ -984,6 +1000,8 @@ export class DetailSupplierComponent implements OnInit {
     this.operationItem = false;
     this.enableItem = false;
     this.walletItem = false;
+    this.operationHistoryItem = false;
+    this.cancelItem = true;
     this.operationHistorySelected = item;
   }
  
@@ -1390,7 +1408,7 @@ export class DetailSupplierComponent implements OnInit {
 
   cancel(){
     this.submit = true;
-    
+   
     let requestData = {
       operation_id: this.operationHistorySelected.id,
     }
@@ -1424,9 +1442,9 @@ export class DetailSupplierComponent implements OnInit {
           } as GlobalConfig,
         };
         this.submit = false;
-        this.editItem = !this.editItem;
         this.itemSelected = !this.itemSelected;
-        this.resetAll();
+        this.cancelItem = !this.cancelItem;
+        this.information = "";
         this.ngOnInit();
       }
       this.cs.showToast(this.toast);
@@ -1550,7 +1568,7 @@ export class DetailSupplierComponent implements OnInit {
         weight_declared: this.weight_declared,
         bags_accepted: this.bags_accepted,
         weight_accepted: this.weight_accepted,
-        refact: this.refact,
+        refact:  this.weight_declared - this.weight_accepted,
         unit_price: this.unit_price_value + (this.tkm - this.bic_value),
         total_price: Math.round(this.weight_accepted * this.unit_price),
         tkm: this.tkm,

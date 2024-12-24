@@ -768,7 +768,7 @@ export class ListOperationComponent implements OnInit {
     this.submit = true;
    
     let requestData = {
-      sale_id: this.itemSelected.id,
+      operation_id: this.itemSelected.id,
     }
 
     this.appService.cancelOperation(this.itemSelected.id,requestData).subscribe(res => {

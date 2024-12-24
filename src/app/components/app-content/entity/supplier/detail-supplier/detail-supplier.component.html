@@ -681,11 +681,17 @@
                                     <th>N°</th>
                                     <th>Action</th>
                                     <th>Date</th>
-                                    <th>Référence</th>
+                                    <!-- <th>Référence</th> -->
+                                    <th>Nombre de sacs déclarés</th>
+                                    <th>Poids déclarés</th>
+                                    <th>Nombre de sacs refoulés</th>
+                                    <th>Poids refoulés</th>
+                                    <th>Nombre de sacs acceptés</th>
+                                    <th>Poids acceptés</th>
                                     <th>Montant</th>
                                     <th>Type</th>
-                                    <th>Méthode de paiement</th>
-                                    <th>Effectué(e) par</th>
+                                    <!-- <th>Méthode de paiement</th>
+                                    <th>Effectué(e) par</th> -->
                                     <th>Effectué(e) le</th>
                                     <th>Statut</th>
                                 </tr>
@@ -709,11 +715,17 @@
                                         </ul>
                                     </td>
                                     <td>{{item?.date | date: 'dd/MM/YYYY'}}</td>
-                                    <td>{{item?.reference}}</td>
+                                    <!-- <td>{{item?.reference}}</td> -->
+                                    <td>{{item?.bags_declared | number:'':'fr-FR'}}</td>
+                                    <td>{{item?.weight_declared | number:'':'fr-FR'}}</td>
+                                    <td>{{(item?.bags_declared - item?.bags_accepted) | number:'':'fr-FR'}}</td>
+                                    <td>{{item?.refact | number:'':'fr-FR'}}</td>
+                                    <td>{{item?.bags_accepted | number:'':'fr-FR'}}</td>
+                                    <td>{{item?.weight_accepted | number:'':'fr-FR'}}</td>
                                     <td>{{item?.total_price | number:'':'fr-FR'}} FCFA</td>
                                     <td>{{item?.operation_type?.label}}</td>
-                                    <td>{{item?.payment_method?.label}}</td>
-                                    <td>{{item?.user?.name}}</td>
+                                    <!-- <td>{{item?.payment_method?.label}}</td>
+                                    <td>{{item?.user?.name}}</td> -->
                                     <td>{{item?.created_at | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
                                     <td> 
                                         <span class="badge bg-success" *ngIf="item?.status?.id == 3">{{item?.status?.label}}</span>
@@ -873,21 +885,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="pt-5" *ngIf="itemSelected && operationHistorySelected">
+                <div class="pt-5" *ngIf="cancelItem">
                     <div class="row mb-5">
                         <div class="fixed inset-0 bg-[black]/60 z-[999]  hidden" :class="open && '!block'">
                             <div class="flex items-start justify-center min-h-screen px-4">
                                 <div x-show="open" x-transition x-transition.duration.300 class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-5xl my-8">
-                                    <h5 class="font-bold text-lg p-5">Annulation du mandat de {{itemSelected?.name}}</h5>
+                                    <h5 class="font-bold text-lg p-5">Annulation de l'opération de {{operationHistorySelected?.wallet?.entity?.name}}</h5>
                                     <div class="p-5">
                                         <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light" *ngFor="let item of error_message; let i = index;">
                                             <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
                                         </div>
                                         <div class="flex justify-center items-center mt-8">
-                                            Voulez-vous annuler le rechargement de {{operationHistorySelected?.amount| number:'':'fr-FR'}} FCFA  pour le portefeuille {{itemSelected?.product_concerned?.name}} du pisteur {{itemSelected?.name}} ?
+                                            Voulez-vous annuler l'opération de {{operationHistorySelected?.total_price| number:'':'fr-FR'}} FCFA au bénéficiaire {{operationHistorySelected?.wallet?.entity?.name}} {{operationHistorySelected?.purchaser?.last_name}} ?
                                         </div>
                                         <div class="flex justify-end items-center mt-8">
-                                            <button type="button" (click)="resetAll(); itemSelected = !itemSelected" class="btn btn-outline-danger">Non</button>
+                                            <button type="button" (click)="resetAll(); operationHistoryItem = !operationHistoryItem; cancelItem = !cancelItem" class="btn btn-outline-danger">Non</button>
                                             <button type="submit" (click)="cancel()" [disabled]="submit" *ngIf="!submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Oui</button>
                                             <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" [disabled]="submit" *ngIf="submit">
                                                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 animate-[spin_2s_linear_infinite] inline-block align-middle ltr:mr-2 rtl:ml-2">
@@ -1048,7 +1060,7 @@
                                                 <div class="mb-3" [formGroup]="formGroupOperationDelivery">
                                                     <label>Poids déclarés <span style="color:red">*</span></label>
                                                     <input type="number" class="form-input" formControlName="weight_declared" [ngClass]="{ 'is-invalid': submittedOperationDelivery && fOperationDelivery['weight_declared'].errors }"
-                                                        name="weight_declared" [(ngModel)]="weight_declared" min="0" />
+                                                        name="weight_declared" [(ngModel)]="weight_declared" min="0" (ngModelChange)="amountChange()" />
                                                     <div *ngIf="submittedOperationDelivery && fOperationDelivery['weight_declared'].errors" class="mt-1">
                                                         <div *ngIf="submittedOperationDelivery && fOperationDelivery['weight_declared'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
                                                     </div>
