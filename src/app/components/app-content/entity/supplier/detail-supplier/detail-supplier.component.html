@@ -686,6 +686,7 @@
                                     <th>Poids déclarés</th>
                                     <th>Nombre de sacs refoulés</th>
                                     <th>Poids refoulés</th>
+                                    <th>Poids refoulés dûs</th>
                                     <th>Nombre de sacs acceptés</th>
                                     <th>Poids acceptés</th>
                                     <th>Montant</th>
@@ -720,6 +721,7 @@
                                     <td>{{item?.weight_declared | number:'':'fr-FR'}}</td>
                                     <td>{{(item?.bags_declared - item?.bags_accepted) | number:'':'fr-FR'}}</td>
                                     <td>{{item?.refact | number:'':'fr-FR'}}</td>
+                                    <td>{{(item?.weight_declared - item?.weight_accepted) | number:'':'fr-FR'}}</td>
                                     <td>{{item?.bags_accepted | number:'':'fr-FR'}}</td>
                                     <td>{{item?.weight_accepted | number:'':'fr-FR'}}</td>
                                     <td>{{item?.total_price | number:'':'fr-FR'}} FCFA</td>
