@@ -408,7 +408,7 @@ export class DetailSupplierComponent implements OnInit {
     this.unit_price_value = 1900;
     this.tkm = 7.14;
     this.unit_price = this.unit_price_value + (this.tkm - 2.5),
-    this.refact = this.weight_declared - this.weight_accepted,
+    // this.refact = this.weight_declared - this.weight_accepted,
     this.total_price = Math.round(this.weight_accepted * this.unit_price);
     this.bic_value = this.weight_accepted * 2.5;
     this.value_prod_plus_tkm = Math.round(this.total_price + this.tkm_amount);
