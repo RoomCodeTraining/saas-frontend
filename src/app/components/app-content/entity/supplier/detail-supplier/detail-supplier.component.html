@@ -690,6 +690,9 @@
                                     <th>Nombre de sacs acceptés</th>
                                     <th>Poids acceptés</th>
                                     <th>Montant</th>
+                                    <th>Montant TKM</th>
+                                    <th>Valeur de production plus TKM</th>
+                                    <th>Valeur BIC</th>
                                     <th>Type</th>
                                     <!-- <th>Méthode de paiement</th>
                                     <th>Effectué(e) par</th> -->
@@ -725,6 +728,9 @@
                                     <td>{{item?.bags_accepted | number:'':'fr-FR'}}</td>
                                     <td>{{item?.weight_accepted | number:'':'fr-FR'}}</td>
                                     <td>{{item?.total_price | number:'':'fr-FR'}} FCFA</td>
+                                    <td>{{item?.tkm_amount | number:'':'fr-FR'}} FCFA</td>
+                                    <td>{{item?.value_prod_plus_tkm | number:'':'fr-FR'}} FCFA</td>
+                                    <td>{{item?.bic_value | number:'':'fr-FR'}} FCFA</td>
                                     <td>{{item?.operation_type?.label}}</td>
                                     <!-- <td>{{item?.payment_method?.label}}</td>
                                     <td>{{item?.user?.name}}</td> -->
