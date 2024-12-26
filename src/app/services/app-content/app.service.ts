@@ -465,8 +465,12 @@ export class AppService {
   }
 
 
-  getAllArticle(entity_id:number, ): Observable<any> {
+  getAllArticle(entity_id:number): Observable<any> {
     return this.http.get<any[]>(`${this.baseUrl}/articles?entity_id=` +entity_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
+  }
+
+  getAllArticleByTypeId(entity_id:number, article_type_id: number): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/articles?entity_id=` +entity_id+ `&article_category_id=`+article_type_id,{headers: this.herdersService.header()}).pipe(catchError(err => { return throwError(err); }));
   }
 
   getArticle(entity_id:number, page:number): Observable<any> {

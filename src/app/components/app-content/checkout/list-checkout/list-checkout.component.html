@@ -220,7 +220,16 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-3" [formGroup]="formGroupAdd">
-                                                    <label for="gridPassword">Article <span style="color:red">*</span></label>
+                                                    <label for="gridPassword">Catégorie de dépense <span style="color:red">*</span></label>
+                                                    <ng-select id="article_type_id" name="article_type_id" formControlName="article_type_id" [(ngModel)]="article_type_id" (change)="onChange($event)" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submitted && f['article_type_id'].errors }">
+                                                        <ng-option *ngFor="let item of listArticleType" [value]="item.id">{{item.label}}</ng-option>
+                                                    </ng-select>
+                                                    <div *ngIf="submitted && f['article_type_id'].errors" class="mt-1">
+                                                        <div *ngIf="submitted && f['article_type_id'].errors?.['required']" class="text-danger">Ce champ est requis !</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3" [formGroup]="formGroupAdd">
+                                                    <label for="gridPassword">Dépense <span style="color:red">*</span></label>
                                                     <ng-select id="article_id" name="article_id" formControlName="article_id" [(ngModel)]="article_id" placeholder="Sélectionner" [ngClass]="{ 'is-invalid': submitted && f['article_id'].errors }">
                                                         <ng-option *ngFor="let item of listArticle" [value]="item.id">{{item.label}}</ng-option>
                                                     </ng-select>

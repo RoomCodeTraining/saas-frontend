@@ -33,6 +33,7 @@ export class ListCheckoutComponent implements OnInit {
   listArticle: any;
   listEntityProduct: any;
   listEntityCampaign: any;
+  listArticleType: any;
   
   itemSelected: any;
 
@@ -107,6 +108,7 @@ export class ListCheckoutComponent implements OnInit {
   cash_register_movement_id: number = 2;
   entity_product_id!: number;
   campaign_id!: number;
+  article_type_id!: number;
   date!: Date;
 
   constructor(
@@ -133,6 +135,7 @@ export class ListCheckoutComponent implements OnInit {
     this.getUserLogged();
 
     this.formGroupAdd = new FormGroup({
+      article_type_id: new FormControl('', [Validators.required]),
       article_id: new FormControl('', [Validators.required]),
       entity_product_id: new FormControl('', [Validators.required]),
       campaign_id: new FormControl('', [Validators.required]),
@@ -169,7 +172,7 @@ export class ListCheckoutComponent implements OnInit {
   getUserLogged(){
     this.appService.getUserProfile().subscribe((data: any) => {
       this.user_logged = data.data;
-      this.getArticle();
+      this.getArticleType();
       this.getEntityProduct();
       this.getEntityCampaign();
       this.getItems();
@@ -212,12 +215,20 @@ export class ListCheckoutComponent implements OnInit {
 
   onChange(event:any) {
     this.SpinnerService.show();
-    this.getItems();
+    this.article_id = "";
+    this.getArticle(event);
   }
 
-  getArticle(){
-    this.appService.getAllArticle(this.user_logged.entity.id).subscribe((data: any) => {
+  getArticleType(){
+    this.appService.getAllArticleCategory(this.user_logged.entity.id).subscribe((data: any) => {
+      this.listArticleType = data.data;
+    });
+  }
+
+  getArticle(article_type_id: number){
+    this.appService.getAllArticleByTypeId(this.user_logged.entity.id,article_type_id).subscribe((data: any) => {
       this.listArticle = data.data;
+      this.SpinnerService.hide();
     });
   }
 
