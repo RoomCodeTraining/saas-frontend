@@ -106,7 +106,7 @@
                                     <td>{{item?.reference}}</td>
                                     <td>{{item?.entity_product?.product?.label}}</td>
                                     <td>{{item?.entity?.name}}</td>
-                                    <td>{{item?.balance | number:'':'fr-FR'}} FCFA</td>
+                                    <td>{{item?.balance | number:'1.0-0':'fr-FR'}} FCFA</td>
                                     <td>{{item?.created_at | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
                                     <td>{{item?.updated_at | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
                                     <td> 
@@ -122,7 +122,7 @@
                         <div class="grid grid-cols-1 grid-cols-2 gap-2">
                             <div style="padding-top: 10px;">
                                 <div class="d-flex mr-5" *ngIf="total">
-                                    <b>Affichage de {{from}} à {{to}} sur {{total | number:'':'fr-FR'}} éléments</b>
+                                    <b>Affichage de {{from}} à {{to}} sur {{total | number:'1.0-0':'fr-FR'}} éléments</b>
                                 </div>
                                 <div class="d-flex mr-5" *ngIf="!total">
                                     <b>Affichage de 0 à 0 sur 0 élément</b>
@@ -346,7 +346,7 @@
                                                     </tr>
                                                     <tr>
                                                         <th>Solde</th>
-                                                        <td>{{itemSelected?.balance | number:'':'fr-FR'}} FCFA</td>
+                                                        <td>{{itemSelected?.balance | number:'1.0-0':'fr-FR'}} FCFA</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Statut</th>
@@ -612,23 +612,23 @@
                         <div class="grid grid-cols-1 grid-cols-2 gap-2">
                             <div class="mb-3">
                                 <label>Versement</label>
-                                <h3 class="form-input">{{listStatistics.payment | number:'':'fr-FR'}} FCFA</h3>
+                                <h3 class="form-input">{{listStatistics.payment | number:'1.0-0':'fr-FR'}} FCFA</h3>
                             </div>
                             <div class="mb-3">
                                 <label>Remboursement</label>
-                                <h3 class="form-input">{{listStatistics.repayment | number:'':'fr-FR'}} FCFA</h3>
+                                <h3 class="form-input">{{listStatistics.repayment | number:'1.0-0':'fr-FR'}} FCFA</h3>
                             </div>
                             <div class="mb-3">
                                 <label>Achat (carburant, ...)</label>
-                                <h3 class="form-input">{{listStatistics.payment_other | number:'':'fr-FR'}} FCFA</h3>
+                                <h3 class="form-input">{{listStatistics.payment_other | number:'1.0-0':'fr-FR'}} FCFA</h3>
                             </div>
                             <div class="mb-3">
                                 <label>pour achat de carburant, ...</label>
-                                <h3 class="form-input">{{listStatistics.repayment_other | number:'':'fr-FR'}} FCFA</h3>
+                                <h3 class="form-input">{{listStatistics.repayment_other | number:'1.0-0':'fr-FR'}} FCFA</h3>
                             </div>
                             <div class="mb-3">
                                 <label>Solde</label>
-                                <h3 class="form-input">{{listStatistics.balance | number:'':'fr-FR'}} FCFA</h3>
+                                <h3 class="form-input">{{listStatistics.balance | number:'1.0-0':'fr-FR'}} FCFA</h3>
                             </div>
                         </div>                                      
                     </form>
@@ -670,9 +670,9 @@
                                     </td>
                                     <td>{{item?.date | date: 'dd/MM/YYYY'}}</td>
                                     <td>{{item?.reference}}</td>
-                                    <td>{{item?.bags_accepted | number:'':'fr-FR'}}</td>
-                                    <td>{{item?.weight_accepted | number:'':'fr-FR'}}</td>
-                                    <td>{{item?.total_price | number:'':'fr-FR'}} FCFA</td>
+                                    <td>{{item?.bags_accepted | number:'1.0-0':'fr-FR'}}</td>
+                                    <td>{{item?.weight_accepted | number:'1.0-0':'fr-FR'}}</td>
+                                    <td>{{item?.total_price | number:'1.0-0':'fr-FR'}} FCFA</td>
                                     <td>{{item?.operation_type?.label}}</td>
                                     <td>{{item?.payment_method?.label}}</td>
                                     <td>{{item?.user?.name}}</td>
@@ -690,7 +690,7 @@
                         <div class="grid grid-cols-1 grid-cols-2 gap-2">
                             <div style="padding-top: 10px;">
                                 <div class="d-flex mr-5" *ngIf="operation_total">
-                                    <b>Affichage de {{operation_from}} à {{to}} sur {{operation_total | number:'':'fr-FR'}} éléments</b>
+                                    <b>Affichage de {{operation_from}} à {{to}} sur {{operation_total | number:'1.0-0':'fr-FR'}} éléments</b>
                                 </div>
                                 <div class="d-flex mr-5" *ngIf="!operation_total">
                                     <b>Affichage de 0 à 0 sur 0 élément</b>
@@ -846,7 +846,7 @@
                                             <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
                                         </div>
                                         <div class="flex justify-center items-center mt-8">
-                                            Voulez-vous annuler l'opération de {{operationHistorySelected?.total_price| number:'':'fr-FR'}} FCFA au bénéficiaire {{operationHistorySelected?.wallet?.entity?.name}} {{operationHistorySelected?.purchaser?.last_name}} ?
+                                            Voulez-vous annuler l'opération de {{operationHistorySelected?.total_price| number:'1.0-0':'fr-FR'}} FCFA au bénéficiaire {{operationHistorySelected?.wallet?.entity?.name}} {{operationHistorySelected?.purchaser?.last_name}} ?
                                         </div>
                                         <div class="flex justify-end items-center mt-8">
                                             <button type="button" (click)="resetAll(); operationHistoryItem = !operationHistoryItem; cancelItem = !cancelItem" class="btn btn-outline-danger">Non</button>

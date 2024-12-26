@@ -85,9 +85,9 @@
                                     </td>
                                     <td>{{item?.reference}}</td>
                                     <td>{{item?.entity_product?.product_name}}</td>
-                                    <td>{{item?.weight | number:'':'fr-FR'}} Kg</td>
-                                    <td>{{item?.price | number:'':'fr-FR'}} FCFA</td>
-                                    <td>{{item?.total_price | number:'':'fr-FR'}} FCFA</td>
+                                    <td>{{item?.weight | number:'1.0-0':'fr-FR'}} Kg</td>
+                                    <td>{{item?.price | number:'1.0-0':'fr-FR'}} FCFA</td>
+                                    <td>{{item?.total_price | number:'1.0-0':'fr-FR'}} FCFA</td>
                                     <td>{{item?.purchaser?.name}}</td>
                                     <td>{{item?.user?.name}}</td>
                                     <td> 
@@ -104,7 +104,7 @@
                         <div class="grid grid-cols-1 grid-cols-2 gap-2">
                             <div style="padding-top: 10px;">
                                 <div class="d-flex mr-5" *ngIf="total">
-                                    <b>Affichage de {{from}} à {{to}} sur {{total | number:'':'fr-FR'}} éléments</b>
+                                    <b>Affichage de {{from}} à {{to}} sur {{total | number:'1.0-0':'fr-FR'}} éléments</b>
                                 </div>
                                 <div class="d-flex mr-5" *ngIf="!total">
                                     <b>Affichage de 0 à 0 sur 0 élément</b>
@@ -317,7 +317,7 @@
                                             <span *ngIf="error_message.length > 0" class="ltr:pr-2 rtl:pl-2">{{item.detail}}</span><br>
                                         </div>
                                         <div class="flex justify-center items-center mt-8">
-                                            Voulez-vous annuler la vente de {{itemSelected?.total_price| number:'':'fr-FR'}} FCFA au client {{itemSelected?.purchaser?.first_name}} {{itemSelected?.purchaser?.last_name}} ?
+                                            Voulez-vous annuler la vente de {{itemSelected?.total_price| number:'1.0-0':'fr-FR'}} FCFA au client {{itemSelected?.purchaser?.first_name}} {{itemSelected?.purchaser?.last_name}} ?
                                         </div>
                                         <div class="flex justify-end items-center mt-8">
                                             <button type="button" (click)="resetAll(); itemSelected = !itemSelected" class="btn btn-outline-danger">Non</button>
