@@ -25,16 +25,15 @@ import { EmailVariable } from 'src/app/models/email-variable.model';
 import { AppService } from 'src/app/services/app-content/app.service';
 
 @Component({
-  selector: 'app-list-user',
-  templateUrl: './list-user.component.html',
-  styleUrls: ['./list-user.component.css']
+  selector: 'app-supplier-operation',
+  templateUrl: './supplier-operation.component.html',
+  styleUrls: ['./supplier-operation.component.css']
 })
-export class ListUserComponent implements OnInit {
+export class SupplierOperationComponent implements OnInit {
 
   listItem: any;
   listUserType: any;
-  listEntity: any;
-  listProfile: any;
+  listRole: any;
   listOrganization: any;
   listEntityFirm: any;
 
@@ -63,9 +62,8 @@ export class ListUserComponent implements OnInit {
   submitted3 = false;
 
   organization_type!: string;
-  entity_id!: number;
   name: string = "";
-  profile_id!:number;
+  profil_id!:number;
   password: string = "";
   telephone: string = "";
   email: string = "";
@@ -77,11 +75,19 @@ export class ListUserComponent implements OnInit {
   entity_type_id!: number;
   entityfirm_id!: any;
   username: string = "";
-  profile!: number;
+  role: string = "";
   firstname: string = "";
   lastname: string = "";
   code: string = "";
+  mobile: string = "";
   avatar: any;
+
+  type: string = "vendeur";
+  entity_product_id!: number;
+  weight: number = 0;
+  price: number= 0;
+  listProduct: any;
+  listSeller: any;
 
   user_logged!: any;
   npage!: number;
@@ -121,8 +127,6 @@ export class ListUserComponent implements OnInit {
   permissions!: any;
   permitted: boolean = false;
 
-  show: boolean = false;
-
   constructor(
     public Jarwis: JarwisService,
     public appService: AppService,
@@ -140,6 +144,8 @@ export class ListUserComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.current_page = 1;
+
     registerLocaleData( fr,'fr-FR' );
     //this.submit = false;
 
@@ -147,24 +153,25 @@ export class ListUserComponent implements OnInit {
     this.SpinnerService.show();
     
     this.getUserLogged();
-    this.getEntity();
-    this.getProfile();
+    this.getProduct();
     this.getItems();
     this.makePassword(12);
 
     this.formGroupAdd = new FormGroup({
-      profile_id: new FormControl('', [Validators.required]),
-      firstname: new FormControl('', [Validators.required]),
-      lastname: new FormControl('', [Validators.required]),
+      organization_type: new FormControl('', [Validators.required]),
+      code: new FormControl('', [Validators.required]),
+      name: new FormControl('', [Validators.required]),
+      address: new FormControl('', [Validators.required]),
       telephone: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
-      password: new FormControl('', [Validators.required]),
+      logo: new FormControl('', [Validators.required]),
     });
 
     this.formGroupEdit = new FormGroup({
-      profile_id: new FormControl('', [Validators.required]),
-      firstname: new FormControl('', [Validators.required]),
-      lastname: new FormControl('', [Validators.required]),
+      organization_type: new FormControl('', [Validators.required]),
+      code: new FormControl('', [Validators.required]),
+      name: new FormControl('', [Validators.required]),
+      address: new FormControl('', [Validators.required]),
       telephone: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
     });
@@ -174,7 +181,7 @@ export class ListUserComponent implements OnInit {
       //entityfirm_id: new FormControl('', [Validators.required]),
       firstname: new FormControl('', [Validators.required]),
       lastname: new FormControl('', [Validators.required]),
-      telephone: new FormControl('', [Validators.required]),
+      mobile: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
     });
 
@@ -200,9 +207,6 @@ export class ListUserComponent implements OnInit {
   getUserLogged(){
     this.appService.getUserProfile().subscribe((data: any) => {
       this.user_logged = data.data;
-      if(this.user_logged == 2){
-        this.entity_id = this.user_logged.entity.id;
-      }
       // this.permissions = this.user_logged.permissions;
       // if(this.permissions.includes("user.view")){
       //   this.permitted = true;
@@ -231,10 +235,6 @@ export class ListUserComponent implements OnInit {
     this._location.back();
   }
 
-  showPassword() {
-    this.show = !this.show;
-  }
-
   resetAll() {
     this.formGroupAdd.reset();
     this.formGroupEdit.reset();
@@ -247,24 +247,8 @@ export class ListUserComponent implements OnInit {
 
     this.firstname = "";
     this.lastname = "";
-    this.telephone = "";
+    this.mobile = "";
     this.email = "";
-  }
-
-  getEntity(){
-    this.appService.getAllEntity().subscribe((data: any) => {
-      this.listEntity = data.data;
-
-      this.SpinnerService.hide();
-    });
-  }
-
-  getProfile(){
-    this.appService.getAllProfile().subscribe((data: any) => {
-      this.listProfile = data.data;
-
-      this.SpinnerService.hide();
-    });
   }
 
   onSelectLogo(event:any) {
@@ -289,11 +273,11 @@ export class ListUserComponent implements OnInit {
     this.SpinnerService.show();
     this.getItems();
   }
-  
-  getAllOrganizations(){
-    // this.entityFirmService.getAllOrganization(1).subscribe((data: any) => {
-    //   this.listOrganization = data.data;
-    // });
+
+  getProduct(){
+    this.appService.getAllProduct().subscribe((data: any) => {
+      this.listProduct = data.data;
+    });
   }
 
   getPaginate(data:any){
@@ -311,59 +295,34 @@ export class ListUserComponent implements OnInit {
   }
 
   getItems(){
-    if(this.profile){
-      this.appService.getUser(this.current_page,this.profile).subscribe((data: any) => {
-        this.listItem = data.data;
-  
-        this.getPaginate(data);
-  
-        this.SpinnerService.hide();
-  
-      });
-    } else {
-      this.appService.getAllUser(this.current_page).subscribe((data: any) => {
-        this.listItem = data.data;
-  
-        this.getPaginate(data);
-  
-        this.SpinnerService.hide();
-  
-      });
-    }
-    
+    this.appService.getAllSupplierOperation(this.current_page).subscribe((data: any) => {
+      this.listItem = data.data;
+
+      this.getPaginate(data);
+
+      this.SpinnerService.hide();
+
+    });
   }
 
   search(){
-    if(this.profile){
-      this.SpinnerService.show();
-      this.appService.getUserSearch(this.current_page,this.profile,this.information).subscribe((data: any) => {
-        this.listItem = data.data;
-        
-        this.getPaginate(data);
+    this.SpinnerService.show();
+    this.appService.getAllSupplierOperationSearch(this.current_page,this.information).subscribe((data: any) => {
+      this.listItem = data.data;
+      
+      this.getPaginate(data);
 
-        this.SpinnerService.hide();
+      this.SpinnerService.hide();
 
-      })
-    } else {
-      this.SpinnerService.show();
-      this.appService.getAllUserSearch(this.current_page,this.information).subscribe((data: any) => {
-        this.listItem = data.data;
-        
-        this.getPaginate(data);
-
-        this.SpinnerService.hide();
-
-      })
-    }
+    })
   }
 
   paginate(){
     if(this.information){
       this.search()
     } else {
-      if(this.profile){
-        this.SpinnerService.show();
-        this.appService.getUserPaginate(this.current_page,this.profile).subscribe((data: any) => {
+      this.SpinnerService.show();
+        this.appService.getAllSupplierOperationPaginate(this.current_page).subscribe((data: any) => {
           this.listItem = data.data;
           
           this.getPaginate(data);
@@ -371,17 +330,6 @@ export class ListUserComponent implements OnInit {
           this.SpinnerService.hide();
 
         })
-      } else {
-        this.SpinnerService.show();
-        this.appService.getAllUserPaginate(this.current_page).subscribe((data: any) => {
-          this.listItem = data.data;
-          
-          this.getPaginate(data);
-
-          this.SpinnerService.hide();
-
-        })
-      }
     }
   }
 
@@ -443,7 +391,7 @@ export class ListUserComponent implements OnInit {
     this.disableItem = false;
     this.itemSelected = item;
     this.email = this.itemSelected.email;
-    this.telephone = this.itemSelected.telephone;
+    this.mobile = this.itemSelected.contact;
     this.firstname = this.itemSelected.first_name;
     this.lastname = this.itemSelected.last_name;
     this.password = this.itemSelected.password;
@@ -461,7 +409,7 @@ export class ListUserComponent implements OnInit {
     this.disableItem = false;
     this.itemSelected = item;
     this.email = this.itemSelected.email;
-    this.telephone = this.itemSelected.telephone;
+    this.mobile = this.itemSelected.contact;
     this.firstname = this.itemSelected.firstname;
     this.lastname = this.itemSelected.lastname;
     this.password = this.itemSelected.password;
@@ -479,7 +427,7 @@ export class ListUserComponent implements OnInit {
     this.disableItem = false;
     this.itemSelected = item;
     this.email = this.itemSelected.email;
-    this.telephone = this.itemSelected.telephone;
+    this.mobile = this.itemSelected.contact;
     this.firstname = this.itemSelected.firstname;
     this.lastname = this.itemSelected.lastname;
     this.password = this.itemSelected.password;
@@ -496,11 +444,11 @@ export class ListUserComponent implements OnInit {
     this.enableItem = false;
     this.disableItem = true;
     this.itemSelected = item;
-    this.email = this.itemSelected.email;
-    this.telephone = this.itemSelected.telephone;
-    this.firstname = this.itemSelected.firstname;
-    this.lastname = this.itemSelected.lastname;
-    this.password = this.itemSelected.password;
+    this.email = this.itemSelected.id.email;
+    this.mobile = this.itemSelected.id.contact;
+    this.firstname = this.itemSelected.id.firstname;
+    this.lastname = this.itemSelected.id.lastname;
+    this.password = this.itemSelected.id.password;
     this.userprofile_id = this.itemSelected.userprofile_id.id;
     this.entityfirm_id = this.itemSelected.entityfirm_id.id;
     this.avatar = this.itemSelected.avatar;
@@ -514,15 +462,20 @@ export class ListUserComponent implements OnInit {
     this.enableItem = false;
     this.disableItem = false;
     this.itemSelected = item;
-    this.email = this.itemSelected.email;
-    this.telephone = this.itemSelected.telephone;
-    this.firstname = this.itemSelected.firstname;
-    this.lastname = this.itemSelected.lastname;
-    //this.password = this.itemSelected.password;
+    this.email = this.itemSelected.id.email;
+    this.mobile = this.itemSelected.id.contact;
+    this.firstname = this.itemSelected.id.firstname;
+    this.lastname = this.itemSelected.id.lastname;
+    //this.password = this.itemSelected.id.password;
     this.userprofile_id = this.itemSelected.userprofile_id.id;
     this.entityfirm_id = this.itemSelected.entityfirm_id.id;
     this.avatar = this.itemSelected.avatar;
     this.status_id = this.itemSelected.status_id;
+  }
+
+  itemCancel(item:any) {
+    this.editItem = false;
+    this.itemSelected = item;
   }
  
   hide_message() {
@@ -547,29 +500,71 @@ export class ListUserComponent implements OnInit {
   save(){
     this.submitted = true;
     if(this.formGroupAdd.invalid){
+      //console.log("Please enter");
       return;
     } else {
-      this.submit = true;
-      let requestData = {
-        entity_id: this.entity_id,
-        email: this.email,
-        telephone: this.telephone,
-        first_name: this.firstname,
-        last_name: this.lastname,
-        profile_id: this.profile_id,
-        password: this.password,
-      }
+      if(this.telephone.slice(0, 2) != "27" && this.telephone.slice(0, 2) != "01" && this.telephone.slice(0, 2) != "05" && this.telephone.slice(0, 2) != "07"){
+        this.exist_error = true;
+        this.phone_error = "Le numéro de téléphone doit commencer par 27 ou 01 ou 05 ou 07.";
+      } else if(this.telephone.length && this.telephone.length != 10){
+        this.exist_error = true;
+        this.phone_error = "Le numéro de téléphone doit contenir que 10 chiffres.";
+      } else {
+        this.submit = true;
+        const formData:any = new FormData();
+        formData.append("organization_type_id",this.organization_type);
+        formData.append("code",this.code);
+        formData.append("name",this.name);
+        formData.append("address",this.address);
+        formData.append("contact",this.telephone);
+        formData.append("email",this.email);
+        if(this.logofiles){
+          formData.append("logo_path",this.logofiles,this.logofiles.name);
+        } else {
+          formData.append("logo_path",null);
+        }
 
-    console.log('this.formGroupAd',requestData);
-
-      this.appService.addUser(requestData).subscribe(res => {
-        this.message = res;
-        if(this.message.success == false){
-          this.submit = false;
-          this.error_message = this.message.message;
-          this.exist_error = false;
+        this.appService.addUser(formData).subscribe(res => {
+          this.message = res;
+          if(this.message.success == false){
+            this.submit = false;
+            this.error_message = this.message.message;
+            this.exist_error = false;
+            this.toast = {
+              message: this.message.message,
+              title: 'Erreur',
+              type: 'error',
+              ic: {
+                timeOut: 5000,
+                closeButton: true,
+                progressBar: true,
+              } as GlobalConfig,
+            };
+            this.SpinnerService.hide();
+          } else {
+            this.toast = {
+              message: this.message.message,
+              title: 'Succès',
+              type: 'success',
+              ic: {
+                timeOut: 2500,
+                closeButton: true,
+                progressBar: true,
+              } as GlobalConfig,
+            };
+            //this.registerMail();
+            this.submit = false;
+            this.addItem = !this.addItem
+            this.resetAll();
+            this.ngOnInit();
+          }
+          this.cs.showToast(this.toast);
+        },
+        (err: HttpErrorResponse) => {
+          this.exist_error = true;
+          this.error_message = err.error.errors;
           this.toast = {
-            message: this.message.message,
+            message: err.error.error,
             title: 'Erreur',
             type: 'error',
             ic: {
@@ -578,31 +573,30 @@ export class ListUserComponent implements OnInit {
               progressBar: true,
             } as GlobalConfig,
           };
-          this.SpinnerService.hide();
-        } else {
-          this.toast = {
-            message: this.message.message,
-            title: 'Succès',
-            type: 'success',
-            ic: {
-              timeOut: 2500,
-              closeButton: true,
-              progressBar: true,
-            } as GlobalConfig,
-          };
           this.submit = false;
-          this.addItem = !this.addItem;
-          this.resetAll();
-          this.ngOnInit();
-        }
-        this.cs.showToast(this.toast);
-      },
-      (err: HttpErrorResponse) => {
+          this.SpinnerService.hide();
+          this.cs.showToast(this.toast);
+        })
+      }      
+    }
+  }
+
+  get f3() { return this.formGroupEdit.controls; }
+
+  sendWelcome(){
+    this.submit = true;
+
+    const formData:any = new FormData();
+    formData.append("email",this.itemSelected.email);
+
+    this.appService.sendWelcome(formData).subscribe(res => {
+      this.message = res;
+      if(this.message.success == false){
+        this.error_message = this.message.message;
+        this.submit = !this.submit;
         this.exist_error = true;
-        this.error_message = err.error.errors;
-        this.submit = false;
         this.toast = {
-          message: err.error.error,
+          message: this.message.message,
           title: 'Erreur',
           type: 'error',
           ic: {
@@ -611,14 +605,43 @@ export class ListUserComponent implements OnInit {
             progressBar: true,
           } as GlobalConfig,
         };
-        this.submit = false;
         this.SpinnerService.hide();
-        this.cs.showToast(this.toast);
-      })
-    }
+      } else {
+        this.toast = {
+          message: this.message.message,
+          title: 'Succès',
+          type: 'success',
+          ic: {
+            timeOut: 2500,
+            closeButton: true,
+            progressBar: true,
+          } as GlobalConfig,
+        };
+        this.submit = !this.submit;
+        this.itemSelected = !this.itemSelected;
+        this.ngOnInit();
+      }
+      this.cs.showToast(this.toast);
+    },
+    (err: HttpErrorResponse) => {
+      this.exist_error = true;
+      this.error_message = err.error.errors;
+      this.submit = false;
+      this.toast = {
+        message: err.error.message,
+        title: 'Erreur',
+        type: 'error',
+        ic: {
+          timeOut: 5000,
+          closeButton: true,
+          progressBar: true,
+        } as GlobalConfig,
+      };
+      this.submit = false;
+      this.SpinnerService.hide();
+      this.cs.showToast(this.toast);
+    })
   }
-
-  get f3() { return this.formGroupEdit.controls; }
 
   enable(){
     this.submit = true;
@@ -741,17 +764,14 @@ export class ListUserComponent implements OnInit {
 
   get f2() { return this.formGroup2.controls; }
 
-  update(){
+  cancel(){
     this.submit = true;
+   
     let requestData = {
-      email: this.email,
-      telephone: this.telephone,
-      first_name: this.firstname,
-      last_name: this.lastname,
-      profile_id: this.profile_id,
+      operation_id: this.itemSelected.id,
     }
 
-    this.appService.updateUser(requestData,this.itemSelected.id).subscribe(res => {
+    this.appService.cancelOperation(this.itemSelected.id,requestData).subscribe(res => {
       this.message = res;
       if(this.message.success == false){
         this.submit = false;
@@ -782,6 +802,7 @@ export class ListUserComponent implements OnInit {
         this.submit = false;
         this.editItem = !this.editItem;
         this.itemSelected = !this.itemSelected;
+        this.information = "";
         this.ngOnInit();
       }
       this.cs.showToast(this.toast);

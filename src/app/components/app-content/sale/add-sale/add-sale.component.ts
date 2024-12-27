@@ -237,7 +237,7 @@ export class AddSaleComponent implements OnInit {
   }
 
   getRoles(){
-    this.appService.getProfile().subscribe((data: any) => {
+    this.appService.getAllProfile().subscribe((data: any) => {
       this.listRole = data.data;
 
       this.SpinnerService.hide();

@@ -44,8 +44,8 @@
                             <thead>
                                 <tr>
                                     <th>N°</th>
-                                    <th>Date</th>
                                     <th *ngIf="user_logged.profile?.id == 2">Action</th>
+                                    <th>Date</th>
                                     <th>Délégué</th>
                                     <th>Produit</th>
                                     <th>Campagne</th>
@@ -63,14 +63,17 @@
                                     <td class="text-center" *ngIf="user_logged?.profile?.id == 2">
                                         <ul class="flex gap-2">
                                             <li *ngIf="item.status?.id == 5">
-                                                <a href="javascript:;" x-tooltip="Activer" (click)="itemOperationValidation(item)">
+                                                <a href="javascript:;" x-tooltip="Valider" (click)="itemOperationValidation(item)">
                                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-success">
                                                         <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
                                                         <path d="M8.5 12.5L10.5 14.5L15.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                                     </svg>
                                                 </a>
                                             </li>
-                                            <li>
+                                            <li *ngIf="item.status?.id != 5">
+                                                ---
+                                            </li>
+                                            <!-- <li>
                                                 <a href="javascript:;" x-tooltip="Détails" (click)="itemOperationValidation(item)">
                                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                                         <path
@@ -82,7 +85,7 @@
                                                         <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="currentColor" stroke-width="1.5"></path>
                                                     </svg>
                                                 </a>
-                                            </li>    
+                                            </li>     -->
                                         </ul>
                                     </td>
                                     <td>{{item?.date | date: 'dd/MM/YYYY'}}</td>

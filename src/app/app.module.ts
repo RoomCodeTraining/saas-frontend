@@ -79,6 +79,9 @@ import { ListDelegateForDeliveryComponent } from './components/app-content/entit
 import { ListCooperativeComponent } from './components/app-content/entity/cooperative/list-cooperative/list-cooperative.component';
 import { ListWeightLoadingComponent } from './components/app-content/weight-loading/list-weight-loading/list-weight-loading.component';
 import { ListWarehouseDeliveryComponent } from './components/app-content/warehouse-delivery/list-warehouse-delivery/list-warehouse-delivery.component';
+import { SpecialSupplierOperationComponent } from './components/app-content/operation/special-supplier/special-supplier-operation/special-supplier-operation.component';
+import { DelegateOperationComponent } from './components/app-content/operation/delegate/delegate-operation/delegate-operation.component';
+import { SupplierOperationComponent } from './components/app-content/operation/supplier/supplier-operation/supplier-operation.component';
 
 function resourceProviderFactory(JarwisService: JarwisService) {
   return () => {
@@ -152,6 +155,9 @@ function resourceProviderFactory(JarwisService: JarwisService) {
     ListCooperativeComponent,
     ListWeightLoadingComponent,
     ListWarehouseDeliveryComponent,
+    SupplierOperationComponent,
+    SpecialSupplierOperationComponent,
+    DelegateOperationComponent,
   ],
   imports: [
     BrowserModule,
